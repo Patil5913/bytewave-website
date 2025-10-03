@@ -8,11 +8,22 @@ import '../globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: 'ByteWave - Technology Solutions',
-  description: 'Professional technology services and training solutions',
-};
-
+export const metadata= {
+  title: 'Bytewave Technology',
+  description: 'Building workforce excellence through innovation and expertise',
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
+  appleWebApp: {
+    title: 'Bytewave Technology',
+    statusBarStyle: 'default',
+    startupImage: [
+      '/logo.png'
+    ]
+  }
+}
 export default function RootLayout({ children }) {
   return (
         <AuthProvider>

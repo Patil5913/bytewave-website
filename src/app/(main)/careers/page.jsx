@@ -39,10 +39,9 @@ const CareersPage = () => {
             animate={{ opacity: 0.8 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Connecting business audiences with business buyers and sellers through
-            content solutions, lead generation, newsletters, print and online
-            advertising, social media and content driven sponsorship.
-          </motion.p>
+Advance your career with Bytewave, where opportunities, skills, and growth
+converge. We connect professionals with the right roles across industries, helping
+you turn potential into success.          </motion.p>
         </div>
       </motion.div>
 

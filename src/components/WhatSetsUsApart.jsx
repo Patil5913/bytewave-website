@@ -10,22 +10,22 @@ function WhatSetsUsApart() {
     {
       icon: <Rocket className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Innovation First",
-      content: "We stay ahead of technological trends, implementing cutting-edge solutions that give our clients a competitive edge."
+      content: "Adapting modern tools and methods for smarter hiring."
     },
     {
       icon: <Target className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Result Driven",
-      content: "Our focus is on delivering measurable results that directly impact our clients' business objectives."
+      content: "Placing candidates who accelerate business success."
     },
     {
       icon: <Shield className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Quality Assured",
-      content: "We maintain rigorous quality standards throughout our development process, ensuring robust and reliable solutions."
+      content: "Every profile is screened, vetted, and aligned with client needs"
     },
     {
       icon: <Zap className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Rapid Delivery",
-      content: "Our agile methodology enables quick turnaround times without compromising on quality."
+      content: "Agile recruitment designed to meet urgent hiring goals."
     }
   ];
   

@@ -28,6 +28,12 @@ const trainingRequestSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+  // Add submission ID field for deduplication
+  submissionId: {
+    type: String,
+    index: true,
+    sparse: true
+  },
   name: {
     type: String,
     trim: true,
@@ -72,9 +78,7 @@ const trainingRequestSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Clear existing models to prevent the OverwriteModelError
-mongoose.models = {};
 
-const TrainingRequest = mongoose.model('TrainingRequest', trainingRequestSchema);
+const TrainingRequest = mongoose.models.TrainingRequest || mongoose.model('TrainingRequest', trainingRequestSchema);
 
 export default TrainingRequest;

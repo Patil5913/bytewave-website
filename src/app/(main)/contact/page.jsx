@@ -84,10 +84,11 @@ export default function Contact() {
         >
           <span className="text-blue-600 font-medium mb-4 block">GET IN TOUCH</span>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Let's Build Something Amazing Together
+            Let’s Build Careers and Teams Together
           </h1>
           <p className="text-zinc-600 mb-16 max-w-2xl mx-auto">
-            Have questions or ready to start your next project? We're here to help turn your vision into reality.
+            Whether you’re a professional looking for your next opportunity or a business
+seeking top talent, we’re here to connect you with the right solution.
           </p>
         </motion.div>
       </div>
@@ -208,7 +209,7 @@ export default function Contact() {
 
       {/* Contact Info Cards */}
       <div className="container mx-auto px-4 pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -221,7 +222,7 @@ export default function Contact() {
               </span>
             </div>
             <h3 className="text-lg font-medium mb-2">Chat with us</h3>
-            <a href="mailto:contact@bytewave.com" className="text-blue-500 hover:underline">contact@bytewave.com</a>
+            <a href="mailto:contact@bytewavetechnology.com" className="text-blue-500 hover:underline">contact@bytewavetechnology.com</a>
             <p className="text-zinc-600 text-sm mt-2">We aim to respond within 24 hours</p>
           </motion.div>
           
@@ -237,7 +238,7 @@ export default function Contact() {
               </span>
             </div>
             <h3 className="text-lg font-medium mb-2">Working Hours</h3>
-            <p className="text-blue-500">Mon - Fri: 9AM - 6PM</p>
+            <p className="text-blue-500">Mon - Fri: 10AM - 6PM EST</p>
             <p className="text-zinc-600 text-sm mt-2">Weekend: Mail us</p>
           </motion.div>
           
@@ -253,8 +254,8 @@ export default function Contact() {
               </span>
             </div>
             <h3 className="text-lg font-medium mb-2">Visit us</h3>
-            <p className="text-blue-500">Ahmedabad, Gujarat</p>
-            <p className="text-zinc-600 text-sm mt-2">India</p>
+            <p className="text-blue-500">117, South Lexington Street</p>
+            <p className="text-zinc-600 text-sm mt-2">United States</p>
           </motion.div>
         </div>
       </div>
