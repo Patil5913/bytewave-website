@@ -56,6 +56,10 @@ export default function Home() {
       <About/>
       <Testimonials/>
 
+
+{/* contact section of dashboard*/}
+
+
       <section className="container mx-auto px-6 py-20">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}

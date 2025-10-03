@@ -11,7 +11,7 @@ export default function Footer() {
             Connect with <span className="text-blue-500">Bytewave</span>
           </h2>
           <p className="text-zinc-600 max-w-xl mx-auto font-medium">
-            Building digital excellence through innovation and creativity
+Building workforce excellence through innovation and expertise
           </p>
         </div>
 
@@ -39,22 +39,29 @@ export default function Footer() {
               Company Info
             </h3>
             <ul className="space-y-3 w-full">
-              <li className="flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
-                <span className="text-zinc-700 font-medium">
-                  Harrisonville, Missouri
-                </span>
-              </li>
+             <li className="flex gap-2">
+  <MapPin className="w-5 h-5 text-blue-500 " />
+  <span className="text-zinc-700 font-medium whitespace-nowrap">
+    117, South Lexington Street
+    <br />
+    <div className="relative right-3">
+    Harrisonville,MO 64701
+    </div>
+  </span>
+</li>
+
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-blue-500 flex-shrink-0" />
                 <span className="text-zinc-700 font-medium">
-                   +1 (314) 464-5006
+                  +1 (314) 464-5006
+
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-blue-500 flex-shrink-0" />
                 <span className="text-zinc-700 font-medium">
-                  contact@bytewavetechnology.com
+                  info@bytewavetechnology.com
+
                 </span>
               </li>
               <li className="flex gap-4 mt-4">
@@ -158,12 +165,7 @@ export default function Footer() {
                   10:00 AM - 6:00 PM EST
                 </span>
               </li>
-              <li className="text-zinc-700">
-                <span className="block font-medium">Saturday</span>
-                <span className="block text-zinc-600 mt-1">
-                  10:00 AM - 2:00 PM EST
-                </span>
-              </li>
+              
             </ul>
           </div>
         </div>
