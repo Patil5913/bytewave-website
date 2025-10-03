@@ -84,10 +84,11 @@ export default function Contact() {
         >
           <span className="text-blue-600 font-medium mb-4 block">GET IN TOUCH</span>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Let's Build Something Amazing Together
+            Let’s Build Careers and Teams Together
           </h1>
           <p className="text-zinc-600 mb-16 max-w-2xl mx-auto">
-            Have questions or ready to start your next project? We're here to help turn your vision into reality.
+            Whether you’re a professional looking for your next opportunity or a business
+seeking top talent, we’re here to connect you with the right solution.
           </p>
         </motion.div>
       </div>
@@ -253,7 +254,7 @@ export default function Contact() {
               </span>
             </div>
             <h3 className="text-lg font-medium mb-2">Visit us</h3>
-            <p className="text-blue-500">Harrisonville, Missouri</p>
+            <p className="text-blue-500">117, South Lexington Street</p>
             <p className="text-zinc-600 text-sm mt-2">United States</p>
           </motion.div>
         </div>
