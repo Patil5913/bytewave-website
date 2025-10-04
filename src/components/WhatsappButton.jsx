@@ -52,7 +52,7 @@ export default function WhatsAppChatButton({
         </span>
 
         {/* Pulse ring */}
-        <span className="absolute -inset-1 rounded-full animate-ping opacity-30 bg-green-400" />
+        {/* <span className="absolute -inset-1 rounded-full animate-ping opacity-30 bg-green-400" /> */}
       </button>
     </div>
   );

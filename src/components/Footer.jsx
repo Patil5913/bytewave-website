@@ -171,8 +171,24 @@ Building workforce excellence through innovation and expertise
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 pt-6 border-t border-zinc-200 text-center text-zinc-600 text-sm">
-          © 2024 Bytewave. All rights reserved.
+        <div className="mt-12 pt-6 border-t border-zinc-200 text-center text-zinc-600 text-sm ">
+          <div className="flex justify-center">
+            © 2024 Bytewave. All rights reserved.| 
+          <div>
+            <Link 
+            href="/about/Terms_Conditions" 
+            className="text-zinc-700 hover:text-blue-500 transition-colors">
+              Terms & Conditions |
+              </Link>
+              <Link 
+            href="/about/Privacy_Policy" 
+            className="text-zinc-700 hover:text-blue-500 transition-colors">
+              Privacy Policy
+              </Link>
+          </div>
+          </div>
+          
+          
           {/* Watermark */}
           <div className="mt-4 flex justify-center items-center gap-2 text-xs">
             <a
