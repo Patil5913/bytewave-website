@@ -22,7 +22,7 @@ const blogPosts = [
     desc: "From remote-first models to AI-powered productivity tools...",
     author: "Alex Johnson",
     image: "https://d2py10ayqu2jji.cloudfront.net/Career.webp",
-    link: "https://www.bytewavetechnology.com/",
+    
     
   },
   {id:1343,
@@ -32,7 +32,7 @@ const blogPosts = [
     desc: "From remote-first models to AI-powered productivity tools...",
     author: "Alex Johnson",
     image: "https://d2py10ayqu2jji.cloudfront.net/Career.webp",
-    link: "https://www.bytewavetechnology.com/",
+    
     
   },
   {id:12322,
@@ -42,7 +42,7 @@ const blogPosts = [
     desc: "From remote-first models to AI-powered productivity tools...",
     author: "Alex Johnson",
     image: "https://d2py10ayqu2jji.cloudfront.net/Career.webp",
-    link: "https://www.bytewavetechnology.com/",
+    
     
   },
   {id:122222,
@@ -52,7 +52,7 @@ const blogPosts = [
     desc: "From remote-first models to AI-powered productivity tools...",
     author: "Alex Johnson",
     image: "https://d2py10ayqu2jji.cloudfront.net/Career.webp",
-    link: "https://www.bytewavetechnology.com/",
+    
   
   },
   {id:1111,
@@ -62,7 +62,7 @@ const blogPosts = [
     desc: "From remote-first models to AI-powered productivity tools...",
     author: "Alex Johnson",
     image: "https://d2py10ayqu2jji.cloudfront.net/Career.webp",
-    link: "https://www.bytewavetechnology.com/",
+    
     
   },
   {
