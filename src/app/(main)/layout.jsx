@@ -5,7 +5,7 @@ import { TrainingProvider } from '@/providers/TrainingProvider';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import '../globals.css';
-
+import WhatsAppChatButton from '@/components/WaButton';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata= {
@@ -32,6 +32,14 @@ export default function RootLayout({ children }) {
               <Navbar/>
               <main className="flex-grow">
                 {children}
+                <div className="fixed right-8">
+        <WhatsAppChatButton
+          phone="918200662782"
+          message="Hi! I have a question about your product."
+          size={50}
+          showPopup={true}
+        />
+      </div>
               </main>
               <Footer />
             </TrainingProvider>
