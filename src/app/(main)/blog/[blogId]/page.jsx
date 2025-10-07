@@ -1,6 +1,6 @@
 import React from 'react';
 import DyBlogPage from './DyBlogPage';
-import { blogPosts } from "@/components/Blog/matadata"; // your posts array
+import { blogPosts } from "@/components/Blog/Metadata"; // your posts array
 
 // Dynamic metadata
 export async function generateMetadata({ params }) {

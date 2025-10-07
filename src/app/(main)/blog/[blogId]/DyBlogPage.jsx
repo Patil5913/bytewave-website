@@ -1,9 +1,9 @@
 "use client"
 import React from 'react'
-import { blogPosts } from "@/components/Blog/matadata";
+import { blogPosts } from "@/components/Blog/Metadata";
 import { useParams } from 'next/navigation';
 import { motion } from "framer-motion";
-import { metadata } from "@/components/Blog/matadata";
+import { metadata } from "@/components/Blog/Metadata";
 
 
 const Page = () => {
