@@ -58,7 +58,7 @@ const BlogCard = ({ data }) => {
               </div>
               
               {/* Description */}
-              <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4 line-clamp-3">
+              <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4 line-clamp-2">
                 {data.desc}
               </p>
               
