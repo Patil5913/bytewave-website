@@ -2,7 +2,7 @@
 import React from "react";
 
 export default function WhatsAppChatButton({
-  phone = "919876543210",
+  phone = "+13127888738",
   message = "Hi! I found you on your website — can we chat?",
   size = 10,
   // showPopup = true,
