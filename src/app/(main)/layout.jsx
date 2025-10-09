@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
             {children}
             <div className="fixed right-8">
               <WhatsAppChatButton
-                phone="918200662782"
+                phone="+13127888738"
                 message="Hi! I have a question about your product."
                 size={50}
                 showPopup={true}
