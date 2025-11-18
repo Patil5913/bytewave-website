@@ -1,17 +1,31 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Blogbar from "@/components/Blog/Blogbar";
 import BlogCard from "@/components/Blog/BlogCard";
-import { blogPosts } from "@/components/Blog/Metadata";
-
 
 const Page = () => {
+  const [blogs, setBlogs] = useState([]); // ✅ hold blogs fetched from API
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
 
-  // Filtering logic
-  const filteredPosts = blogPosts.filter((post) => {
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("/api/blogs");
+        const data = await res.json();
+        console.log(data);
+        
+        setBlogs(data.blogs || []);
+      } catch (err) {
+        console.error("Error fetching blogs:", err);
+      }
+    }
+    fetchData();
+  }, []);
+
+  // ✅ Use fetched blogs instead of static import
+  const filteredPosts = blogs.filter((post) => {
     const matchesSearch =
       [post.title, post.category, post.author]
         .join(" ")
@@ -19,7 +33,6 @@ const Page = () => {
         .includes(search.toLowerCase());
 
     const matchesFilter = filter === "All" || post.category === filter;
-
     return matchesSearch && matchesFilter;
   });
 

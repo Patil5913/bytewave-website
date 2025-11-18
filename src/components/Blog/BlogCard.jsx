@@ -22,7 +22,7 @@ const BlogCard = ({ data }) => {
           {/* Image section - Fixed height */}
           <div className="relative w-full md:w-2/5 h-64 md:h-80 overflow-hidden group flex-shrink-0">
             <img
-              src={data.image}
+              src={data.imageUrl}
               alt={data.title}
               className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
             />
@@ -58,13 +58,14 @@ const BlogCard = ({ data }) => {
               </div>
               
               {/* Description */}
-              <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4 line-clamp-2">
-                {data.desc}
-              </p>
+               <div
+                    className="text-sm text-gray-700 mb-4 line-clamp-3 flex-1"
+                    dangerouslySetInnerHTML={{ __html: data.content }}
+                  />
               
               {/* Read more link */}
               <a 
-                href={`/blog/${data.id}` }
+                href={`/blog/${data._id}` }
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="inline-flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700 transition-colors relative group/link"
