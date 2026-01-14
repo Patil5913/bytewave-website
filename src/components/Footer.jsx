@@ -39,16 +39,7 @@ export default function Footer() {
               Company Info
             </h3>
             <ul className="space-y-3 w-full">
-              <li className="flex gap-3 relative right-6">
-                <MapPin className="w-5 h-5 text-blue-500 " />
-                <span className="text-zinc-700 font-medium whitespace-nowrap">
-                  117, South Lexington Street
-                  <br />
-                  <div className="relative right-3">
-                    Harrisonville,MO 64701
-                  </div>
-                </span>
-              </li>
+              
 
               <li className="flex items-center gap-3 relative right-6">
                 <Phone className="w-5 h-5 text-blue-500 flex-shrink-0" />
@@ -62,6 +53,26 @@ export default function Footer() {
                 <span className="text-zinc-700 font-medium">
                   info@bytewavetechnology.com
 
+                </span>
+              </li>
+              <li className="flex gap-3 relative right-6">
+                <MapPin className="w-5 h-5 text-blue-500 " />
+                <span className="text-zinc-700 font-medium whitespace-nowrap">
+                  117, South Lexington Street
+                  <br />
+                  <div className="relative right-3">
+                    Harrisonville,MO 64701
+                  </div>
+                </span>
+              </li>
+              <li className="flex gap-3 relative right-6">
+                <MapPin className="w-5 h-5 text-blue-500 " />
+                <span className="text-zinc-700 font-medium whitespace-nowrap">
+                  679 Danforth Ave, Toronto,
+                  <br />
+                  <div className="relative right-3">
+                    ON M4J 1L2, Canada
+                  </div>
                 </span>
               </li>
               <li className="flex gap-4 mt-4 relative right-6">
