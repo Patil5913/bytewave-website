@@ -200,30 +200,7 @@ export default function Footer() {
           </div>
 
 
-          {/* Watermark */}
-          <div className="mt-4 flex justify-center items-center gap-2 text-xs">
-            <a
-              href="https://www.vrugle.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 hover:text-blue-500 transition-colors"
-            >
-              Made with
-              <span
-                className="inline-block animate-bounce"
-                style={{ animationDuration: "1.1s" }}
-              >
-                <img
-                  src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Blue%20Heart.png"
-                  alt="Blue Heart"
-                  width="25"
-                  height="25"
-                  style={{ display: "inline-block", verticalAlign: "middle" }}
-                />
-              </span>
-              by Vrugle
-            </a>
-          </div>
+
         </div>
       </div>
     </footer>
