@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { format } from "date-fns";
 
-export default function ServiceTable({ onEdit }) {
+export default function ServiceTable({ onEdit, refreshKey }) {
   const { toast } = useToast();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +29,8 @@ export default function ServiceTable({ onEdit }) {
     isOpen: false,
     service: null,
     loading: false
-  });
+  }); 
+  
 
   const fetchServices = async () => {
     try {
@@ -50,11 +51,19 @@ export default function ServiceTable({ onEdit }) {
   };
 
   // Auto reload data every 30 seconds
+    useEffect(() => {
+      fetchServices();
+      const interval = setInterval(fetchServices, 30000);
+      return () => clearInterval(interval);
+    }, [refreshKey]);
+
+  // Refetch when parent signals a refresh (e.g., after create/update)
   useEffect(() => {
-    fetchServices();
-    const interval = setInterval(fetchServices, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    if (typeof refreshKey !== 'undefined') {
+      fetchServices();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshKey]);
 
   const handleDeleteClick = (service) => {
     setDeleteDialog({
@@ -107,6 +116,7 @@ export default function ServiceTable({ onEdit }) {
               <TableRow>
                 <TableHead className="w-[250px] px-6">Title</TableHead>
                 <TableHead className="w-[300px] px-6">Overview</TableHead>
+                <TableHead className="w-[120px] px-6">Price</TableHead>
                 <TableHead className="w-[200px] px-6">Created By</TableHead>
                 <TableHead className="w-[150px] px-6">Created At</TableHead>
                 <TableHead className="w-[150px] px-6">Updated At</TableHead>
@@ -121,6 +131,11 @@ export default function ServiceTable({ onEdit }) {
                     <div className="max-w-[300px] truncate" title={service.overview}>
                       {service.overview}
                     </div>
+                  </TableCell>
+                  <TableCell className="px-6">
+                    {Number.isFinite(Number(service.price))
+                      ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(service.price))
+                      : '-'}
                   </TableCell>
                   <TableCell className="px-6">{service.createdBy}</TableCell>
                   <TableCell className="px-6">

@@ -57,6 +57,11 @@ export async function PUT(request) {
       );
     }
 
+    // If price provided, coerce to Number
+    if (data.price !== undefined) {
+      data.price = Number(data.price) || 0;
+    }
+
     // Validate keyBenefits if provided
     if (data.keyBenefits) {
       if (!Array.isArray(data.keyBenefits) || 

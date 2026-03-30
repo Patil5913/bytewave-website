@@ -223,6 +223,7 @@ export default function Contact() {
             </div>
             <h3 className="text-lg font-medium mb-2">Chat with us</h3>
             <a href="mailto:contact@bytewavetechnology.com" className="text-blue-500 hover:underline">contact@bytewavetechnology.com</a>
+            <p className="text-blue-500 hover:underline">+1 (314) 464-5006</p>
             <p className="text-zinc-600 text-sm mt-2">We aim to respond within 24 hours</p>
           </motion.div>
 
@@ -254,7 +255,8 @@ export default function Contact() {
               </span>
             </div>
             <h3 className="text-lg font-medium mb-2">Visit us</h3>
-            <p className="text-blue-500">117, South Lexington Street</p>
+            <p className="text-blue-500">117, South Lexington Street
+Harrisonville,MO 64701</p>
             <p className="text-zinc-600 text-sm mt-2">United States</p>
           </motion.div>
         </div>

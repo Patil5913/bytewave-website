@@ -72,6 +72,10 @@ const serviceSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    price: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

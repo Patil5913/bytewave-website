@@ -10,6 +10,7 @@ import { Plus, X } from "lucide-react"; // Make sure to import lucide-react icon
 export default function Service() {
   const [editingService, setEditingService] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const toggleForm = () => {
     setShowForm(!showForm);
@@ -39,18 +40,22 @@ export default function Service() {
           onServiceCreated={() => {
             setShowForm(false);
             setEditingService(null);
+            setRefreshKey((k) => k + 1);
           }} 
         />
       )}
       
-      <ServiceTable onEdit={setEditingService} />
+      <ServiceTable onEdit={setEditingService} refreshKey={refreshKey} />
 
       {editingService && (
         <ServiceEdit
           service={editingService}
           isOpen={!!editingService}
           onClose={() => setEditingService(null)}
-          onSuccess={() => setEditingService(null)}
+          onSuccess={() => {
+            setEditingService(null);
+            setRefreshKey((k) => k + 1);
+          }}
         />
       )}
     </div>

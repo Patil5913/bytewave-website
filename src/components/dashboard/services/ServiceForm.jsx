@@ -16,6 +16,7 @@ const initialFormState = {
   keyBenefits: [{ point: "" }],
   approach: "",
   imageUrl: "",
+    price: 0,
 };
 
 export default function ServiceForm({ onServiceCreated }) {
@@ -91,6 +92,7 @@ export default function ServiceForm({ onServiceCreated }) {
         overview: formData.overview.trim(),
         approach: formData.approach.trim(),
         imageUrl: formData.imageUrl.trim(),
+        price: Number(formData.price) || 0,
         keyBenefits: formData.keyBenefits
           .map((benefit) => ({
             point: benefit.point.trim(),
@@ -169,6 +171,24 @@ export default function ServiceForm({ onServiceCreated }) {
               }
               required
               className="min-h-[120px] resize-none"
+            />
+          </div>
+
+          {/* Price */}
+          <div className="space-y-2">
+            <Label htmlFor="price" className="text-base font-medium">
+              Price (USD)
+            </Label>
+            <Input
+              id="price"
+              type="number"
+              step="0.01"
+              min="0"
+              value={formData.price}
+              onChange={(e) =>
+                setFormData({ ...formData, price: Number(e.target.value) })
+              }
+              className="h-12"
             />
           </div>
 
