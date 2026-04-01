@@ -75,6 +75,11 @@ export async function POST(request) {
       );
     }
 
+    // Ensure price is numeric
+    if (data.price !== undefined) {
+      data.price = Number(data.price) || 0;
+    }
+
     // Generate serviceId
     const serviceId = await generateServiceId();
     const currentDateTime = formatDate();

@@ -28,8 +28,9 @@ export default function ServiceEdit({ service, isOpen, onClose, onSuccess }) {
     approach: service.approach,
     imageUrl: service.imageUrl,
     keyBenefits: service.keyBenefits,
+    price: service.price || 0,
   });
-
+  
   const [loading, setLoading] = useState(false);
 
   const handleKeyBenefitChange = (index, value) => {
@@ -99,6 +100,7 @@ export default function ServiceEdit({ service, isOpen, onClose, onSuccess }) {
           overview: formData.overview.trim(),
           approach: formData.approach.trim(),
           imageUrl: formData.imageUrl.trim(),
+          price: Number(formData.price) || 0,
           keyBenefits: formData.keyBenefits
             .map((benefit) => ({ point: benefit.point.trim() }))
             .filter((benefit) => benefit.point !== ""),
@@ -168,6 +170,24 @@ export default function ServiceEdit({ service, isOpen, onClose, onSuccess }) {
                 }
                 required
                 className="min-h-[120px] resize-none"
+              />
+            </div>
+
+            {/* Price */}
+            <div className="space-y-2">
+              <Label htmlFor="price" className="text-base font-medium">
+                  Price (USD)
+                </Label>
+              <Input
+                id="price"
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.price}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: Number(e.target.value) })
+                }
+                className="h-12"
               />
             </div>
 
