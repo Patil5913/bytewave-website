@@ -19,6 +19,11 @@ export default function ServiceDetailModal({
     }
   };
 
+  // Format price if available
+  const formattedPrice = Number.isFinite(Number(selectedService?.price))
+    ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(selectedService.price))
+    : null;
+
   return (
     <>
       {/* Dark overlay */}
@@ -91,13 +96,20 @@ export default function ServiceDetailModal({
               {!showContactForm ? (
                 <div>
                   <div className="flex justify-between items-start mb-6">
-                    <h2 className="text-3xl font-bold text-zinc-900">
-                      {selectedService.title}
-                    </h2>
-                    <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                      {selectedService.serviceType || "Service"}
-                    </span>
-                  </div>
+                      <div>
+                        <h2 className="text-3xl font-bold text-zinc-900">
+                          {selectedService.title}
+                        </h2>
+                        {formattedPrice && (
+                          <p className="mt-2 text-lg text-zinc-700 font-semibold">
+                            {formattedPrice}
+                          </p>
+                        )}
+                      </div>
+                      <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                        {selectedService.serviceType || "Service"}
+                      </span>
+                    </div>
 
                   <div className="space-y-6">
                     <div>
@@ -138,9 +150,12 @@ export default function ServiceDetailModal({
               ) : (
                 <div>
                   <div className="flex justify-between items-start mb-6">
-                    <h2 className="text-3xl font-bold text-zinc-900">
-                      Contact Us About {selectedService.title}
-                    </h2>
+                    <div>
+                      <h2 className="text-3xl font-bold text-zinc-900">
+                        Contact Us About {selectedService.title}
+                      </h2>
+                       
+                    </div>
                   </div>
 
                   <ServiceForm
