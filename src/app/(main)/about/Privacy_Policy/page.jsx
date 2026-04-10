@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import LegalLinks from "../_component/legal_links";
 const PrivacyPolicyPage = () => {
   return (
     <div>
@@ -27,69 +28,151 @@ const PrivacyPolicyPage = () => {
             animate={{ opacity: 0.8 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-           Bytewave (“we,” “our,” “us”) respects your privacy and is committed to protecting your personal information. This Privacy Policy describes how we collect, use, disclose, and safeguard your data when you interact with us through our website, SMS, phone, email, and other digital or in-person communications.
-
+            Bytewave ("we", "our", "us") is committed to protecting your
+            personal information. This Privacy Policy explains how we collect,
+            use, and safeguard your data when you interact with our platform,
+            services, or communication channels.
           </motion.p>
+          <p className="mt-2">
+            By using our services, you agree to the practices described in this
+            policy.
+          </p>
         </div>
       </motion.div>
 
-      
-
-
       <div className="px-6 py-10 max-w-4xl mx-auto space-y-6">
         <section>
-          <h2 className="text-2xl font-semibold text-black">1. Information We Collect</h2>
-          <p className="mt-2">We may collect personal, professional, communication, usage, and preference data.</p>
-        </section>
+          <h2 className="text-2xl font-semibold text-black">
+            1. Information We Collect
+          </h2>
+          <p className="mt-2 font-medium">a) Information You Provide</p>
+          <ul className="list-disc ml-6 mt-2 space-y-1">
+            <li>Full name, email address, and phone number</li>
+            <li>Resume, work experience, and career-related details</li>
+            <li>Visa status or job preferences (if shared by you)</li>
+          </ul>
 
-        <section>
-          <h2 className="text-2xl font-semibold text-black">2. How We Use Your Information</h2>
-          <p className="mt-2">To provide services, improve communication, share job updates, and maintain compliance.</p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold text-black">3. SMS & Text Messaging Policy</h2>
-          <ul className="list-disc ml-5 mt-2 space-y-1">
-            <li>You consent to receive SMS alerts & updates.</li>
-            <li>Message frequency varies.</li>
-            <li>Reply STOP to opt out, HELP for help.</li>
-            <li>No SMS data is shared with third parties.</li>
+          <p className="mt-4 font-medium">
+            b) Automatically Collected Information
+          </p>
+          <ul className="list-disc ml-6 mt-2 space-y-1">
+            <li>IP address and device information</li>
+            <li>Browser type and usage behavior</li>
+            <li>Pages visited and time spent on the website</li>
           </ul>
         </section>
 
         <section>
-          <h2 className="text-2xl font-semibold text-black">4. Data Retention</h2>
-          <p className="mt-2">We retain your information only as long as required by business or legal reasons.</p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold text-black">5. Data Sharing</h2>
-          <p className="mt-2">We share data only with service providers, legal authorities, or during business transfers.</p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold text-black">6–12. Additional Information</h2>
-          <ul className="list-disc ml-5 mt-2 space-y-1">
-            <li>We are not responsible for third-party site policies.</li>
-            <li>We use security measures to protect your data.</li>
-            <li>Cookies help improve user experience.</li>
-            <li>International transfers follow safety protocols.</li>
-            <li>You may request access, correction, or deletion of data.</li>
-            <li>No services are intended for children under 16.</li>
-            <li>Policy updates will have a new effective date.</li>
+          <h2 className="text-2xl font-semibold text-black">
+            2. How We Use Your Information
+          </h2>
+          <p className="mt-2">We use your information to:</p>
+          <ul className="list-disc ml-6 mt-2 space-y-1">
+            <li>Provide job search and staffing-related services</li>
+            <li>Improve our platform and user experience</li>
+            <li>Communicate updates, opportunities, and responses</li>
+            <li>Ensure security and prevent misuse</li>
           </ul>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold text-black">13. Contact Us</h2>
           <p className="mt-2">
-            Bytewave<br />
-            Email: info@bytewave.com<br />
-            Phone: +1 (314) 464-5006<br />
+            We do not sell your personal information to third parties.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold text-black">
+            3. Cookies & Tracking
+          </h2>
+          <p className="mt-2">
+            We use cookies and similar technologies to improve user experience,
+            analyze traffic, and remember preferences.
+          </p>
+          <p className="mt-2">
+            You can disable cookies through your browser settings, but some
+            features may not function properly.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold text-black">4. Data Sharing</h2>
+          <p className="mt-2">We may share your information:</p>
+          <ul className="list-disc ml-6 mt-2 space-y-1">
+            <li>
+              With trusted service providers (hosting, communication tools)
+            </li>
+            <li>When required by law or legal processes</li>
+            <li>During business transitions such as mergers or acquisitions</li>
+          </ul>
+          <p className="mt-2">
+            We do not allow third parties to use your data for unrelated
+            marketing purposes.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold text-black">
+            5. Data Retention
+          </h2>
+          <p className="mt-2">
+            We retain your data only as long as necessary for business, legal,
+            or operational purposes.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold text-black">
+            6. Data Security
+          </h2>
+          <p className="mt-2">
+            We implement reasonable security measures to protect your
+            information. However, no system is completely secure.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-2xl font-semibold text-black">7. Your Rights</h2>
+          <p className="mt-2">You may have the right to:</p>
+          <ul className="list-disc ml-6 mt-2 space-y-1">
+            <li>Request access to your data</li>
+            <li>Request correction or deletion</li>
+            <li>Withdraw consent where applicable</li>
+          </ul>
+          <p className="mt-2">
+            To exercise these rights, contact us using the details below.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold text-black">
+            8. Children's Privacy
+          </h2>
+          <p className="mt-2">
+            Our services are not intended for individuals under the age of 16.
+            We do not knowingly collect personal data from children.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-2xl font-semibold text-black">
+            9. Updates to This Policy
+          </h2>
+          <p className="mt-2">
+            We may update this Privacy Policy from time to time. Continued use
+            of our services indicates acceptance of the updated policy.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold text-black">10. Contact Us</h2>
+          <p className="mt-2">
+            Bytewave
+            <br />
+            Email: info@bytewave.com
+            <br />
+            Phone: +1 (314) 464-5006
+            <br />
             Website: https://www.bytewavetechnology.com
           </p>
         </section>
       </div>
+      <LegalLinks current="privacy" />
     </div>
   );
 };
