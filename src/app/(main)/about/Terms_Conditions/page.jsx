@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import LegalLinks from "../_component/legal_links";
+import LegalLinks from "@/components/legal_links";
 
 const TermsPage = () => {
   return (
@@ -176,7 +176,7 @@ const TermsPage = () => {
           </p>
         </section>
       </div>
-        <LegalLinks current="terms" />
+      <LegalLinks current="terms" />
     </div>
   );
 };

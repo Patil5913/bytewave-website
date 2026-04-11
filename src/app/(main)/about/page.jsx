@@ -5,45 +5,10 @@ import { Stats } from '@/components/Stats';
 import WhoWeAre from '@/components/WhoWeAre';
 import WhatSetsUsApart from '@/components/WhatSetsUsApart';
 import FAQ from '@/components/FAQ';
-import About from '@/components/about';
-// import ContactSection from '@/components/ContactSection';
 
 function App() {
   const [ref, setRef] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
-
-  const services = [
-    {
-      title: "Content Marketing",
-      description: "An informative approach used to attract, engage, and retain an audience by creating and sharing relevant articles, videos and other media.",
-      imageUrl: "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-    },
-    {
-      title: "Digital Advertising",
-      description: "Solutions to target audiences via display advertising on websites, newsletter, social media, email direct, content marketing and native advertising.",
-      imageUrl: "https://images.pexels.com/photos/6214472/pexels-photo-6214472.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-    },
-    {
-      title: "Marketing Strategy",
-      description: "Comprehensive market analysis and campaign development to maximize ROI through strategic positioning and targeted messaging.",
-      imageUrl: "https://images.pexels.com/photos/8867431/pexels-photo-8867431.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-    },
-    {
-      title: "Brand Development",
-      description: "Strategic brand creation and evolution services that help businesses establish a strong, memorable presence in their target markets.",
-      imageUrl: "https://images.pexels.com/photos/7688336/pexels-photo-7688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-    },
-    {
-      title: "Social Media Management",
-      description: "Comprehensive social media strategy and execution to build engagement, grow followers, and drive meaningful interactions with your audience.",
-      imageUrl: "https://images.pexels.com/photos/147413/twitter-facebook-together-exchange-of-information-147413.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-    },
-    {
-      title: "Analytics & Reporting",
-      description: "Data-driven insights and detailed performance analysis to optimize your marketing strategies and maximize return on investment.",
-      imageUrl: "https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-    }
-  ];
 
   const descriptionText = "We deliver end-to-end staffing and recruitment solutions with a unified approach that blends strategic hiring, candidate training, and workforce consulting to maximise career and business potential. By leveraging our expertise in human capital and placement services, we help companies build stronger teams, connect professionals with the right opportunities, and drive measurable results";
   const words = descriptionText.split(' ');
