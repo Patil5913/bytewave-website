@@ -92,7 +92,7 @@ const RefundPage = () => {
           </div>
 
           <p className="mt-3 text-sm font-medium text-red-600">
-            After 45 days, payments are non-refundable.
+            After 90 days, payments are non-refundable.
           </p>
         </section>
 
