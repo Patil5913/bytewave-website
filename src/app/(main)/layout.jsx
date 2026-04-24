@@ -7,11 +7,43 @@ import Footer from "@/components/Footer";
 import "../globals.css";
 import WhatsAppChatButton from "@/components/WhatsappButton";
 const inter = Inter({ subsets: ["latin"] });
-import ScheduleMeetingButton from "@/components/Schedule_meeting"
+import ScheduleMeetingButton from "@/components/Schedule_meeting";
 
 export const metadata = {
+  metadataBase: new URL("https://www.bytewavetechnology.com"),
   title: "Bytewave Technology",
-  description: "Building workforce excellence through innovation and expertise",
+  description:
+    "Bytewave helps job seekers accelerate their careers with resume optimization, job search strategy, interview preparation, and professional guidance tailored to real market demands.",
+  keywords: [
+    "job search support",
+    "career guidance services",
+    "resume optimization",
+    "interview preparation",
+    "job application strategy",
+    "staffing services",
+    "career consulting",
+    "job placement assistance",
+    "professional resume help",
+    "job search services",
+  ],
+  openGraph: {
+    type: "website",
+    siteName: "Bytewave",
+    url: "https://www.bytewavetechnology.com",
+    title: "Bytewave | Smarter Career Growth & Job Support",
+    description:
+      "Accelerate your job search with expert resume support, interview prep, and career strategy.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: "/logo.png",
     shortcut: "/logo.png",
@@ -39,9 +71,7 @@ export default function RootLayout({ children }) {
                 showPopup={true}
               />
             </div>
-           < ScheduleMeetingButton
-           size= {50}
-           />
+            <ScheduleMeetingButton size={50} />
           </main>
           <Footer />
         </TrainingProvider>

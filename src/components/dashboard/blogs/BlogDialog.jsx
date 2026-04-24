@@ -197,7 +197,6 @@ useEffect(() => {
         setPreviewUrl("");
       }
     } catch (err) {
-      console.log(err);
       const errorMessage =
         err.response?.data?.message ||
         err.message || // fallback

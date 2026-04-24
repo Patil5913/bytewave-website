@@ -66,7 +66,6 @@ function TrainingPage() {
   // Check if submission is currently in progress or recently completed
   const isSubmissionAllowed = () => {
     if (submissionInProgress) {
-      console.log("Training submission already in progress, preventing duplicate");
       return false;
     }
     return true;
@@ -174,7 +173,6 @@ function TrainingPage() {
       try {
         // Generate a unique submission ID
         const submissionId = generateSubmissionId();
-        console.log("Auto-saving training request with ID:", submissionId);
         
         // Lock submissions
         startSubmissionTimer(submissionId);
@@ -317,7 +315,6 @@ function TrainingPage() {
     // 1. Form is already being submitted
     // 2. Any submission is in progress
     if (formStatus.isSubmitting || !isSubmissionAllowed()) {
-      console.log("Preventing duplicate training submission - already in progress");
       return;
     }
 
@@ -330,7 +327,6 @@ function TrainingPage() {
     try {
       // Generate a unique submission ID
       const submissionId = generateSubmissionId();
-      console.log("Manual training submission with ID:", submissionId);
       
       // Lock submissions
       startSubmissionTimer(submissionId);

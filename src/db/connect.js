@@ -14,7 +14,6 @@ if (!cached) {
 
 async function connectDB() {
   if (cached.conn) {
-    console.log('Using cached MongoDB connection');
     return cached.conn;
   }
 
@@ -25,7 +24,6 @@ async function connectDB() {
       useUnifiedTopology: true,
     };
 
-    console.log('Creating new MongoDB connection');
     cached.promise = mongoose.connect(MONGODB_URI, opts)
       .then((mongoose) => {
         return mongoose;

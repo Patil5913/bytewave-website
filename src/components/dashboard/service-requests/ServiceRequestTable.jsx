@@ -68,9 +68,7 @@ export default function ServiceRequestTable({ setEditRequest }) {
     try {
       const response = await fetch("/api/service-requests");
       const data = await response.json();
-      console.log("Service Requests API Response:", data); // Log the full response
       if (data.success) {
-        console.log("Service Requests Data:", data.data); // Log the requests data
         setRequests(data.data);
       }
     } catch (error) {

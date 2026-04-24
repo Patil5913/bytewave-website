@@ -61,7 +61,6 @@ function ServicesPage() {
   // Check if submission is currently in progress or recently completed
   const isSubmissionAllowed = () => {
     if (submissionInProgress) {
-      console.log("Submission already in progress, preventing duplicate");
       return false;
     }
     return true;
@@ -272,7 +271,6 @@ function ServicesPage() {
     // 1. Form is already being submitted
     // 2. Any submission is in progress
     if (formStatus.isSubmitting || !isSubmissionAllowed()) {
-      console.log("Preventing duplicate submission - already in progress");
       return;
     }
 
