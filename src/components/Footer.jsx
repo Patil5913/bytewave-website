@@ -39,20 +39,16 @@ export default function Footer() {
               Company Info
             </h3>
             <ul className="space-y-3 w-full">
-              
-
               <li className="flex items-center gap-3 relative right-6">
                 <Phone className="w-5 h-5 text-blue-500 flex-shrink-0" />
                 <span className="text-zinc-700 font-medium">
                   +1 (314) 464-5006
-
                 </span>
               </li>
               <li className="flex items-center gap-3 relative right-6">
                 <Mail className="w-5 h-5 text-blue-500 flex-shrink-0" />
                 <span className="text-zinc-700 font-medium">
                   info@bytewavetechnology.com
-
                 </span>
               </li>
               <li className="flex gap-3 relative right-6">
@@ -60,9 +56,7 @@ export default function Footer() {
                 <span className="text-zinc-700 font-medium whitespace-nowrap">
                   117, South Lexington Street
                   <br />
-                  <div className="relative right-3">
-                    Harrisonville,MO 64701
-                  </div>
+                  <div className="relative right-3">Harrisonville,MO 64701</div>
                 </span>
               </li>
               <li className="flex gap-3 relative right-6">
@@ -70,9 +64,7 @@ export default function Footer() {
                 <span className="text-zinc-700 font-medium whitespace-nowrap">
                   679 Danforth Ave, Toronto,
                   <br />
-                  <div className="relative right-3">
-                    ON M4J 1L2, Canada
-                  </div>
+                  <div className="relative right-3">ON M4J 1L2, Canada</div>
                 </span>
               </li>
               <li className="flex gap-4 mt-4 relative right-6">
@@ -158,6 +150,42 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
+              <li className="flex ">
+                <Link
+                  href="/terms"
+                  className="text-zinc-700 hover:text-blue-500 transition-colors flex items-center gap-2"
+                >
+                  <span className="text-blue-500 font-medium">›</span>
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li className="flex ">
+                <Link
+                  href="/privacy-policy"
+                  className="text-zinc-700 hover:text-blue-500 transition-colors flex items-center gap-2"
+                >
+                  <span className="text-blue-500 font-medium">›</span>
+                  Privacy Policy
+                </Link>
+              </li>
+              <li className="flex ">
+                <Link
+                  href="/refund-policy"
+                  className="text-zinc-700 hover:text-blue-500 transition-colors flex items-center gap-2"
+                >
+                  <span className="text-blue-500 font-medium">›</span>
+                  Refund Policy
+                </Link>
+              </li>
+              <li className="flex ">
+                <Link
+                  href="/cookies-policy"
+                  className="text-zinc-700 hover:text-blue-500 transition-colors flex items-center gap-2"
+                >
+                  <span className="text-blue-500 font-medium">›</span>
+                  Cookies Policy
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -176,7 +204,6 @@ export default function Footer() {
                   10:00 AM - 6:00 PM EST
                 </span>
               </li>
-
             </ul>
           </div>
         </div>
@@ -184,23 +211,8 @@ export default function Footer() {
         {/* Copyright */}
         <div className="mt-12 pt-6 border-t border-zinc-200 text-center text-zinc-600 text-sm ">
           <div className="flex justify-center">
-            © 2024 Bytewave. All rights reserved.|
-            <div>
-              <Link
-                href="/about/Terms_Conditions"
-                className="text-zinc-700 hover:text-blue-500 transition-colors">
-                Terms & Conditions |
-              </Link>
-              <Link
-                href="/about/Privacy_Policy"
-                className="text-zinc-700 hover:text-blue-500 transition-colors">
-                Privacy Policy
-              </Link>
-            </div>
+            © 2024 Bytewave. All rights reserved.
           </div>
-
-
-
         </div>
       </div>
     </footer>

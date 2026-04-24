@@ -40,7 +40,7 @@ export async function GET() {
     const formattedCourses = courses.map(formatTrainingData);
 
     return NextResponse.json(
-      { 
+      {
         success: true, 
         data: formattedCourses 
       },

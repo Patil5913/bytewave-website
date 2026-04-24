@@ -142,7 +142,7 @@ const CareerForm = ({ selectedJob, availableJobs }) => {
     try {
       // Upload file first
       const uploadedUrl = await handleUpload(file);
-      
+      console.log("File uploaded successfully:", uploadedUrl);
       // Update form data with uploaded file URL
       setFormData(prev => ({
         ...prev,
@@ -361,7 +361,7 @@ const CareerForm = ({ selectedJob, availableJobs }) => {
                 onChange={handleFileChange}
                 disabled={submitting}
                 uploading={fileUploading}
-                accept=".pdf,.doc,.docx"
+                accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
                 onRemove={() => {
                   setFormData(prev => ({
                     ...prev,

@@ -21,37 +21,37 @@ const logos = [
   { id: 15, src: "/logos/salesforce.png", alt: "Salesforce" },
 ];
 
-const CompanyLogos = () => {
-  return (
-    <motion.div
-      className="relative w-full overflow-hidden py-8 bg-white"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    >
-      <div className="absolute left-0 right-0 h-full bg-gradient-to-r from-white/5 via-transparent to-white/5 z-10" />
-      <div className="flex gap-6 marquee-container-reverse">
-        <div className="flex gap-6 animate-marquee-reverse">
-          {[...logos, ...logos].map((logo, index) => (
-            <motion.div
-              key={index}
-              className="flex-shrink-0 w-8 h-4 flex items-center justify-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <img
-                src={logo.src}
-                alt={logo.alt}
-                className="max-w-full max-h-full object-contain transition-all duration-300"
-              />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-};
+// const CompanyLogos = () => {
+//   return (
+//     <motion.div
+//       className="relative w-full overflow-hidden py-8 bg-white"
+//       initial={{ opacity: 0 }}
+//       whileInView={{ opacity: 1 }}
+//       transition={{ duration: 0.8 }}
+//     >
+//       <div className="absolute left-0 right-0 h-full bg-gradient-to-r from-white/5 via-transparent to-white/5 z-10" />
+//       <div className="flex gap-6 marquee-container-reverse">
+//         <div className="flex gap-6 animate-marquee-reverse">
+//           {[...logos, ...logos].map((logo, index) => (
+//             <motion.div
+//               key={index}
+//               className="flex-shrink-0 w-8 h-4 flex items-center justify-center"
+//               initial={{ opacity: 0, y: 20 }}
+//               whileInView={{ opacity: 1, y: 0 }}
+//               transition={{ duration: 0.5, delay: index * 0.1 }}
+//             >
+//               <img
+//                 src={logo.src}
+//                 alt={logo.alt}
+//                 className="max-w-full max-h-full object-contain transition-all duration-300"
+//               />
+//             </motion.div>
+//           ))}
+//         </div>
+//       </div>
+//     </motion.div>
+//   );
+// };
 
 const Testimonials = () => {
   const testimonials = [
@@ -60,7 +60,7 @@ const Testimonials = () => {
     role: "Software Engineer",
     company: "Amazon",
     image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+      "https://cdn.vrugle.com/bytewave/1776859041110-Aditi_Singh.png",
     content:
       "Thrilled to announce that I’ve joined Amazon as a Software Engineer! The journey wasn’t easy, but Bytewave’s structured training and mock interviews gave me the edge I needed.",
     rating: 5,
@@ -70,7 +70,7 @@ const Testimonials = () => {
     role: "Data Analyst",
     company: "A Tech Logistics",
     image:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+      "https://cdn.vrugle.com/bytewave/1776859913258-Viswadatta_Chinta.jpeg",
     content:
       "Excited to start my new role as a Data Analyst at A Tech Logistics. From resume building to advanced SQL and Power BI training, Bytewave guided me every step of the way.",
     rating: 5,
@@ -80,7 +80,7 @@ const Testimonials = () => {
     role: "Software Engineer",
     company: "Ironclad",
     image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+      "https://cdn.vrugle.com/bytewave/1776860104274-Jyoti_Vapre.jpeg",
     content:
       "Overjoyed to share that I’ve joined Ironclad as a Software Engineer! Bytewave’s intensive coding bootcamp and real-world project simulations gave me the confidence to crack the interviews.",
     rating: 5,
@@ -90,7 +90,7 @@ const Testimonials = () => {
     role: "Supply Chain Analyst",
     company: "Tech Electronics",
     image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+      "https://cdn.vrugle.com/bytewave/1776860346883-Deepankar_Sakya.jpeg",
     content:
       "Happy to begin my career as a Supply Chain Analyst at Tech Electronics. Bytewave’s analytics training and personalized mentorship really helped me bridge the gap between academics and industry.",
     rating: 5,
@@ -100,7 +100,7 @@ const Testimonials = () => {
     role: "Power BI Developer",
     company: "Deel",
     image:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+      "https://cdn.vrugle.com/bytewave/1776860440894-Abhilash_Komuravelli.jpeg",
     content:
       "Excited to step into my new role as a Power BI Developer at Deel. Bytewave not only sharpened my technical skills but also prepared me with soft skills and interview strategies.",
     rating: 5,
@@ -110,7 +110,7 @@ const Testimonials = () => {
     role: "Business Analyst",
     company: "Cigna Health",
     image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+      "https://cdn.vrugle.com/bytewave/1776860484180-Hema_Yadavalli.jpeg",
     content:
       "Delighted to share that I’ve accepted an offer as a Business Analyst at Cigna Health. Bytewave’s training on requirement analysis and case studies made me confident to take on this role.",
     rating: 5,
@@ -120,7 +120,7 @@ const Testimonials = () => {
     role: "React Developer",
     company: "OpenLaw",
     image:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+      "https://cdn.vrugle.com/bytewave/1776860551259-Prathyusha_Rajapudi.jpeg",
     content:
       "Thrilled to begin my journey with OpenLaw as a React Developer. Bytewave’s hands-on React projects and placement assistance helped me achieve this milestone.",
     rating: 5,

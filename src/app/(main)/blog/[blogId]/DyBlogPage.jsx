@@ -6,11 +6,7 @@ import { motion } from "framer-motion";
 import { metadata } from "@/components/Blog/Metadata";
 
 
-const Page = () => {
-  
- 
-  console.log(blogPosts);
-  
+const Page = () => {  
     let blogData = NaN;
     const params = useParams();
     for (let i in blogPosts){

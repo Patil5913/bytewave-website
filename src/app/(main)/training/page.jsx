@@ -17,7 +17,6 @@ function TrainingPage() {
   const router = useRouter();
   const formRef = useRef(null);
   const [selectedTraining, setSelectedTraining] = useState(null);
-  const [showContactForm, setShowContactForm] = useState(false);
   const [trainings, setTrainings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);

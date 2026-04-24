@@ -141,13 +141,11 @@ function ServicesPage() {
     if (!data) return false;
     
     // Check for required fields
-    const hasName = data.name && data.name.trim().length > 0;
     const hasEmail = data.email && data.email.trim().length > 0;
     const hasPhone = data.phone && data.phone.trim().length > 0;
-    const hasMessage = data.message && data.message.trim().length > 0;
     
     // At least one of these fields should have data
-    return hasName || hasEmail || hasPhone || hasMessage;
+    return hasEmail || hasPhone;
   };
   
   // Submit form data at trigger points
@@ -163,10 +161,9 @@ function ServicesPage() {
       hasFormData(formChangesRef.current.data)
     ) {
       try {
-        // Generate a unique submission ID
-        const submissionId = generateSubmissionId();
-        console.log("Auto-saving with ID:", submissionId);
         
+        // Generate a unique submission ID
+        const submissionId = generateSubmissionId();        
         // Lock submissions
         startSubmissionTimer(submissionId);
         
@@ -290,7 +287,7 @@ function ServicesPage() {
       setFormStatus({
         submitted: false,
         isSubmitting: false,
-        error: "Please fill in at least one field before submitting.",
+        error: "Please fill in at least an email or phone number before submitting.",
       });
       return;
     }
@@ -298,7 +295,6 @@ function ServicesPage() {
     try {
       // Generate a unique submission ID
       const submissionId = generateSubmissionId();
-      console.log("Manual submission with ID:", submissionId);
       
       // Lock submissions
       startSubmissionTimer(submissionId);

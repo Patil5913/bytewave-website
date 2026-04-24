@@ -160,17 +160,16 @@ export default function CareerRequestTable({ setEditRequest }) {
               </TableHeader>
               <TableBody>
                 {Array.isArray(requests) &&
-                  requests.map((request) => {
+                  requests.map((request,idx) => {
                     // Ensure we have valid request data
                     if (!request) return null;
 
-                    const rowKey = request.requestId || request._id || `row-${Math.random()}`;
                     const currentStatus = request.statusHistory?.[
                       request.statusHistory.length - 1
                     ]?.status || "pending";
 
                     return (
-                      <TableRow key={rowKey}>
+                      <TableRow key={idx}>
                         <TableCell className="font-medium px-6">
                           {request.name || "N/A"}
                         </TableCell>

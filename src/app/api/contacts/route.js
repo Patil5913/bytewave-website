@@ -112,9 +112,7 @@ export async function POST(request) {
     // Create the contact
     const contact = await Contact.create(contactData);
     const formattedContact = formatContactData(contact);
-
-    console.log("data:", formattedContact)
-
+  
     return NextResponse.json(
       { 
         success: true, 
