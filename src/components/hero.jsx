@@ -159,7 +159,7 @@ professionals and businesses to grow, adapt, and lead.            </p>
               {/* Laptop Image */}
               <div className="col-span-4 row-span-3 bg-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg opacity-0 animate-on-scroll slide-in-right transition-all duration-500">
                 <img
-                  src="https://cdn.pixabay.com/photo/2017/08/02/00/49/people-2569234_1280.jpg"
+                  src="https://cdn.vrugle.com/bytewave/1776858748274-hero_image_bytewave.jpg"
                   alt="Person working on laptop"
                   className="w-full h-full object-cover"
                   loading="eager"

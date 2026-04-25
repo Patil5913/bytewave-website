@@ -19,12 +19,10 @@ async function createAdmin() {
     }
 
     await mongoose.connect(process.env.MONGODB_URI);
-    console.log('Connected to MongoDB successfully');
     
     // Check if admin already exists
     const existingAdmin = await User.findOne({ isAdmin: true });
     if (existingAdmin) {
-      console.log('Admin already exists');
       process.exit(0);
     }
 
@@ -41,12 +39,8 @@ async function createAdmin() {
 
     await admin.save();
     
-    console.log('Admin user created successfully');
-    console.log('Email:', adminEmail);
-    console.log('Password:', adminPassword);
     
     await mongoose.connection.close();
-    console.log('Database connection closed');
     process.exit(0);
   } catch (error) {
     console.error('Error creating admin:', error);

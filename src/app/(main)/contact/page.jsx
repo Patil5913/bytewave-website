@@ -30,6 +30,9 @@ export default function Contact() {
     setStatus({ loading: true, error: null, success: false });
 
     try {
+      if(!formData.phone && !formData.email) {
+        throw new Error('Please provide at least an email or phone number');
+      }
       const response = await fetch('/api/contacts', {
         method: 'POST',
         headers: {

@@ -6,11 +6,11 @@ const policies = [
   {
     key: "terms",
     label: "Terms & Conditions",
-    href: "/about/Terms_Conditions",
+    href: "/terms",
   },
-  { key: "refund", label: "Refund Policy", href: "/about/Refund" },
-  { key: "privacy", label: "Privacy Policy", href: "/about/Privacy_Policy" },
-  { key: "cookies", label: "Cookies Policy", href: "/about/Cookies_Policy" },
+  { key: "refund", label: "Refund Policy", href: "/refund" },
+  { key: "privacy", label: "Privacy Policy", href: "/privacy-policy" },
+  { key: "cookies", label: "Cookies Policy", href: "/cookies-policy" },
 ];
 
 export default function LegalLinks({ current }) {

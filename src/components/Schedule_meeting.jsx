@@ -54,7 +54,6 @@ export default function ScheduleMeetingButton({ size = 50 }) {
         setIsOpen(false);
       }
     } catch (err) {
-      console.log(err);
       toast({
         title: "Error",
         description: "❌ Failed to schedule meeting. Please try again.",

@@ -115,10 +115,6 @@ export async function POST(request) {
       });
 
       if (existingSubmission) {
-        console.log(
-          "Duplicate training submission detected by ID:",
-          data.submissionId
-        );
         return NextResponse.json(
           {
             success: true, // Return success to avoid client retries

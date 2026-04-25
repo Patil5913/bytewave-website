@@ -14,7 +14,6 @@ const Page = () => {
       try {
         const res = await fetch("/api/blogs");
         const data = await res.json();
-        console.log(data);
         
         setBlogs(data.blogs || []);
       } catch (err) {

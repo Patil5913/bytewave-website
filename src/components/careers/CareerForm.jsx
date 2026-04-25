@@ -63,7 +63,6 @@ const CareerForm = ({ selectedJob, availableJobs }) => {
   // Handle route changes
   useEffect(() => {
     if (pathname !== previousPath) {
-      console.log("Route changed from", previousPath, "to", pathname);
       if (formData.name || formData.email || formData.phone) {
         handleAutoSubmit();
       }
@@ -142,7 +141,6 @@ const CareerForm = ({ selectedJob, availableJobs }) => {
     try {
       // Upload file first
       const uploadedUrl = await handleUpload(file);
-      
       // Update form data with uploaded file URL
       setFormData(prev => ({
         ...prev,
@@ -361,7 +359,7 @@ const CareerForm = ({ selectedJob, availableJobs }) => {
                 onChange={handleFileChange}
                 disabled={submitting}
                 uploading={fileUploading}
-                accept=".pdf,.doc,.docx"
+                accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
                 onRemove={() => {
                   setFormData(prev => ({
                     ...prev,

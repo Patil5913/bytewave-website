@@ -15,7 +15,10 @@ export default function TrainingCard({ training, index, onTrainingClick }) {
       <div className="relative p-6">
         <div className="mb-6 h-48 overflow-hidden rounded-2xl">
           <motion.img
-            src={training.imageUrl || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"}
+            src={
+              training.imageUrl ||
+              "https://cdn.vrugle.com/bytewave/1777005347286-working_in_Laptop.jpeg"
+            }
             alt={training.title}
             className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
             initial={{ scale: 1 }}

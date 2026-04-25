@@ -13,12 +13,6 @@ export const fetchTrainingCourses = async () => {
 // Submit training request
 export const submitTrainingRequest = async (formData) => {
   try {
-    console.log("Submitting training request with data:", {
-      name: formData.name,
-      email: formData.email,
-      submissionId: formData.submissionId,
-    });
-
     const response = await fetch("/api/training-requests", {
       method: "POST",
       headers: {
