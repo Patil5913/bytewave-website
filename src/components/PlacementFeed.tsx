@@ -52,7 +52,7 @@ const PLACEMENTS = [
   {
     role: "Data Analyst",
     stack: "SQL, Python, Looker",
-    candidate: "R. Patel",
+    candidate: "R. Foster",
     company: "figma.com",
     companyName: "Figma",
     location: "Austin, TX",

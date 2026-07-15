@@ -144,11 +144,18 @@ export default function Hero() {
                     key={i}
                     className="group flex items-center gap-2.5 text-base font-medium text-white transition-colors duration-200 hover:text-white/80"
                   >
-                    <img
-                      src={`https://img.logo.dev/name/${encodeURIComponent(platform.name)}?token=${process.env.NEXT_PUBLIC_LOGO_DEV_KEY}&size=40&format=png&theme=dark`}
-                      alt={platform.name}
-                      className="h-5 w-5 opacity-70 transition-opacity duration-200 group-hover:opacity-100"
-                    />
+                    <span className="relative h-5 w-5">
+                      <img
+                        src={`https://jobspipe.dev/favicons/${platform.slug}.png`}
+                        alt={platform.name}
+                        className="absolute inset-0 h-5 w-5 grayscale invert opacity-70 transition-opacity duration-200 group-hover:opacity-0"
+                      />
+                      <img
+                        src={`https://jobspipe.dev/favicons/${platform.slug}.png`}
+                        alt=""
+                        className="absolute inset-0 h-5 w-5 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                      />
+                    </span>
                     {platform.name}
                   </span>
                 ))}
