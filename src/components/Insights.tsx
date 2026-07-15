@@ -2,6 +2,7 @@
 
 import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { ALL_POSTS, buildHref } from "@/lib/insights";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -12,36 +13,7 @@ const fadeUp: Variants = {
   },
 };
 
-const ARTICLES = [
-  {
-    href: "/insights/article-1",
-    date: "October 12, 2026",
-    tag: "Market Analysis",
-    title: "The changing baseline for senior DevOps compensation in Q4.",
-    author: "R. Fischer",
-    description:
-      "Compensation bands are shifting fast as demand for platform engineers outpaces supply across every major market.",
-  },
-  {
-    href: "/insights/article-2",
-    date: "October 08, 2026",
-    tag: "Operations",
-    title:
-      "Why traditional HR screening fails at identifying actual engineering talent.",
-    author: "L. Marsh",
-    description:
-      "Keyword filters and resume scoring miss the signals that actually predict on-the-job performance.",
-  },
-  {
-    href: "/insights/article-3",
-    date: "September 29, 2026",
-    tag: "Infrastructure",
-    title: "Structuring your data science team for early-stage scaling.",
-    author: "T. Nakamura",
-    description:
-      "The right ratio of generalists to specialists changes at every stage of growth — here's how to plan for it.",
-  },
-];
+const ARTICLES = ALL_POSTS.slice(0, 3);
 
 export default function Insights() {
   return (
@@ -75,8 +47,8 @@ export default function Insights() {
         <div className="border-t border-white/10">
           {ARTICLES.map((article, i) => (
             <motion.a
-              key={article.href}
-              href={article.href}
+              key={article.id}
+              href={buildHref(article)}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.5 }}
@@ -94,7 +66,7 @@ export default function Insights() {
                   {article.title}
                 </h3>
                 <p className="text-sm leading-relaxed text-white/40">
-                  {article.description}
+                  {article.excerpt}
                 </p>
                 <span className="mt-1 text-xs tracking-wider text-white/30 uppercase">
                   {article.author}

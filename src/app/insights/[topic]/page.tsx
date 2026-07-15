@@ -1,31 +1,59 @@
 import Navbar from "@components/Navbar";
 import Footer from "@components/Footer";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-import { ALL_POSTS, buildHref } from "@/lib/insights";
+import { ALL_POSTS, buildHref, postsByTopic, topicSlug } from "@/lib/insights";
 
-export default function InsightsIndex() {
+export function generateStaticParams() {
+  const topics = new Set(ALL_POSTS.map((post) => topicSlug(post)));
+  return Array.from(topics).map((topic) => ({ topic }));
+}
+
+export default async function InsightsTopic({
+  params,
+}: {
+  params: Promise<{ topic: string }>;
+}) {
+  const { topic } = await params;
+  const posts = postsByTopic(topic);
+
+  if (posts.length === 0) {
+    notFound();
+  }
+
   return (
     <>
       <Navbar />
       <section className="w-full bg-black px-6 pt-32 pb-24 md:px-16">
         <div className="mx-auto max-w-7xl">
+          <div className="mb-6 flex items-center gap-2 text-xs tracking-wide text-white/40">
+            <Link href="/" className="transition-colors hover:text-white">
+              Home
+            </Link>
+            <span>/</span>
+            <Link
+              href="/insights"
+              className="transition-colors hover:text-white"
+            >
+              Insights
+            </Link>
+            <span>/</span>
+            <span className="text-white/60">{posts[0].tag}</span>
+          </div>
+
           <div className="mb-16 flex flex-col gap-4 md:max-w-2xl">
             <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-              <span className="text-emerald-400">[ 05 ]</span>
-              Insights
+              <span className="text-emerald-400">[ Topic ]</span>
+              {posts[0].tag}
             </span>
             <h1 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
-              Intelligence & Insights.
+              {posts[0].tag}.
             </h1>
-            <p className="max-w-md text-base leading-relaxed text-white/50">
-              Market data, hiring analysis, and field notes from inside the
-              network.
-            </p>
           </div>
 
           <div className="border-t border-white/10">
-            {ALL_POSTS.map((post) => (
+            {posts.map((post) => (
               <Link
                 key={post.id}
                 href={buildHref(post)}
