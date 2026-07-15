@@ -89,9 +89,9 @@ export default function PlacementFeed() {
               viewport={{ once: true, amount: 0.5 }}
               variants={fadeUp}
               transition={{ delay: i * 0.08 }}
-              className="group -mx-4 grid grid-cols-1 gap-2 border-b border-white/10 px-4 py-6 transition-colors hover:bg-white/[0.03] md:grid-cols-12 md:items-center md:gap-4"
+              className="group -mx-4 grid grid-cols-2 gap-x-4 gap-y-3 border-b border-white/10 px-4 py-6 transition-colors hover:bg-white/[0.03] lg:grid-cols-12 lg:items-center lg:gap-4 lg:gap-y-4"
             >
-              <div className="flex items-center gap-2 md:col-span-2">
+              <div className="order-1 flex items-center gap-2 lg:order-none lg:col-span-2">
                 <span className="relative flex h-1.5 w-1.5">
                   <span
                     className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${STATUS_COLORS[item.status]}`}
@@ -105,7 +105,7 @@ export default function PlacementFeed() {
                 </span>
               </div>
 
-              <div className="flex flex-col justify-center md:col-span-3">
+              <div className="order-3 col-span-2 flex flex-col justify-center lg:order-none lg:col-span-3">
                 <span className="font-medium text-white/80 transition-colors group-hover:text-white">
                   {item.role}
                 </span>
@@ -114,8 +114,8 @@ export default function PlacementFeed() {
                 </span>
               </div>
 
-              <div className="flex items-center gap-3 text-sm text-white/60 md:col-span-3">
-                <span className="w-20 shrink-0 truncate text-right">{item.candidate}</span>
+              <div className="order-4 col-span-2 flex items-center gap-3 text-sm text-white/60 lg:order-none lg:col-span-3">
+                <span className="shrink-0 truncate lg:w-20 lg:text-right">{item.candidate}</span>
                 <span className="shrink-0 text-white/30">→</span>
                 <img
                   src={`https://img.logo.dev/${item.company}?token=${process.env.NEXT_PUBLIC_LOGO_DEV_KEY}&size=40&format=png&theme=dark`}
@@ -123,14 +123,17 @@ export default function PlacementFeed() {
                   className="h-4 w-4 shrink-0 object-contain opacity-70 transition-opacity duration-300 group-hover:opacity-100"
                 />
                 <span className="truncate">{item.companyName}</span>
+                <span className="ml-auto shrink-0 pl-3 text-xs text-white/40 lg:hidden">
+                  {item.location}
+                </span>
               </div>
 
-              <div className="flex items-center text-xs text-white/40 md:col-span-2">
+              <div className="order-5 col-span-2 hidden items-center text-xs text-white/40 lg:order-none lg:col-span-2 lg:flex lg:justify-start">
                 {item.location}
               </div>
 
-              <div className="flex items-center text-sm text-white/70 md:col-span-2 md:justify-end">
-                <span className="text-white/90 md:text-white/70">{item.pay}</span>
+              <div className="order-2 flex items-center justify-end text-sm lg:order-none lg:col-span-2 lg:justify-end">
+                <span className="text-white/90 lg:text-white/70">{item.pay}</span>
               </div>
             </motion.div>
           ))}

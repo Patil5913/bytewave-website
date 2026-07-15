@@ -24,6 +24,10 @@ body {
   animation: marquee 30s linear infinite;
 }
 
+.animate-marquee-slow {
+  animation: marquee 50s linear infinite;
+}
+
 .marquee-fade {
   mask-image: linear-gradient(
     to right,
@@ -37,6 +41,23 @@ body {
     transparent 0%,
     black 25%,
     black 75%,
+    transparent 100%
+  );
+}
+
+.marquee-fade-soft {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
     transparent 100%
   );
 }

@@ -59,7 +59,7 @@ export default function Insights() {
               <span className="text-emerald-400">[ 05 ]</span>
               Insights
             </span>
-            <h2 className="font-instrument text-3xl font-medium text-white md:text-4xl">
+            <h2 className="font-instrument text-4xl font-medium text-white md:text-5xl">
               Intelligence & Insights.
             </h2>
           </div>
@@ -72,7 +72,7 @@ export default function Insights() {
           </a>
         </motion.div>
 
-        <div className="flex flex-col gap-10">
+        <div className="border-t border-white/10">
           {ARTICLES.map((article, i) => (
             <motion.a
               key={article.href}
@@ -82,24 +82,28 @@ export default function Insights() {
               viewport={{ once: true, amount: 0.5 }}
               variants={fadeUp}
               transition={{ delay: i * 0.1 }}
-              className="group -mx-4 flex flex-col gap-3 rounded-lg px-4 py-4 transition-colors hover:bg-white/[0.03]"
+              className="group grid grid-cols-1 gap-x-8 gap-y-3 border-b border-white/10 py-8 transition-colors hover:bg-white/[0.02] md:grid-cols-12 md:items-baseline"
             >
-              <div className="flex items-center justify-between text-xs tracking-widest text-white/40 uppercase">
-                <span className="flex items-center gap-2">
-                  <span className="text-emerald-400">{article.date}</span>
-                  <span className="text-white/20">/</span>
-                  {article.tag}
-                </span>
-                <span className="normal-case">{article.author}</span>
+              <div className="flex items-center gap-2 text-xs tracking-widest text-white/40 uppercase md:col-span-3 md:flex-col md:items-start md:gap-2">
+                <span className="text-emerald-400">{article.date}</span>
+                <span className="text-white/50">{article.tag}</span>
               </div>
 
-              <h3 className="text-2xl leading-snug font-medium text-white/80 transition-colors group-hover:text-white md:text-3xl">
-                {article.title}
-              </h3>
+              <div className="flex flex-col gap-3 md:col-span-8">
+                <h3 className="text-xl leading-snug font-medium text-white/80 transition-colors group-hover:text-white md:text-2xl">
+                  {article.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-white/40">
+                  {article.description}
+                </p>
+                <span className="mt-1 text-xs tracking-wider text-white/30 uppercase">
+                  {article.author}
+                </span>
+              </div>
 
-              <p className="truncate text-sm leading-relaxed text-white/40">
-                {article.description}
-              </p>
+              <div className="hidden items-center justify-end md:col-span-1 md:flex">
+                <ArrowRight className="h-4 w-4 text-white/20 transition-all duration-300 group-hover:translate-x-1 group-hover:text-emerald-400" />
+              </div>
             </motion.a>
           ))}
         </div>

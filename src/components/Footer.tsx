@@ -4,6 +4,8 @@ import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
 import { ArrowRight, Globe } from "lucide-react";
 
+const MotionLink = motion.create(Link);
+
 const fadeUp: Variants = {
 	hidden: { opacity: 0, y: 24 },
 	visible: {
@@ -40,19 +42,20 @@ const LINK_GROUPS = [
 		],
 	},
 	{
-		title: "Community",
+		title: "Talent",
 		links: [
-			{ label: "Discord", href: "/discord" },
-			{ label: "Events", href: "/events" },
-			{ label: "Partners", href: "/partners" },
+			{ label: "Job Placement", href: "/placement" },
+			{ label: "IT Skills Training", href: "/training" },
+			{ label: "Resume & Interview Prep", href: "/prep" },
 		],
 	},
 	{
-		title: "Support",
+		title: "Enterprise",
 		links: [
-			{ label: "Contact Us", href: "/contact" },
-			{ label: "System Status", href: "/status" },
-			{ label: "Report a Bug", href: "/bug-report" },
+			{ label: "Technical Staffing", href: "/staffing" },
+			{ label: "Talent Acquisition", href: "/acquisition" },
+			{ label: "Background Verification", href: "/verification" },
+			{ label: "Payroll & Compliance", href: "/payroll" },
 		],
 	},
 	{
@@ -77,9 +80,21 @@ export default function Footer() {
 					className="flex flex-col gap-16 md:flex-row md:justify-between"
 				>
 					<div className="flex flex-col gap-4">
-						<span className="text-lg font-archivo font-bold text-white/70 uppercase tracking-tighter">
-							BW_
-						</span>
+						<MotionLink
+							href="/"
+							whileHover={{ scale: 1.06 }}
+							whileTap={{ scale: 0.94 }}
+							transition={{ type: "spring", stiffness: 400, damping: 20 }}
+							className="group flex w-fit items-end gap-1 text-lg font-archivo font-bold uppercase text-white transition hover:text-white/80"
+						>
+							BW
+							<motion.span
+								aria-hidden
+								animate={{ opacity: [1, 1, 0, 0] }}
+								transition={{ duration: 1.1, repeat: Infinity, ease: "linear" }}
+								className="mb-1 h-0.5 w-2.5 -translate-x-0.75 -translate-y-1 bg-white/40 backdrop-blur-md group-hover:bg-white/70"
+							/>
+						</MotionLink>
 						<p className="max-w-xs text-sm leading-relaxed text-white/40">
 							Connecting verified professionals with the teams that need them.
 						</p>
