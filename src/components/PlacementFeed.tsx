@@ -89,7 +89,7 @@ export default function PlacementFeed() {
               viewport={{ once: true, amount: 0.5 }}
               variants={fadeUp}
               transition={{ delay: i * 0.08 }}
-              className="group -mx-4 grid grid-cols-2 gap-4 border-b border-white/10 px-4 py-6 transition-colors hover:bg-white/[0.03] md:grid-cols-12"
+              className="group -mx-4 grid grid-cols-1 gap-2 border-b border-white/10 px-4 py-6 transition-colors hover:bg-white/[0.03] md:grid-cols-12 md:items-center md:gap-4"
             >
               <div className="flex items-center gap-2 md:col-span-2">
                 <span className="relative flex h-1.5 w-1.5">
@@ -105,7 +105,7 @@ export default function PlacementFeed() {
                 </span>
               </div>
 
-              <div className="col-span-2 flex flex-col justify-center md:col-span-3">
+              <div className="flex flex-col justify-center md:col-span-3">
                 <span className="font-medium text-white/80 transition-colors group-hover:text-white">
                   {item.role}
                 </span>
@@ -130,7 +130,7 @@ export default function PlacementFeed() {
               </div>
 
               <div className="flex items-center text-sm text-white/70 md:col-span-2 md:justify-end">
-                {item.pay}
+                <span className="text-white/90 md:text-white/70">{item.pay}</span>
               </div>
             </motion.div>
           ))}

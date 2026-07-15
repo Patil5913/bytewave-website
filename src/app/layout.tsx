@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Instrument_Serif, Archivo } from "next/font/google";
 import SmoothScroll from "@components/SmoothScroll";
-import Navbar from "@components/Navbar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -37,7 +36,6 @@ export default function RootLayout({
     >
       <body className="overflow-x-hidden">
         <SmoothScroll />
-        <Navbar />
         {children}
       </body>
     </html>

@@ -31,8 +31,7 @@ export default function CallToAction() {
         </h2>
 
         <p className="mb-12 max-w-xl text-lg text-white/60">
-          Whether you&apos;re building out your team or ready to deploy your
-          own expertise, connect with us to get started.
+          Whether you&apos;re scaling your workforce or advancing your career, connect with us to bypass the noise and find your exact match.
         </p>
 
         <div className="flex w-full flex-col items-center gap-4 sm:w-auto sm:flex-row">
