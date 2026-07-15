@@ -5,6 +5,7 @@ import AdvocacyProtocol from "@components/AdvocacyProtocol";
 import HistoricalTelemetry from "@components/HistoricalTelemetry";
 import VideoTelemetry from "@components/VideoTelemetry";
 import SystemDocumentation from "@components/SystemDocumentation";
+import PricingReferral from "@components/PricingReferral";
 import ContactTerminal from "@components/ContactTerminal";
 import Footer from "@components/Footer";
 
@@ -18,6 +19,7 @@ export default function Professionals() {
       <HistoricalTelemetry />
       <VideoTelemetry />
       <SystemDocumentation />
+      <PricingReferral />
       <ContactTerminal />
       <Footer />
     </>

@@ -31,7 +31,7 @@ export default function Navbar() {
         </MotionLink>
         <div className="flex items-center gap-4 sm:gap-8">
           <Link
-            href="#"
+            href="/companies"
             className="hidden text-sm text-white/70 transition-colors hover:text-white md:block"
           >
             For Companies
@@ -43,7 +43,7 @@ export default function Navbar() {
             For Professionals
           </Link>
           <Link
-            href="#"
+            href="/insights"
             className="hidden text-sm text-white/70 transition-colors hover:text-white md:block"
           >
             Insights
