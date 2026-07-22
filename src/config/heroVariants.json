@@ -1,0 +1,49 @@
+{
+  "active": 0,
+  "variants": [
+    {
+      "label": "Skyward",
+      "src": "https://images.pexels.com/photos/13599309/pexels-photo-13599309.jpeg",
+      "rotateDeg": 0,
+      "fit": "cover",
+      "zoom": 1,
+      "plane": true,
+      "config": {
+        "cellSize": 8,
+        "contrast": 112,
+        "brightness": 16,
+        "saturation": 1.5,
+        "baseAlpha": 0.28,
+        "brightAlpha": 0.9,
+        "charRamp": " .·:-+=?7ctoe3#8",
+        "stretchLo": 0.015,
+        "stretchHi": 0.985,
+        "gamma": 0.6,
+        "trailPeak": 0.78,
+        "trailAvgMax": 0.5
+      }
+    },
+    {
+      "label": "Contrails",
+      "src": "https://images.pexels.com/photos/2091318/pexels-photo-2091318.jpeg",
+      "rotateDeg": 0,
+      "fit": "cover",
+      "zoom": 1,
+      "plane": false,
+      "config": {
+        "cellSize": 8,
+        "contrast": 112,
+        "brightness": 16,
+        "saturation": 1.5,
+        "baseAlpha": 0.28,
+        "brightAlpha": 0.9,
+        "charRamp": " .·:-+=?7ctoe3#8",
+        "stretchLo": 0.015,
+        "stretchHi": 0.985,
+        "gamma": 0.6,
+        "trailPeak": 0.78,
+        "trailAvgMax": 0.5
+      }
+    }
+  ]
+}

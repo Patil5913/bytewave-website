@@ -1,8 +1,22 @@
 "use client";
 
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
+import AsciiHero, { type AsciiConfig } from "@components/AsciiHero";
+import heroVariants from "@/config/heroVariants.json";
+
+type HeroVariant = {
+  label: string;
+  src: string;
+  rotateDeg: number;
+  fit: "cover" | "contain";
+  zoom: number;
+  plane: boolean;
+  config?: Partial<AsciiConfig>;
+};
+
+const VARIANTS = heroVariants.variants as HeroVariant[];
+const ACTIVE = VARIANTS[heroVariants.active] ?? VARIANTS[0];
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -30,16 +44,16 @@ const itemVariants: Variants = {
 export default function Hero() {
   return (
     <section className="relative flex min-h-svh w-full flex-col overflow-hidden">
-      <Image
-        src="https://images.pexels.com/photos/13599309/pexels-photo-13599309.jpeg"
-        alt="Hero background"
-        fill
-        priority
-        quality={85}
-        sizes="100vw"
-        className="object-cover saturate-125 contrast-105"
+      <AsciiHero
+        key={ACTIVE.src}
+        src={ACTIVE.src}
+        config={ACTIVE.config}
+        rotateDeg={ACTIVE.rotateDeg}
+        fit={ACTIVE.fit}
+        zoom={ACTIVE.zoom}
+        plane={ACTIVE.plane}
+        className="absolute inset-0"
       />
-      <div className="absolute inset-0 bg-black/40" />
       <motion.div
         className="relative z-10 flex flex-1 flex-col items-center justify-center gap-5 px-6 pt-28 pb-8 sm:gap-6 sm:pt-32"
         variants={containerVariants}
