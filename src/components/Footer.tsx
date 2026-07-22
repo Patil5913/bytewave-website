@@ -1,19 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { motion, type Variants } from "framer-motion";
 import { ArrowRight, Globe } from "lucide-react";
-
-const MotionLink = motion.create(Link);
-
-const fadeUp: Variants = {
-	hidden: { opacity: 0, y: 24 },
-	visible: {
-		opacity: 1,
-		y: 0,
-		transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
-	},
-};
+import PixelBackdrop from "@components/PixelBackdrop";
+import Reveal from "@components/Reveal";
 
 const LINK_GROUPS = [
 	{
@@ -70,31 +60,21 @@ const LINK_GROUPS = [
 
 export default function Footer() {
 	return (
-		<footer className="w-full bg-black px-6 pt-24 pb-8 md:px-16">
-			<div className="mx-auto max-w-7xl">
-				<motion.div
-					initial="hidden"
-					whileInView="visible"
-					viewport={{ once: true, amount: 0.3 }}
-					variants={fadeUp}
-					className="flex flex-col gap-16 md:flex-row md:justify-between"
-				>
+		<footer className="relative w-full overflow-hidden bg-black px-6 pt-24 pb-8 md:px-16">
+			<PixelBackdrop variant="grid" className="absolute inset-0 z-0" intensity={0.6} />
+			<div className="relative z-10 mx-auto max-w-7xl">
+				<Reveal className="flex flex-col gap-16 md:flex-row md:justify-between">
 					<div className="flex flex-col gap-4">
-						<MotionLink
+						<Link
 							href="/"
-							whileHover={{ scale: 1.06 }}
-							whileTap={{ scale: 0.94 }}
-							transition={{ type: "spring", stiffness: 400, damping: 20 }}
-							className="group flex w-fit items-end gap-1 text-lg font-archivo font-bold uppercase text-white transition hover:text-white/80"
+							className="group flex w-fit items-end gap-1 text-lg font-archivo font-bold uppercase text-white transition-transform duration-200 hover:scale-105 hover:text-white/80 active:scale-95"
 						>
 							BW
-							<motion.span
+							<span
 								aria-hidden
-								animate={{ opacity: [1, 1, 0, 0] }}
-								transition={{ duration: 1.1, repeat: Infinity, ease: "linear" }}
-								className="mb-1 h-0.5 w-2.5 -translate-x-0.75 -translate-y-1 bg-white/40 backdrop-blur-md group-hover:bg-white/70"
+								className="mb-1 h-0.5 w-2.5 -translate-x-0.75 -translate-y-1 animate-blink bg-white/40 backdrop-blur-md group-hover:bg-white/70"
 							/>
-						</MotionLink>
+						</Link>
 						<p className="max-w-xs text-sm leading-relaxed text-white/40">
 							Connecting verified professionals with the teams that need them.
 						</p>
@@ -179,7 +159,7 @@ export default function Footer() {
 							</span>
 						</div>
 					</div>
-				</motion.div>
+				</Reveal>
 
 				<div className="mt-20 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-8 text-xs text-white/40 sm:flex-row sm:items-center">
 					<span>© 2026 Bytewave. All rights reserved.</span>

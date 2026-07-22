@@ -1,26 +1,14 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
+import PixelBackdrop from "@components/PixelBackdrop";
+import Reveal from "@components/Reveal";
 
 export default function CallToAction() {
   return (
-    <section className="w-full bg-black px-6 py-32 md:px-16">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.5 }}
-        variants={fadeUp}
-        className="mx-auto flex max-w-4xl flex-col items-center text-center"
-      >
+    <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-black px-6 py-32 md:px-16">
+      <PixelBackdrop variant="glow" className="absolute inset-0 z-0" />
+      <PixelBackdrop variant="dots" className="absolute inset-0 z-0" intensity={0.5} />
+      <Reveal className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center">
         <span className="mb-6 flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
           <span className="text-emerald-400">[ 06 ]</span>
           Get Started
@@ -42,7 +30,7 @@ export default function CallToAction() {
             Message Our Team
           </button>
         </div>
-      </motion.div>
+      </Reveal>
     </section>
   );
 }

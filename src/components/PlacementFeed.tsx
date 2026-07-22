@@ -1,15 +1,7 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
+import PixelBackdrop from "@components/PixelBackdrop";
+import Reveal from "@components/Reveal";
 
 const STATUS_COLORS: Record<string, string> = {
   Placed: "bg-emerald-400",
@@ -73,22 +65,18 @@ const PLACEMENTS = [
 
 export default function PlacementFeed() {
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
-      <div className="mx-auto max-w-7xl">
+    <section className="relative w-full overflow-hidden bg-black px-6 py-24 md:px-16">
+      <PixelBackdrop variant="grid" className="absolute inset-0 z-0" />
+      <div className="relative z-10 mx-auto max-w-7xl">
         <span className="mb-12 flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
           <span className="text-emerald-400">[ 04 ]</span>
           Recent Placements
         </span>
 
-        <div className="border-t border-white/10">
-          {PLACEMENTS.map((item, i) => (
-            <motion.div
+        <Reveal stagger={0.08} y={20} className="border-t border-white/10">
+          {PLACEMENTS.map((item) => (
+            <div
               key={item.candidate}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.5 }}
-              variants={fadeUp}
-              transition={{ delay: i * 0.08 }}
               className="group -mx-4 grid grid-cols-2 gap-x-4 gap-y-3 border-b border-white/10 px-4 py-6 transition-colors hover:bg-white/[0.03] lg:grid-cols-12 lg:items-center lg:gap-4 lg:gap-y-4"
             >
               <div className="order-1 flex items-center gap-2 lg:order-none lg:col-span-2">
@@ -135,9 +123,9 @@ export default function PlacementFeed() {
               <div className="order-2 flex items-center justify-end text-sm lg:order-none lg:col-span-2 lg:justify-end">
                 <span className="text-white/90 lg:text-white/70">{item.pay}</span>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

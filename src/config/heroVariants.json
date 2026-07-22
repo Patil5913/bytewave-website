@@ -1,4 +1,5 @@
 {
+  "asciiEnabled": false,
   "active": 0,
   "variants": [
     {
@@ -7,7 +8,7 @@
       "rotateDeg": 0,
       "fit": "cover",
       "zoom": 1,
-      "plane": true,
+      "plane": false,
       "config": {
         "cellSize": 8,
         "contrast": 112,

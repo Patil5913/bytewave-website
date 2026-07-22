@@ -1,16 +1,7 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import Reveal from "@components/Reveal";
 import { ArrowRight } from "lucide-react";
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
 
 const MODULES = [
   {
@@ -43,13 +34,7 @@ export default function PricingReferral() {
   return (
     <section className="w-full bg-black px-6 py-24 md:px-16">
       <div className="mx-auto max-w-7xl">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          variants={fadeUp}
-          className="mb-16 flex flex-col gap-4 md:max-w-2xl"
-        >
+        <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
           <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
             <span className="text-emerald-400">[ 07 ]</span>
             Pricing
@@ -63,16 +48,10 @@ export default function PricingReferral() {
             only if there&apos;s a real gap between where you are and the
             offer you want.
           </p>
-        </motion.div>
+        </Reveal>
 
         {/* Core entry point */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeUp}
-          className="mb-10 flex flex-col justify-between gap-8 md:flex-row md:items-center md:gap-12"
-        >
+        <Reveal className="mb-10 flex flex-col justify-between gap-8 md:flex-row md:items-center md:gap-12">
           <div className="flex flex-col gap-3">
             <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50 uppercase">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
@@ -105,18 +84,16 @@ export default function PricingReferral() {
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </a>
           </div>
-        </motion.div>
+        </Reveal>
 
         {/* Modular add-ons — segmented strip, matches Advocacy Protocol */}
-        <div className="flex flex-col gap-10 md:flex-row md:gap-12">
-          {MODULES.map((mod, i) => (
-            <motion.div
+        <Reveal
+          stagger={0.08}
+          className="flex flex-col gap-10 md:flex-row md:gap-12"
+        >
+          {MODULES.map((mod) => (
+            <div
               key={mod.id}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={fadeUp}
-              transition={{ delay: i * 0.08 }}
               className="group flex-1 transition-colors duration-300"
             >
               <span className="mb-6 flex items-center gap-2 text-3xl font-medium text-white/15 transition-colors duration-300 group-hover:text-emerald-400/60">
@@ -135,18 +112,12 @@ export default function PricingReferral() {
               <span className="text-xs font-medium tracking-widest text-white/40 uppercase">
                 {mod.price}
               </span>
-            </motion.div>
+            </div>
           ))}
-        </div>
+        </Reveal>
 
         {/* Referral */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          variants={fadeUp}
-          className="mt-16 flex flex-col justify-between gap-8 md:flex-row md:items-center md:gap-12"
-        >
+        <Reveal className="mt-16 flex flex-col justify-between gap-8 md:flex-row md:items-center md:gap-12">
           <div className="flex flex-col gap-3">
             <span className="text-xs font-medium tracking-widest text-white/50 uppercase">
               Referrals
@@ -168,7 +139,7 @@ export default function PricingReferral() {
             Get your referral link
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

@@ -1,15 +1,12 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Reveal from "@components/Reveal";
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const STATS = [
   { value: "15+", label: "Years Experience" },
@@ -56,16 +53,51 @@ const linePath = points
 const areaPath = `${linePath} L ${points[points.length - 1].x} ${CHART_H} L ${points[0].x} ${CHART_H} Z`;
 
 export default function HistoricalTelemetry() {
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const el = chartRef.current;
+      if (!el) return;
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const area = el.querySelector<SVGPathElement>("[data-area]");
+        const line = el.querySelector<SVGPathElement>("[data-line]");
+        const dots = gsap.utils.toArray<HTMLElement>(
+          el.querySelectorAll("[data-dot]"),
+        );
+        const st = { trigger: el, start: "top 85%", once: true } as const;
+        gsap.from(el, {
+          opacity: 0,
+          y: 24,
+          duration: 0.7,
+          delay: 0.1,
+          ease: "power3.out",
+          scrollTrigger: st,
+        });
+        if (line)
+          gsap.from(line, { opacity: 0, duration: 0.8, delay: 0.4, scrollTrigger: st });
+        if (area)
+          gsap.from(area, { opacity: 0, duration: 0.8, delay: 0.6, scrollTrigger: st });
+        if (dots.length)
+          gsap.from(dots, {
+            opacity: 0,
+            scale: 0,
+            duration: 0.3,
+            delay: 0.3,
+            stagger: 0.15,
+            scrollTrigger: st,
+          });
+      });
+      return () => mm.revert();
+    },
+    { scope: chartRef },
+  );
+
   return (
     <section className="w-full bg-black px-6 py-24 md:px-16">
       <div className="mx-auto max-w-7xl">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          variants={fadeUp}
-          className="mb-16 flex flex-col gap-4 md:max-w-2xl"
-        >
+        <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
           <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
             <span className="text-emerald-400">[ 04 ]</span>
             Track Record
@@ -73,15 +105,9 @@ export default function HistoricalTelemetry() {
           <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
             Proven scale. Global reach.
           </h2>
-        </motion.div>
+        </Reveal>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          variants={fadeUp}
-          className="mb-16 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-6"
-        >
+        <Reveal className="mb-16 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-6">
           {STATS.map((stat) => (
             <div key={stat.label} className="flex items-baseline gap-2">
               <span className="font-instrument text-2xl font-medium text-white">
@@ -92,15 +118,9 @@ export default function HistoricalTelemetry() {
               </span>
             </div>
           ))}
-        </motion.div>
+        </Reveal>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeUp}
-          transition={{ delay: 0.1 }}
-        >
+        <div ref={chartRef}>
           <span className="mb-8 block text-xs font-medium tracking-widest text-white/50 uppercase">
             Placement Volume, Year Over Year
           </span>
@@ -156,16 +176,10 @@ export default function HistoricalTelemetry() {
                 );
               })}
 
-              <motion.path
-                d={areaPath}
-                fill="url(#telemetry-fade)"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-              />
+              <path data-area d={areaPath} fill="url(#telemetry-fade)" />
 
-              <motion.path
+              <path
+                data-line
                 d={linePath}
                 fill="none"
                 stroke="#34d399"
@@ -173,26 +187,19 @@ export default function HistoricalTelemetry() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 vectorEffect="non-scaling-stroke"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
               />
             </svg>
 
             {/* Data dots (HTML overlay — stay round) */}
-            {points.map((p, i) => (
-              <motion.span
+            {points.map((p) => (
+              <span
                 key={p.year}
+                data-dot
                 style={{
                   left: `${(p.x / CHART_W) * 100}%`,
                   top: `${(p.y / CHART_H) * 100}%`,
                 }}
                 className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400"
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.6 }}
-                transition={{ duration: 0.3, delay: 0.3 + i * 0.15 }}
               />
             ))}
           </div>
@@ -219,7 +226,7 @@ export default function HistoricalTelemetry() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

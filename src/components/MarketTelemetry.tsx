@@ -1,16 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { motion, type Variants } from "framer-motion";
+import { useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Reveal from "@components/Reveal";
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const FLOOR = 80;
 const CEILING = 220;
@@ -33,17 +29,43 @@ function toPercent(value: number) {
 
 export default function MarketTelemetry() {
   const [active, setActive] = useState<number | null>(null);
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const el = chartRef.current;
+      if (!el) return;
+      const wipes = gsap.utils.toArray<HTMLElement>(
+        el.querySelectorAll("[data-bar-wipe]"),
+      );
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(
+          wipes,
+          { scaleX: 1 },
+          {
+            scaleX: 0,
+            transformOrigin: "right center",
+            duration: 0.8,
+            ease: "expo.out",
+            stagger: 0.09,
+            delay: 0.15,
+            scrollTrigger: { trigger: el, start: "top 40%", once: true },
+          },
+        );
+      });
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(wipes, { scaleX: 0 });
+      });
+      return () => mm.revert();
+    },
+    { scope: chartRef },
+  );
 
   return (
     <section className="w-full bg-black px-6 py-24 md:px-16">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 md:grid-cols-12 md:gap-16">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          variants={fadeUp}
-          className="flex flex-col gap-4 md:col-span-4"
-        >
+        <Reveal className="flex flex-col gap-4 md:col-span-4">
           <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
             <span className="text-emerald-400">[ 02 ]</span>
             Market Telemetry
@@ -59,17 +81,10 @@ export default function MarketTelemetry() {
           <p className="mt-2 text-xs font-medium tracking-widest text-white/40 uppercase">
             USD base / year · trailing 90 days
           </p>
-        </motion.div>
+        </Reveal>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeUp}
-          transition={{ delay: 0.15 }}
-          className="md:col-span-8"
-        >
-          <div className="flex gap-4 sm:gap-6">
+        <Reveal delay={0.15} className="md:col-span-8">
+          <div ref={chartRef} className="flex gap-4 sm:gap-6">
             {/* Row labels */}
             <div className="flex w-28 shrink-0 flex-col gap-3 sm:w-36 lg:w-44">
               {STACKS.map((stack, i) => (
@@ -150,15 +165,8 @@ export default function MarketTelemetry() {
                         >
                           ${stack.max}k
                         </span>
-                        <motion.div
-                          initial={{ scaleX: 1 }}
-                          whileInView={{ scaleX: 0 }}
-                          viewport={{ once: true, amount: 0.6 }}
-                          transition={{
-                            duration: 0.8,
-                            delay: 0.15 + i * 0.09,
-                            ease: [0.16, 1, 0.3, 1],
-                          }}
+                        <div
+                          data-bar-wipe
                           className="absolute inset-0 origin-right bg-black"
                         />
                       </div>
@@ -181,7 +189,7 @@ export default function MarketTelemetry() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

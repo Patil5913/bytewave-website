@@ -1,17 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import Reveal from "@components/Reveal";
 import { ArrowRight } from "lucide-react";
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
+gsap.registerPlugin(useGSAP);
 
 const FAQS = [
   {
@@ -46,19 +41,92 @@ const FAQS = [
   },
 ];
 
+function FaqItem({
+  faq,
+  isOpen,
+  onToggle,
+}: {
+  faq: (typeof FAQS)[number];
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const firstRun = useRef(true);
+
+  useGSAP(
+    () => {
+      const el = panelRef.current;
+      if (!el) return;
+      if (firstRun.current) {
+        firstRun.current = false;
+        gsap.set(el, { height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 });
+        return;
+      }
+      if (isOpen) {
+        gsap.to(el, {
+          height: "auto",
+          opacity: 1,
+          duration: 0.3,
+          ease: "power3.out",
+        });
+      } else {
+        gsap.to(el, {
+          height: 0,
+          opacity: 0,
+          duration: 0.3,
+          ease: "power3.out",
+        });
+      }
+    },
+    { dependencies: [isOpen] },
+  );
+
+  return (
+    <div>
+      <button
+        onClick={onToggle}
+        className="group -mx-4 flex w-full items-center justify-between gap-4 rounded-lg px-4 py-6 text-left transition-colors hover:bg-white/[0.03]"
+      >
+        <div className="flex items-center gap-6 pr-4">
+          <span className="text-xs tracking-widest text-white/40 transition-colors group-hover:text-emerald-400">
+            {faq.id}
+          </span>
+          <h3
+            className={`text-lg font-medium transition-colors ${
+              isOpen ? "text-white" : "text-white/70 group-hover:text-white"
+            }`}
+          >
+            {faq.question}
+          </h3>
+        </div>
+
+        <span
+          className={`shrink-0 text-lg leading-none transition-all duration-300 ${
+            isOpen
+              ? "rotate-45 text-emerald-400"
+              : "text-white/40 group-hover:text-white"
+          }`}
+        >
+          +
+        </span>
+      </button>
+
+      <div ref={panelRef} className="overflow-hidden">
+        <p className="pr-4 pb-8 pl-12 text-sm leading-relaxed text-white/50">
+          {faq.answer}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function SystemDocumentation() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
     <section className="w-full bg-black px-6 py-24 md:px-16">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 lg:grid-cols-12">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          variants={fadeUp}
-          className="flex flex-col gap-6 lg:col-span-5 lg:sticky lg:top-24 lg:h-fit"
-        >
+        <Reveal className="flex flex-col gap-6 lg:col-span-5 lg:sticky lg:top-24 lg:h-fit">
           <div className="flex flex-col gap-4">
             <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
               <span className="text-emerald-400">[ 06 ]</span>
@@ -80,68 +148,20 @@ export default function SystemDocumentation() {
             Talk to our team
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
-        </motion.div>
+        </Reveal>
 
-        <div className="flex flex-col lg:col-span-7">
-          {FAQS.map((faq, index) => {
-            const isOpen = openIndex === index;
-
-            return (
-              <motion.div
-                key={faq.id}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
-                variants={fadeUp}
-                transition={{ delay: index * 0.08 }}
-              >
-                <button
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="group -mx-4 flex w-full items-center justify-between gap-4 rounded-lg px-4 py-6 text-left transition-colors hover:bg-white/[0.03]"
-                >
-                  <div className="flex items-center gap-6 pr-4">
-                    <span className="text-xs tracking-widest text-white/40 transition-colors group-hover:text-emerald-400">
-                      {faq.id}
-                    </span>
-                    <h3
-                      className={`text-lg font-medium transition-colors ${
-                        isOpen ? "text-white" : "text-white/70 group-hover:text-white"
-                      }`}
-                    >
-                      {faq.question}
-                    </h3>
-                  </div>
-
-                  <span
-                    className={`shrink-0 text-lg leading-none transition-all duration-300 ${
-                      isOpen
-                        ? "rotate-45 text-emerald-400"
-                        : "text-white/40 group-hover:text-white"
-                    }`}
-                  >
-                    +
-                  </span>
-                </button>
-
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-                      className="overflow-hidden"
-                    >
-                      <p className="pr-4 pb-8 pl-12 text-sm leading-relaxed text-white/50">
-                        {faq.answer}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
-          })}
-        </div>
+        <Reveal stagger={0.08} className="flex flex-col lg:col-span-7">
+          {FAQS.map((faq, index) => (
+            <FaqItem
+              key={faq.id}
+              faq={faq}
+              isOpen={openIndex === index}
+              onToggle={() =>
+                setOpenIndex(openIndex === index ? null : index)
+              }
+            />
+          ))}
+        </Reveal>
       </div>
     </section>
   );

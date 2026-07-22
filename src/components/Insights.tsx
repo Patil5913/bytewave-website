@@ -1,31 +1,18 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ALL_POSTS, buildHref } from "@/lib/insights";
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
+import PixelBackdrop from "@components/PixelBackdrop";
+import Reveal from "@components/Reveal";
 
 const ARTICLES = ALL_POSTS.slice(0, 3);
 
 export default function Insights() {
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
-      <div className="mx-auto max-w-7xl">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-          variants={fadeUp}
-          className="mb-12 flex items-end justify-between"
-        >
+    <section className="relative w-full overflow-hidden bg-black px-6 py-24 md:px-16">
+      <PixelBackdrop variant="grid" className="absolute inset-0 z-0" />
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <Reveal className="mb-12 flex items-end justify-between">
           <div className="flex flex-col gap-4">
             <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
               <span className="text-emerald-400">[ 05 ]</span>
@@ -42,18 +29,13 @@ export default function Insights() {
             View All
             <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
-        </motion.div>
+        </Reveal>
 
-        <div className="border-t border-white/10">
-          {ARTICLES.map((article, i) => (
-            <motion.a
+        <Reveal stagger={0.1} className="border-t border-white/10">
+          {ARTICLES.map((article) => (
+            <a
               key={article.id}
               href={buildHref(article)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.5 }}
-              variants={fadeUp}
-              transition={{ delay: i * 0.1 }}
               className="group grid grid-cols-1 gap-x-8 gap-y-3 border-b border-white/10 py-8 transition-colors hover:bg-white/[0.02] md:grid-cols-12 md:items-baseline"
             >
               <div className="flex items-center gap-2 text-xs tracking-widest text-white/40 uppercase md:col-span-3 md:flex-col md:items-start md:gap-2">
@@ -76,9 +58,9 @@ export default function Insights() {
               <div className="hidden items-center justify-end md:col-span-1 md:flex">
                 <ArrowRight className="h-4 w-4 text-white/20 transition-all duration-300 group-hover:translate-x-1 group-hover:text-emerald-400" />
               </div>
-            </motion.a>
+            </a>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

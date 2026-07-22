@@ -1,16 +1,8 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
+import PixelBackdrop from "@components/PixelBackdrop";
+import Reveal from "@components/Reveal";
 
 const ROUTES = [
   {
@@ -39,24 +31,23 @@ const ROUTES = [
 
 export default function Gateways() {
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
-      <div className="mx-auto max-w-7xl">
+    <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-black px-6 py-24 md:px-16">
+      <PixelBackdrop variant="scan" className="absolute inset-0 z-0" />
+      <div className="relative z-10 mx-auto w-full max-w-7xl">
         <span className="mb-12 flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
           <span className="text-emerald-400">[ 03 ]</span>
           Choose Your Path
         </span>
 
-        <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-white/10 md:grid-cols-2">
+        <Reveal
+          stagger={0.12}
+          className="grid grid-cols-1 overflow-hidden rounded-2xl border border-white/10 md:grid-cols-2"
+        >
           {ROUTES.map((route, i) => (
-            <motion.a
+            <a
               key={route.href}
               href={route.href}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.4 }}
-              variants={fadeUp}
-              transition={{ delay: i * 0.1 }}
-              className={`group relative flex min-h-[420px] flex-col justify-center gap-12 overflow-hidden p-12 transition-colors duration-500 hover:bg-white/[0.04] md:p-16 ${
+              className={`group relative flex min-h-[420px] flex-col justify-center gap-12 overflow-hidden p-12 md:min-h-[60svh] transition-colors duration-500 hover:bg-white/[0.04] md:p-16 ${
                 i === 0
                   ? "border-b border-white/10 md:border-r md:border-b-0"
                   : ""
@@ -87,9 +78,9 @@ export default function Gateways() {
                   <ArrowRight className="h-4 w-4 text-white/70 transition-all duration-300 group-hover:translate-x-1 group-hover:text-white" />
                 </div>
               </div>
-            </motion.a>
+            </a>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

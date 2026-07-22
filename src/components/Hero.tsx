@@ -1,8 +1,8 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { motion, type Variants } from "framer-motion";
 import AsciiHero, { type AsciiConfig } from "@components/AsciiHero";
+import Reveal from "@components/Reveal";
 import heroVariants from "@/config/heroVariants.json";
 
 type HeroVariant = {
@@ -12,56 +12,55 @@ type HeroVariant = {
   fit: "cover" | "contain";
   zoom: number;
   plane: boolean;
+  bg?: "ascii" | "image";
   config?: Partial<AsciiConfig>;
 };
 
 const VARIANTS = heroVariants.variants as HeroVariant[];
 const ACTIVE = VARIANTS[heroVariants.active] ?? VARIANTS[0];
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.46, 0.45, 0.94],
-    },
-  },
-};
+const ASCII_ENABLED = heroVariants.asciiEnabled ?? true;
+// Per-variant override wins; else fall back to the global ascii toggle.
+const BG_MODE = ACTIVE.bg ?? (ASCII_ENABLED ? "ascii" : "image");
 
 export default function Hero() {
   return (
     <section className="relative flex min-h-svh w-full flex-col overflow-hidden">
-      <AsciiHero
-        key={ACTIVE.src}
-        src={ACTIVE.src}
-        config={ACTIVE.config}
-        rotateDeg={ACTIVE.rotateDeg}
-        fit={ACTIVE.fit}
-        zoom={ACTIVE.zoom}
-        plane={ACTIVE.plane}
-        className="absolute inset-0"
-      />
-      <motion.div
+      {BG_MODE === "ascii" ? (
+        <AsciiHero
+          key={ACTIVE.src}
+          src={ACTIVE.src}
+          config={ACTIVE.config}
+          rotateDeg={ACTIVE.rotateDeg}
+          fit={ACTIVE.fit}
+          zoom={ACTIVE.zoom}
+          plane={ACTIVE.plane}
+          className="absolute inset-0"
+        />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={ACTIVE.src}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{
+            transform: ACTIVE.rotateDeg
+              ? `rotate(${ACTIVE.rotateDeg}deg) scale(${ACTIVE.zoom})`
+              : ACTIVE.zoom !== 1
+                ? `scale(${ACTIVE.zoom})`
+                : undefined,
+          }}
+        />
+      )}
+      <div aria-hidden className="absolute inset-0 z-[1] bg-black/50" />
+      <Reveal
+        scroll={false}
+        stagger={0.15}
+        delay={0.2}
+        y={20}
         className="relative z-10 flex flex-1 flex-col items-center justify-center gap-5 px-6 pt-28 pb-8 sm:gap-6 sm:pt-32"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
       >
-        <motion.span
-          variants={itemVariants}
+        <span
           className="flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-1.5 text-xs text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] backdrop-blur-md sm:px-4 sm:py-2 sm:text-sm"
         >
           <span className="relative flex h-2 w-2">
@@ -69,26 +68,23 @@ export default function Hero() {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
           </span>
           Now live: verified hiring, no noise
-        </motion.span>
+        </span>
 
-        <motion.h1
-          variants={itemVariants}
+        <h1
           className="max-w-4xl text-center font-instrument text-4xl font-medium text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] sm:text-5xl lg:text-8xl"
         >
           The frictionless way to hire and get hired.
-        </motion.h1>
+        </h1>
 
-        <motion.h2
-          variants={itemVariants}
+        <h2
           className="max-w-2xl text-center text-sm text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)] sm:text-base lg:text-lg"
         >
           Skip the endless resume reviews and generic job boards. We connect
           verified candidates directly with companies actively looking for
           their exact skills.
-        </motion.h2>
+        </h2>
 
-        <motion.div
-          variants={itemVariants}
+        <div
           className="mt-2 flex w-full max-w-xs flex-col items-center gap-3 text-sm sm:w-auto sm:max-w-none sm:flex-row sm:gap-4 sm:text-base"
         >
           <a
@@ -104,13 +100,13 @@ export default function Hero() {
           >
             Build Your Team
           </a>
-        </motion.div>
-      </motion.div>
+        </div>
+      </Reveal>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.8 }}
+      <Reveal
+        scroll={false}
+        delay={0.8}
+        y={20}
         className="relative z-10 flex w-full flex-col items-center justify-center gap-2 pb-8 sm:pb-12"
       >
         <p className="px-6 text-center text-xs font-medium text-white/70 sm:text-sm lg:text-base">
@@ -176,7 +172,7 @@ export default function Hero() {
             </div>
           </div>
         </div>
-      </motion.div>
+      </Reveal>
     </section>
   );
 }

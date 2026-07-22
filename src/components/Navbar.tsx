@@ -1,34 +1,28 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
-
-const MotionLink = motion.create(Link);
+import Reveal from "@components/Reveal";
 
 export default function Navbar() {
   return (
-    <motion.nav
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+    <Reveal
+      as="nav"
+      scroll={false}
+      y={-10}
+      duration={0.5}
       className="fixed top-0 left-0 right-0 z-50 px-6 py-4 md:px-16 md:py-5"
     >
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
-        <MotionLink
+        <Link
           href="/"
-          whileHover={{ scale: 1.06 }}
-          whileTap={{ scale: 0.94 }}
-          transition={{ type: "spring", stiffness: 400, damping: 20 }}
-          className="group flex items-end gap-1 text-lg font-archivo font-bold uppercase text-white transition hover:text-white/80"
+          className="group flex items-end gap-1 text-lg font-archivo font-bold uppercase text-white transition-transform duration-200 hover:scale-105 hover:text-white/80 active:scale-95"
         >
           BW
-          <motion.span
+          <span
             aria-hidden
-            animate={{ opacity: [1, 1, 0, 0] }}
-            transition={{ duration: 1.1, repeat: Infinity, ease: "linear" }}
-            className="mb-1 h-0.5 w-2.5 -translate-x-0.75 -translate-y-1 bg-white/40 backdrop-blur-md group-hover:bg-white/70"
+            className="mb-1 h-0.5 w-2.5 -translate-x-0.75 -translate-y-1 animate-blink bg-white/40 backdrop-blur-md group-hover:bg-white/70"
           />
-        </MotionLink>
+        </Link>
         <div className="flex items-center gap-4 sm:gap-8">
           <Link
             href="/companies"
@@ -53,6 +47,6 @@ export default function Navbar() {
           </button>
         </div>
       </div>
-    </motion.nav>
+    </Reveal>
   );
 }

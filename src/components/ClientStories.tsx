@@ -1,17 +1,8 @@
 "use client";
 
 import { Fragment } from "react";
-import { motion, type Variants } from "framer-motion";
 import { ArrowRight, Quote } from "lucide-react";
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
+import Reveal from "@components/Reveal";
 
 const CLIENT_LOGS = [
   {
@@ -61,13 +52,7 @@ export default function ClientStories() {
     <section className="w-full bg-black px-6 py-24 md:px-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
-            variants={fadeUp}
-            className="flex flex-col gap-4"
-          >
+          <Reveal className="flex flex-col gap-4">
             <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
               <span className="text-emerald-400">[ 05 ]</span>
               Client Stories
@@ -75,19 +60,16 @@ export default function ClientStories() {
             <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
               Teams that stopped guessing.
             </h2>
-          </motion.div>
+          </Reveal>
 
-          <motion.a
+          <Reveal
+            as="a"
             href="#"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
-            variants={fadeUp}
             className="group flex w-fit items-center gap-2 text-xs tracking-wider text-white/50 uppercase transition-colors hover:text-white"
           >
             Read All Case Studies
             <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-          </motion.a>
+          </Reveal>
         </div>
       </div>
 
@@ -126,13 +108,7 @@ export default function ClientStories() {
         </div>
       </div>
 
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.5 }}
-        variants={fadeUp}
-        className="mx-auto mt-16 flex max-w-3xl flex-col items-center gap-5 px-6 text-center md:mt-20 md:px-16"
-      >
+      <Reveal className="mx-auto mt-16 flex max-w-3xl flex-col items-center gap-5 px-6 text-center md:mt-20 md:px-16">
         <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
           <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
@@ -154,7 +130,7 @@ export default function ClientStories() {
           Start Hiring
           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
         </a>
-      </motion.div>
+      </Reveal>
     </section>
   );
 }
