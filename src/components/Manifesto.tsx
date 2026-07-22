@@ -8,34 +8,27 @@ import ResumeCard from "@components/ResumeCard";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-// Pile cards that drop in ON TOP of the main resume, then travel with it.
-const PILE = [
-  { rotate: -7, xPercent: -6 },
-  { rotate: 8, xPercent: 7 },
-  { rotate: -3, xPercent: -2 },
-];
+// Pile cards that drop in ON TOP of the main resume, then travel with it —
+// straight, even offsets (no rotation/scatter) so the stack reads as organized.
+const PILE_COUNT = 3;
 
-// Static fanned offsets for the tablet layout (no scroll animation).
-const TABLET_PILE = [
-  { rotate: -6, x: -7, y: -4 },
-  { rotate: 7, x: 6, y: 3 },
-  { rotate: -3, x: -2, y: 7 },
-];
+// Static offsets for the tablet layout (no scroll animation).
+const TABLET_PILE = [3, 6, 9]; // vertical % offset per card, back to front
 
 function StaticPile({ className = "" }: { className?: string }) {
   return (
     <div className={`relative ${className}`}>
-      <ResumeCard className="w-full" />
-      {TABLET_PILE.map((c, i) => (
+      {TABLET_PILE.map((y, i) => (
         <div
           key={i}
           aria-hidden
-          className="absolute inset-0"
-          style={{ transform: `translate(${c.x}%, ${c.y}%) rotate(${c.rotate}deg)` }}
+          className="absolute inset-0 z-0"
+          style={{ transform: `translateY(${y}%)` }}
         >
           <ResumeCard className="w-full" />
         </div>
       ))}
+      <ResumeCard className="relative z-10 w-full" />
     </div>
   );
 }
@@ -105,9 +98,10 @@ export default function Manifesto() {
           const piles = gsap.utils.toArray<HTMLElement>(".mf-pile");
           const copy = root.current!.querySelector<HTMLElement>("#mf-copy")!;
 
-          // Derived from the untransformed slot so they stay correct across pin
-          // refreshes (function values re-evaluate on invalidateOnRefresh).
-          const bigScale = () => (window.innerWidth * 0.9) / stack.offsetWidth;
+          // Scale so the whole portrait card fits the viewport HEIGHT (not
+          // width) — otherwise the tall résumé overflows and only its top shows.
+          // Measured off the untransformed slot/card so it survives pin refreshes.
+          const bigScale = () => (window.innerHeight * 0.86) / stack.offsetHeight;
           const dx = () => {
             const r = slot.getBoundingClientRect();
             return window.innerWidth / 2 - (r.left + r.width / 2);
@@ -116,8 +110,7 @@ export default function Manifesto() {
           gsap.set(piles, {
             autoAlpha: 0,
             yPercent: -125,
-            rotation: (i: number) => PILE[i].rotate,
-            xPercent: (i: number) => PILE[i].xPercent,
+            xPercent: 0,
             willChange: "transform, opacity",
             force3D: true,
           });
@@ -141,16 +134,26 @@ export default function Manifesto() {
             stack,
             {
               x: dx,
-              y: "2vh",
+              y: 0,
               scale: bigScale,
-              transformOrigin: "top center",
+              transformOrigin: "center center",
               willChange: "transform",
               force3D: true,
             },
-            { x: dx, y: "2vh", scale: () => bigScale() * 0.5, duration: 1, immediateRender: true },
+            { x: dx, y: 0, scale: () => bigScale() * 0.5, duration: 1, immediateRender: true },
           );
-          // 2. pile cards drop in on top, staggered
-          tl.to(piles, { autoAlpha: 1, yPercent: 0, duration: 1, stagger: 0.45 }, ">-0.15");
+          // 2. pile cards drop in on top, staggered, settling into an organized
+          // stack (each peeking a little further below the one in front).
+          tl.to(
+            piles,
+            {
+              autoAlpha: 1,
+              yPercent: (i: number) => 3 * (i + 1),
+              duration: 1,
+              stagger: 0.45,
+            },
+            ">-0.15",
+          );
           // 3. whole stack settles into its natural left slot
           tl.to(stack, { x: 0, y: 0, scale: 1, duration: 1.4 }, ">-0.1");
           // 4. copy reveals on the right
@@ -175,9 +178,9 @@ export default function Manifesto() {
       >
         <div className="mx-auto flex min-h-[calc(100vh-12rem)] w-full max-w-7xl items-center justify-between gap-x-[8%]">
           <div className="flex shrink-0 justify-center">
-            <div id="mf-stack" className="relative w-[16vw]">
+            <div id="mf-stack" className="relative w-[20vw] xl:w-[16.5vw]">
               <ResumeCard className="w-full" />
-              {PILE.map((_, i) => (
+              {Array.from({ length: PILE_COUNT }, (_, i) => (
                 <div key={i} aria-hidden className="mf-pile absolute inset-0">
                   <ResumeCard className="w-full" />
                 </div>
@@ -200,7 +203,7 @@ export default function Manifesto() {
           <ManifestoCopy />
         </div>
         <div className="flex flex-1 justify-end">
-          <StaticPile className="w-[82%] min-w-[320px] max-w-[420px] translate-x-2" />
+          <StaticPile className="w-[84%] min-w-[310px] max-w-[420px] translate-x-2" />
         </div>
       </section>
 
@@ -209,7 +212,7 @@ export default function Manifesto() {
         id="manifesto-m"
         className="relative flex min-h-screen w-full flex-col items-center gap-12 border-t border-white/10 bg-black px-6 py-24 md:hidden"
       >
-        <ResumeCard className="w-56 shadow-2xl sm:w-64" />
+        <ResumeCard className="w-52 shadow-2xl sm:w-60" />
         <ManifestoCopy />
       </section>
     </>
