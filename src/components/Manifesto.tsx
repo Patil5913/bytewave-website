@@ -3,24 +3,27 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { CheckCircle2, ScanLine } from "lucide-react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowRight, BadgeCheck, Check, MapPin } from "lucide-react";
 import PixelBackdrop from "@components/PixelBackdrop";
 import Reveal from "@components/Reveal";
 
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
 const SKILLS = [
-  { name: "React", score: 92, verified: true },
-  { name: "TypeScript", score: 88, verified: true },
-  { name: "System Design", score: 85, verified: true },
-  { name: "Node.js", score: 76, verified: true },
-  { name: "GraphQL", score: 64, verified: false },
+  { name: "React", verified: true },
+  { name: "TypeScript", verified: true },
+  { name: "System Design", verified: true },
+  { name: "Node.js", verified: true },
+  { name: "GraphQL", verified: false },
 ];
 
 const OVERALL = 93;
 
-// Friendly panel: watch a resume get read, skills verified, and scored.
-// Driven by one smooth, looping GSAP timeline. Markup defaults to the final
-// state, so reduced-motion / no-JS users see the completed result.
-function ScanFeed() {
+// A real product screen — a candidate match card the way a hiring team sees it.
+// Reveals + score count-up once on scroll (GSAP). Markup defaults to the final
+// state for reduced-motion / no-JS.
+function CandidateCard() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -30,79 +33,33 @@ function ScanFeed() {
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const rows = gsap.utils.toArray<HTMLElement>(
-          root.querySelectorAll(".skill-row"),
-        );
-        const bars = gsap.utils.toArray<HTMLElement>(
-          root.querySelectorAll(".skill-bar"),
-        );
-        const checks = gsap.utils.toArray<HTMLElement>(
-          root.querySelectorAll(".skill-check"),
-        );
         const scoreEl = root.querySelector<HTMLElement>(".score-num");
         const proxy = { val: 0 };
 
         const tl = gsap.timeline({
-          repeat: -1,
-          repeatDelay: 1.4,
+          scrollTrigger: { trigger: root, start: "top 80%", once: true },
           defaults: { ease: "power3.out" },
         });
 
-        tl.set(rows, { opacity: 0.2, y: 8 }, 0)
-          .set(bars, { width: 0 }, 0)
-          .set(checks, { scale: 0, opacity: 0 }, 0)
-          .set(".progress-fill", { width: "0%" }, 0)
-          .set(".status-analyzing", { opacity: 1 }, 0)
-          .set(".status-complete", { opacity: 0 }, 0)
-          .set(".score-block", { opacity: 0.15 }, 0)
-          .add(() => {
-            if (scoreEl) scoreEl.textContent = "0";
-          }, 0);
-
-        const step = 0.5;
-        const scanDur = rows.length * step + 0.4;
-        tl.to(
-          ".progress-fill",
-          { width: "100%", duration: scanDur, ease: "none" },
-          0,
+        if (scoreEl) scoreEl.textContent = "0";
+        tl.from(".rise", { opacity: 0, y: 14, duration: 0.5, stagger: 0.07 });
+        tl.from(
+          ".chip",
+          { opacity: 0, scale: 0.85, duration: 0.35, stagger: 0.05 },
+          "-=0.3",
         );
-
-        rows.forEach((row, i) => {
-          const at = i * step;
-          tl.to(row, { opacity: 1, y: 0, duration: 0.4 }, at)
-            .to(
-              bars[i],
-              {
-                width: `${SKILLS[i].score}%`,
-                duration: 0.7,
-                ease: "power2.out",
-              },
-              at,
-            )
-            .to(
-              checks[i],
-              { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" },
-              at + 0.4,
-            );
-        });
-
-        const endAt = rows.length * step + 0.2;
-        tl.to(".status-analyzing", { opacity: 0, duration: 0.3 }, endAt)
-          .to(".status-complete", { opacity: 1, duration: 0.3 }, endAt)
-          .to(".score-block", { opacity: 1, duration: 0.5 }, endAt)
-          .to(
-            proxy,
-            {
-              val: OVERALL,
-              duration: 0.9,
-              ease: "power2.out",
-              onUpdate: () => {
-                if (scoreEl)
-                  scoreEl.textContent = Math.round(proxy.val).toString();
-              },
+        tl.to(
+          proxy,
+          {
+            val: OVERALL,
+            duration: 1,
+            ease: "power2.out",
+            onUpdate: () => {
+              if (scoreEl) scoreEl.textContent = Math.round(proxy.val).toString();
             },
-            endAt,
-          );
+          },
+          0.1,
+        );
       });
 
       return () => mm.revert();
@@ -113,79 +70,102 @@ function ScanFeed() {
   return (
     <div
       ref={containerRef}
-      className="w-full overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-sm"
+      className="w-full rounded-2xl border border-white/10 bg-white/[0.04] p-1.5 shadow-2xl shadow-black/60 backdrop-blur-sm"
     >
-      <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
-        <div className="flex items-center gap-2.5">
-          <ScanLine className="h-4 w-4 text-emerald-400" />
-          <span className="text-sm font-medium text-white">
-            Reading the resume
-          </span>
-        </div>
-        <span className="inline-grid rounded-full bg-white/5 px-2.5 py-1 text-xs font-medium">
-          <span
-            className="status-analyzing col-start-1 row-start-1 text-white/50"
-            style={{ opacity: 0 }}
-          >
-            Analyzing
-          </span>
-          <span className="status-complete col-start-1 row-start-1 text-emerald-400">
-            Complete
-          </span>
-        </span>
-      </div>
-
-      {/* scan progress */}
-      <div className="h-0.5 w-full bg-white/5">
-        <div
-          className="progress-fill h-full bg-emerald-400"
-          style={{ width: "100%" }}
-        />
-      </div>
-
-      <div className="flex flex-col gap-4 p-5">
-        <p className="text-xs text-white/40">
-          Skills we found — and confirmed against real work.
-        </p>
-
-        <div className="flex flex-col gap-3.5">
-          {SKILLS.map((s) => (
-            <div key={s.name} className="skill-row flex items-center gap-3">
-              <span className="w-24 shrink-0 truncate text-sm text-white/80 sm:w-28">
-                {s.name}
-              </span>
-              <span className="relative h-2 flex-1 overflow-hidden rounded-full bg-white/10">
-                <span
-                  className="skill-bar absolute inset-y-0 left-0 rounded-full bg-emerald-400"
-                  style={{ width: `${s.score}%` }}
-                />
-              </span>
-              <span className="w-9 shrink-0 text-right text-sm text-white/50">
-                {s.score}%
-              </span>
-              <span className="skill-check flex w-5 shrink-0 justify-center">
-                {s.verified ? (
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                ) : (
-                  <span className="h-1.5 w-1.5 rounded-full bg-white/25" />
-                )}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="score-block mt-1 flex items-end justify-between border-t border-white/10 pt-4">
-          <div>
-            <div className="font-instrument text-3xl font-medium text-white">
-              <span className="score-num">{OVERALL}</span>%
-            </div>
-            <div className="text-xs text-white/40">Overall match</div>
+      <div className="overflow-hidden rounded-xl border border-white/10 bg-black/50">
+        {/* window title bar */}
+        <div className="relative flex items-center justify-between gap-3 border-b border-white/10 bg-white/[0.02] px-4 py-3">
+          <div className="flex items-center gap-1.5">
+            <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+            <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
+            <span className="h-3 w-3 rounded-full bg-[#28c840]" />
           </div>
-          <div className="text-right">
-            <div className="text-sm font-medium text-emerald-400">
-              Strong fit
+          <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 font-mono text-xs tracking-wider text-white/40">
+            find &amp; hire — candidate
+          </span>
+          <span className="flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-2.5 py-1 text-xs font-medium text-emerald-400">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            </span>
+            Available
+          </span>
+        </div>
+
+        <div className="flex flex-col gap-5 p-5">
+          {/* candidate header */}
+          <div className="rise flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="relative">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-400/15 font-medium text-emerald-400">
+                  JR
+                </div>
+                <BadgeCheck className="absolute -right-1 -bottom-1 h-5 w-5 rounded-full bg-black text-emerald-400" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-medium text-white">Jordan Rivera</span>
+                <span className="text-sm text-white/50">
+                  Senior Frontend Engineer
+                </span>
+                <span className="mt-0.5 flex items-center gap-1 text-xs text-white/40">
+                  <MapPin className="h-3 w-3" />
+                  Remote · San Francisco
+                </span>
+              </div>
             </div>
-            <div className="text-xs text-white/40">Senior Frontend roles</div>
+            <div className="text-right">
+              <div className="font-instrument text-3xl leading-none font-medium text-emerald-400">
+                <span className="score-num">{OVERALL}</span>%
+              </div>
+              <div className="mt-1 text-xs text-white/40">match</div>
+            </div>
+          </div>
+
+          {/* verified skills */}
+          <div className="rise flex flex-col gap-2">
+            <span className="text-xs tracking-wider text-white/40 uppercase">
+              Verified skills
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {SKILLS.map((s) => (
+                <span
+                  key={s.name}
+                  className={`chip flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs ${
+                    s.verified
+                      ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-400"
+                      : "border-white/10 text-white/50"
+                  }`}
+                >
+                  {s.verified && <Check className="h-3 w-3" />}
+                  {s.name}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* quick facts */}
+          <div className="rise grid grid-cols-3 gap-3 border-t border-white/10 pt-4">
+            {[
+              { k: "Experience", v: "8 yrs" },
+              { k: "Notice", v: "2 weeks" },
+              { k: "Target", v: "$180k" },
+            ].map((f) => (
+              <div key={f.k} className="flex flex-col gap-1">
+                <span className="text-sm font-medium text-white">{f.v}</span>
+                <span className="text-xs text-white/40">{f.k}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* actions */}
+          <div className="rise flex items-center gap-3">
+            <button className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-medium text-black transition hover:bg-white/90">
+              Request intro
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </button>
+            <button className="rounded-lg border border-white/15 px-4 py-2.5 text-sm text-white transition hover:bg-white/5">
+              View profile
+            </button>
           </div>
         </div>
       </div>
@@ -201,7 +181,7 @@ export default function Manifesto() {
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16">
           <Reveal className="flex flex-col gap-6 md:col-span-6">
             <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-              <span className="text-emerald-400">[ 01 ]</span>
+              <span className="text-white/40">[ 01 ]</span>
               Why We Exist
             </span>
             <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-white lg:text-5xl xl:text-6xl">
@@ -217,7 +197,7 @@ export default function Manifesto() {
           </Reveal>
 
           <Reveal className="md:col-span-6">
-            <ScanFeed />
+            <CandidateCard />
           </Reveal>
         </div>
 

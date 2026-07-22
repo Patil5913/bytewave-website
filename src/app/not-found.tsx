@@ -17,7 +17,7 @@ export default function NotFound() {
 
       <div className="flex w-full flex-col items-center justify-center gap-6 px-6 py-16 text-center md:w-1/2 md:px-16">
         <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-          <span className="text-emerald-400">[ 404 ]</span>
+          <span className="text-white/40">[ 404 ]</span>
           Page Not Found
         </span>
 

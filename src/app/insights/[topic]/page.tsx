@@ -44,7 +44,7 @@ export default async function InsightsTopic({
 
           <div className="mb-16 flex flex-col gap-4 md:max-w-2xl">
             <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-              <span className="text-emerald-400">[ Topic ]</span>
+              <span className="text-white/40">[ Topic ]</span>
               {posts[0].tag}
             </span>
             <h1 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">

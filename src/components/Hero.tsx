@@ -89,7 +89,7 @@ export default function Hero() {
         >
           <a
             href="#"
-            className="group flex w-full items-center justify-center gap-2 bg-white/10 px-4 py-2.5 text-white backdrop-blur-md transition hover:bg-white/20 sm:w-auto sm:py-1.5"
+            className="group flex w-full items-center justify-center gap-2 bg-white px-4 py-2.5 font-medium text-black transition hover:bg-white/90 sm:w-auto sm:py-1.5"
           >
             Advance Your Career
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

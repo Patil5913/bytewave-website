@@ -67,7 +67,7 @@ export default function MarketTelemetry() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 md:grid-cols-12 md:gap-16">
         <Reveal className="flex flex-col gap-4 md:col-span-4">
           <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-            <span className="text-emerald-400">[ 02 ]</span>
+            <span className="text-white/40">[ 02 ]</span>
             Market Telemetry
           </span>
           <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
@@ -147,8 +147,8 @@ export default function MarketTelemetry() {
                         style={{ left: `${left}%`, width: `${width}%` }}
                         className={`absolute inset-y-0 flex items-center justify-between overflow-hidden border-l-2 bg-linear-to-r px-2.5 backdrop-blur-md transition-all duration-300 ${
                           isActive
-                            ? "border-emerald-200/60 from-emerald-300/70 via-amber-300/55 to-rose-300/60"
-                            : "border-emerald-300/30 from-emerald-300/12 via-amber-300/10 to-rose-300/[0.07] hover:from-emerald-300/25 hover:via-amber-300/18 hover:to-rose-300/12"
+                            ? "border-emerald-400/60 from-emerald-400/70 via-amber-300/55 to-rose-300/60"
+                            : "border-emerald-400/30 from-emerald-400/12 via-amber-300/10 to-rose-300/[0.07] hover:from-emerald-400/25 hover:via-amber-300/18 hover:to-rose-300/12"
                         }`}
                       >
                         <span

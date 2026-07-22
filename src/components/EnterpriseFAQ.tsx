@@ -133,7 +133,7 @@ export default function EnterpriseFAQ() {
         <Reveal className="flex flex-col gap-6 lg:col-span-5 lg:sticky lg:top-24 lg:h-fit">
           <div className="flex flex-col gap-4">
             <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-              <span className="text-emerald-400">[ 06 ]</span>
+              <span className="text-white/40">[ 06 ]</span>
               Common Questions
             </span>
             <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">

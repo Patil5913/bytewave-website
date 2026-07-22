@@ -15,13 +15,9 @@ export default function Navbar() {
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
         <Link
           href="/"
-          className="group flex items-end gap-1 text-lg font-archivo font-bold uppercase text-white transition-transform duration-200 hover:scale-105 hover:text-white/80 active:scale-95"
+          className="font-instrument text-xl font-normal text-brand transition-transform duration-200 hover:scale-105 hover:text-brand/80 active:scale-95 sm:text-2xl"
         >
-          BW
-          <span
-            aria-hidden
-            className="mb-1 h-0.5 w-2.5 -translate-x-0.75 -translate-y-1 animate-blink bg-white/40 backdrop-blur-md group-hover:bg-white/70"
-          />
+          find &amp; hire
         </Link>
         <div className="flex items-center gap-4 sm:gap-8">
           <Link

@@ -2,13 +2,16 @@
 
 html,
 body {
-  background-color: #000;
+  background-color: #000000;
 }
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-instrument: var(--font-instrument-sans);
   --font-archivo: var(--font-archivo);
+
+  /* brand: black bg, white text, blue accent (used sparingly — brand name) */
+  --color-brand: #2191fb;
 }
 
 @keyframes marquee {

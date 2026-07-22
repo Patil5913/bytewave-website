@@ -15,7 +15,7 @@ export default function Insights() {
         <Reveal className="mb-12 flex items-end justify-between">
           <div className="flex flex-col gap-4">
             <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-              <span className="text-emerald-400">[ 05 ]</span>
+              <span className="text-white/40">[ 05 ]</span>
               Insights
             </span>
             <h2 className="font-instrument text-4xl font-medium text-white md:text-5xl">

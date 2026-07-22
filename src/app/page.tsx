@@ -1,6 +1,7 @@
 import Navbar from "@components/Navbar";
 import Hero from "@components/Hero";
 import Manifesto from "@components/Manifesto";
+import AgentIntro from "@components/AgentIntro";
 import Stats from "@components/Stats";
 import Gateways from "@components/Gateways";
 import PlacementFeed from "@components/PlacementFeed";
@@ -14,6 +15,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Manifesto />
+      <AgentIntro />
       <Stats />
       <Gateways />
       <PlacementFeed />

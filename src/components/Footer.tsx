@@ -67,16 +67,19 @@ export default function Footer() {
 					<div className="flex flex-col gap-4">
 						<Link
 							href="/"
-							className="group flex w-fit items-end gap-1 text-lg font-archivo font-bold uppercase text-white transition-transform duration-200 hover:scale-105 hover:text-white/80 active:scale-95"
+							className="group flex w-fit items-end gap-1 font-instrument text-2xl font-bold text-brand transition-transform duration-200 hover:scale-105 hover:text-brand/80 active:scale-95"
 						>
-							BW
+							find &amp; hire
 							<span
 								aria-hidden
-								className="mb-1 h-0.5 w-2.5 -translate-x-0.75 -translate-y-1 animate-blink bg-white/40 backdrop-blur-md group-hover:bg-white/70"
+								className="mb-1.5 h-0.5 w-2.5 animate-blink bg-brand backdrop-blur-md"
 							/>
 						</Link>
 						<p className="max-w-xs text-sm leading-relaxed text-white/40">
 							Connecting verified professionals with the teams that need them.
+						</p>
+						<p className="text-xs text-white/30">
+							find &amp; hire is the trading name of Bytewave, Inc.
 						</p>
 						<address className="max-w-xs text-sm leading-relaxed text-white/40 not-italic">
 							548 Market St, Suite 95000
@@ -162,7 +165,7 @@ export default function Footer() {
 				</Reveal>
 
 				<div className="mt-20 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-8 text-xs text-white/40 sm:flex-row sm:items-center">
-					<span>© 2026 Bytewave. All rights reserved.</span>
+					<span>© 2026 find &amp; hire, a Bytewave company. All rights reserved.</span>
 					<a
 						href="https://rudr.me"
 						target="_blank"

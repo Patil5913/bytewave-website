@@ -21,7 +21,7 @@ function renderSpans(spans: Span[]): ReactNode {
 
     if (span.code) {
       node = (
-        <code className="rounded bg-white/10 px-1.5 py-0.5 text-[0.9em] text-emerald-300">
+        <code className="rounded bg-white/10 px-1.5 py-0.5 text-[0.9em] text-emerald-400">
           {node}
         </code>
       );
@@ -41,7 +41,7 @@ function renderSpans(spans: Span[]): ReactNode {
       node = (
         <Link
           href={span.href}
-          className="text-emerald-400 underline underline-offset-4 transition-colors hover:text-emerald-300"
+          className="text-emerald-400 underline underline-offset-4 transition-colors hover:text-emerald-400"
         >
           {node}
         </Link>

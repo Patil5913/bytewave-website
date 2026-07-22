@@ -12,7 +12,7 @@ type PixelBackdropProps = {
 };
 
 const CELL = 22; // px between grid nodes
-const EMERALD = "16, 185, 129"; // tailwind emerald-400-ish
+const EMERALD = "255, 255, 255"; // neutral white — kept subtle/ambient
 const FRAME_MS = 1000 / 30; // cap canvas variants at ~30fps
 
 function prefersReducedMotion() {

@@ -64,7 +64,7 @@ export default function Stats() {
       <PixelBackdrop variant="dots" className="absolute inset-0 z-0" />
       <div ref={ref} className="relative z-10 mx-auto w-full max-w-7xl">
         <span className="mb-12 flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-          <span className="text-emerald-400">[ 02 ]</span>
+          <span className="text-white/40">[ 02 ]</span>
           By the Numbers
         </span>
 

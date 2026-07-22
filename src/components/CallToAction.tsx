@@ -10,7 +10,7 @@ export default function CallToAction() {
       <PixelBackdrop variant="dots" className="absolute inset-0 z-0" intensity={0.5} />
       <Reveal className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center">
         <span className="mb-6 flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-          <span className="text-emerald-400">[ 06 ]</span>
+          <span className="text-white/40">[ 06 ]</span>
           Get Started
         </span>
 

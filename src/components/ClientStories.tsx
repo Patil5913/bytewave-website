@@ -54,7 +54,7 @@ export default function ClientStories() {
         <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <Reveal className="flex flex-col gap-4">
             <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-              <span className="text-emerald-400">[ 05 ]</span>
+              <span className="text-white/40">[ 05 ]</span>
               Client Stories
             </span>
             <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">

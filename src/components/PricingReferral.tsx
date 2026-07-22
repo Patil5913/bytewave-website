@@ -36,7 +36,7 @@ export default function PricingReferral() {
       <div className="mx-auto max-w-7xl">
         <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
           <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-            <span className="text-emerald-400">[ 07 ]</span>
+            <span className="text-white/40">[ 07 ]</span>
             Pricing
           </span>
           <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
