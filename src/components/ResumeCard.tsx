@@ -1,151 +1,105 @@
-function Bar({ w, tone = "line" }: { w: string; tone?: "line" | "faint" | "accent" | "ink" }) {
+// Single-column, modern software-engineer résumé. All internal sizing is in
+// cqw (% of the card's own width) so it looks identical at any rendered size.
+
+function Bar({ w, tone = "line" }: { w: string; tone?: "line" | "faint" | "accent" }) {
   const bg =
     tone === "accent"
-      ? "bg-emerald-600/80"
-      : tone === "ink"
-        ? "bg-neutral-700"
-        : tone === "faint"
-          ? "bg-neutral-300"
-          : "bg-neutral-400";
-  return <span className={`block h-[0.7vh] ${bg}`} style={{ width: w }} />;
+      ? "bg-emerald-400"
+      : tone === "faint"
+        ? "bg-white/10"
+        : "bg-white/25";
+  return <span className={`block h-[1.5cqw] rounded-[1px] ${bg}`} style={{ width: w }} />;
 }
 
-function Entry({ title, dates, lines }: { title: string; dates: string; lines: string[] }) {
+function SectionLabel({ w }: { w: string }) {
   return (
-    <div className="flex flex-col gap-[0.9vh]">
+    <div className="flex items-center gap-[2cqw]">
+      <span className="h-[2cqw] w-[2cqw] shrink-0 rounded-[1px] bg-emerald-400" />
+      <span className="h-[2cqw] rounded-[1px] bg-emerald-400/80" style={{ width: w }} />
+    </div>
+  );
+}
+
+function Bullet({ w }: { w: string }) {
+  return (
+    <div className="flex items-center gap-[2cqw]">
+      <span className="h-[1.2cqw] w-[1.2cqw] shrink-0 rounded-full bg-white/30" />
+      <span className="h-[1.4cqw] rounded-[1px] bg-white/25" style={{ width: w }} />
+    </div>
+  );
+}
+
+function Experience({ title, date, bullets }: { title: string; date: string; bullets: string[] }) {
+  return (
+    <div className="flex flex-col gap-[2cqw]">
       <div className="flex items-center justify-between">
-        <span className="h-[0.9vh] bg-neutral-700" style={{ width: title }} />
-        <span className="h-[0.6vh] bg-neutral-300" style={{ width: dates }} />
+        <span className="h-[2cqw] rounded-[1px] bg-white/45" style={{ width: title }} />
+        <span className="h-[1.4cqw] rounded-[1px] bg-white/15" style={{ width: date }} />
       </div>
-      {lines.map((w, i) => (
-        <Bar key={i} w={w} />
+      <span className="h-[1.4cqw] w-[45%] rounded-[1px] bg-white/20" />
+      {bullets.map((w, i) => (
+        <Bullet key={i} w={w} />
       ))}
     </div>
   );
 }
 
-type Variant = {
-  paper: string;
-  name: string;
-  role: string;
-  hasAvatar: boolean;
-  contacts: string[];
-  entries: { title: string; dates: string; lines: string[] }[];
-  chips: string[];
-};
-
-const VARIANTS: Variant[] = [
-  {
-    paper: "#f2f2ef",
-    name: "13vh",
-    role: "9vh",
-    hasAvatar: true,
-    contacts: ["4vh", "5vh", "3vh"],
-    entries: [
-      { title: "10vh", dates: "4vh", lines: ["100%", "88%", "72%"] },
-      { title: "8vh", dates: "4vh", lines: ["94%", "80%"] },
-      { title: "11vh", dates: "4vh", lines: ["100%", "90%", "64%"] },
-    ],
-    chips: ["3vh", "4vh", "2.5vh", "3.5vh", "3vh", "2vh"],
-  },
-  {
-    paper: "#eeefe9",
-    name: "10vh",
-    role: "12vh",
-    hasAvatar: false,
-    contacts: ["5vh", "4vh"],
-    entries: [
-      { title: "12vh", dates: "3.5vh", lines: ["96%", "70%"] },
-      { title: "9vh", dates: "4vh", lines: ["100%", "84%", "58%", "76%"] },
-    ],
-    chips: ["4vh", "2.5vh", "3.5vh", "3vh"],
-  },
-  {
-    paper: "#f4f1ec",
-    name: "15vh",
-    role: "7vh",
-    hasAvatar: true,
-    contacts: ["3vh", "4vh", "5vh", "3vh"],
-    entries: [
-      { title: "9vh", dates: "4vh", lines: ["88%", "100%"] },
-      { title: "11vh", dates: "3.5vh", lines: ["92%", "76%", "60%"] },
-      { title: "7vh", dates: "4vh", lines: ["100%", "68%"] },
-    ],
-    chips: ["2.5vh", "3.5vh", "3vh", "4vh", "2vh"],
-  },
-  {
-    paper: "#f0f0ec",
-    name: "11vh",
-    role: "10vh",
-    hasAvatar: false,
-    contacts: ["4vh", "5vh", "4vh"],
-    entries: [
-      { title: "8vh", dates: "4vh", lines: ["100%", "82%", "90%"] },
-      { title: "13vh", dates: "3.5vh", lines: ["74%", "96%"] },
-    ],
-    chips: ["3vh", "2vh", "4vh", "3.5vh", "2.5vh", "3vh"],
-  },
+const EXPERIENCE = [
+  { title: "46%", date: "20%", bullets: ["96%", "88%", "92%", "85%"] },
+  { title: "38%", date: "20%", bullets: ["92%", "78%", "84%"] },
+  { title: "42%", date: "20%", bullets: ["88%", "80%",] },
 ];
+const CONTACTS = ["16%", "20%", "14%", "18%"];
+const SKILLS = ["14%", "20%", "11%", "17%", "13%", "22%", "12%", "16%", "18%", "15%"];
 
-export default function ResumeCard({
-  className = "",
-  variant = 0,
-}: {
-  className?: string;
-  variant?: number;
-}) {
-  const v = VARIANTS[variant % VARIANTS.length];
-
+export default function ResumeCard({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`relative flex aspect-[17/22] flex-col gap-[3.5%] overflow-hidden rounded-md border border-neutral-300 p-[6%] shadow-lg ${className}`}
-      style={{ backgroundColor: v.paper }}
+      className={`@container relative flex aspect-[17/22] flex-col gap-[5cqw] overflow-hidden rounded-md border border-white/10 bg-[#0d0f0e] p-[7cqw] shadow-2xl ${className}`}
     >
       {/* header */}
-      <div className="flex items-start justify-between border-b border-neutral-200 pb-[3%]">
-        <div className="flex flex-col gap-[0.9vh]">
-          <span className="font-mono text-[clamp(0.5rem,1.5vh,1.1rem)] font-bold tracking-[0.35em] text-neutral-900 uppercase">
-            Résumé
+      <div className="flex items-start justify-between gap-[4cqw] border-b border-white/10 pb-[5cqw]">
+        <div className="flex flex-col gap-[2cqw]">
+          <span className="h-[3.4cqw] w-[52%] rounded-[1px] bg-white/85" />
+          <span className="mt-[1cqw] flex items-center gap-[2cqw]">
+            <span className="h-[1.6cqw] w-[26%] rounded-[1px] bg-emerald-400/80" />
+            <span className="h-[1.6cqw] w-[16%] rounded-[1px] bg-white/25" />
           </span>
-          <span className="mt-[0.4vh] h-[1.4vh] bg-neutral-800" style={{ width: v.name }} />
-          <span className="h-[0.7vh] bg-neutral-500" style={{ width: v.role }} />
-          <div className="mt-[0.4vh] flex gap-[1vh]">
-            {v.contacts.map((w, i) => (
-              <Bar key={i} w={w} tone="faint" />
-            ))}
-          </div>
         </div>
-        {v.hasAvatar && <div className="h-[7vh] w-[7vh] shrink-0 rounded-sm bg-neutral-300" />}
+        <span className="font-instrument text-[5cqw] leading-none font-medium tracking-[0.28em] text-white/70 uppercase">
+          CV
+        </span>
       </div>
 
-      {/* body: two columns */}
-      <div className="flex flex-1 gap-[6%]">
-        <div className="flex w-[62%] flex-col gap-[2.4vh]">
-          <Bar w="7vh" tone="accent" />
-          {v.entries.map((e, i) => (
-            <Entry key={i} {...e} />
-          ))}
-        </div>
+      {/* contact row */}
+      <div className="flex flex-wrap gap-[3cqw]">
+        {CONTACTS.map((w, i) => (
+          <Bar key={i} w={w} tone="faint" />
+        ))}
+      </div>
 
-        <div className="flex flex-1 flex-col gap-[2.4vh] border-l border-neutral-200 pl-[6%]">
-          <div className="flex flex-col gap-[1vh]">
-            <Bar w="6vh" tone="accent" />
-            <Bar w="100%" />
-            <Bar w="70%" />
-          </div>
-          <div className="flex flex-col gap-[1vh]">
-            <Bar w="5vh" tone="accent" />
-            <div className="flex flex-wrap gap-[0.8vh]">
-              {v.chips.map((w, i) => (
-                <span key={i} className="h-[1.4vh] rounded-[1px] bg-neutral-300" style={{ width: w }} />
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-col gap-[1vh]">
-            <Bar w="6vh" tone="accent" />
-            <Bar w="90%" />
-            <Bar w="60%" />
-          </div>
+      {/* summary */}
+      <div className="flex flex-col gap-[2.5cqw]">
+        <SectionLabel w="22%" />
+        <Bar w="100%" />
+        <Bar w="82%" />
+      </div>
+
+      {/* experience */}
+      <div className="flex flex-col gap-[3.5cqw]">
+        <SectionLabel w="30%" />
+        {EXPERIENCE.map((e, i) => (
+          <Experience key={i} {...e} />
+        ))}
+      </div>
+
+      {/* skills */}
+      <div className="flex flex-col gap-[2.5cqw]">
+        <SectionLabel w="18%" />
+        <div className="flex flex-wrap gap-[2cqw]">
+          {SKILLS.map((w, i) => (
+            <span key={i} className="h-[3.4cqw] rounded-[2px] bg-white/10" style={{ width: w }} />
+          ))}
         </div>
       </div>
     </div>

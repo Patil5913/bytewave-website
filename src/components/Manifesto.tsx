@@ -15,6 +15,31 @@ const PILE = [
   { rotate: -3, xPercent: -2 },
 ];
 
+// Static fanned offsets for the tablet layout (no scroll animation).
+const TABLET_PILE = [
+  { rotate: -6, x: -7, y: -4 },
+  { rotate: 7, x: 6, y: 3 },
+  { rotate: -3, x: -2, y: 7 },
+];
+
+function StaticPile({ className = "" }: { className?: string }) {
+  return (
+    <div className={`relative ${className}`}>
+      <ResumeCard className="w-full" />
+      {TABLET_PILE.map((c, i) => (
+        <div
+          key={i}
+          aria-hidden
+          className="absolute inset-0"
+          style={{ transform: `translate(${c.x}%, ${c.y}%) rotate(${c.rotate}deg)` }}
+        >
+          <ResumeCard className="w-full" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ManifestoCopy() {
   return (
     <div className="flex flex-col gap-8">
@@ -22,10 +47,12 @@ function ManifestoCopy() {
         <span className="text-xs font-medium tracking-widest text-white/50 uppercase">
           Why We Exist
         </span>
-        <h2 className="font-instrument text-4xl leading-tight font-medium text-white md:text-5xl xl:text-6xl">
-          The traditional hiring loop is broken. We built a better mechanism.
+        <h2 className="font-instrument text-3xl leading-tight font-medium text-white sm:text-4xl xl:text-5xl">
+          The traditional hiring loop is broken.
+          <br />
+          We built a better mechanism.
         </h2>
-        <p className="max-w-xl text-base leading-relaxed text-white/60 md:text-lg">
+        <p className="max-w-[60ch] text-base leading-relaxed text-white/60 md:text-lg">
           Most staffing agencies rely on keyword matching and endless resume
           piles, frustrating companies and candidates alike. We see hiring as a
           matching problem — connecting real needs directly with a network of
@@ -33,7 +60,7 @@ function ManifestoCopy() {
         </p>
       </div>
 
-      <div className="grid max-w-xl grid-cols-1 gap-8 border-t border-white/10 pt-6 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8 border-t border-white/10 pt-6 sm:grid-cols-2">
         <div>
           <h4 className="mb-2 text-sm font-medium tracking-wider text-white uppercase">
             No Guesswork
@@ -62,6 +89,12 @@ export default function Manifesto() {
 
   useGSAP(
     () => {
+      // Fonts loading after mount changes layout widths; recompute once ready
+      // so the pinned intro measures/centres against the final layout.
+      if (typeof document !== "undefined" && document.fonts) {
+        document.fonts.ready.then(() => ScrollTrigger.refresh());
+      }
+
       const mq = gsap.matchMedia();
 
       mq.add(
@@ -140,7 +173,7 @@ export default function Manifesto() {
         id="manifesto"
         className="relative hidden min-h-screen w-full overflow-hidden border-t border-white/10 bg-black px-6 py-24 lg:block lg:px-16"
       >
-        <div className="mx-auto flex min-h-[calc(100vh-12rem)] w-full max-w-7xl items-center justify-between gap-16">
+        <div className="mx-auto flex min-h-[calc(100vh-12rem)] w-full max-w-7xl items-center justify-between gap-x-[8%]">
           <div className="flex shrink-0 justify-center">
             <div id="mf-stack" className="relative w-[16vw]">
               <ResumeCard className="w-full" />
@@ -152,16 +185,29 @@ export default function Manifesto() {
             </div>
           </div>
 
-          <div id="mf-copy" className="w-[56%] shrink-0">
+          <div id="mf-copy" className="w-full max-w-2xl shrink-0">
             <ManifestoCopy />
           </div>
+        </div>
+      </section>
+
+      {/* Tablet: static two-column, pile parked to the right. */}
+      <section
+        id="manifesto-t"
+        className="relative hidden min-h-[110vh] w-full items-center gap-10 border-t border-white/10 bg-black px-10 py-32 md:flex lg:hidden"
+      >
+        <div className="w-[46%] max-w-xl">
+          <ManifestoCopy />
+        </div>
+        <div className="flex flex-1 justify-end">
+          <StaticPile className="w-[82%] min-w-[320px] max-w-[420px] translate-x-2" />
         </div>
       </section>
 
       {/* Mobile: static stacked layout. */}
       <section
         id="manifesto-m"
-        className="relative flex min-h-screen w-full flex-col items-center gap-12 border-t border-white/10 bg-black px-6 py-24 lg:hidden"
+        className="relative flex min-h-screen w-full flex-col items-center gap-12 border-t border-white/10 bg-black px-6 py-24 md:hidden"
       >
         <ResumeCard className="w-56 shadow-2xl sm:w-64" />
         <ManifestoCopy />
