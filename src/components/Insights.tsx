@@ -3,6 +3,7 @@
 import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ALL_POSTS, buildHref } from "@/lib/insights";
+import PixelBackdrop from "@components/PixelBackdrop";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -17,8 +18,9 @@ const ARTICLES = ALL_POSTS.slice(0, 3);
 
 export default function Insights() {
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
-      <div className="mx-auto max-w-7xl">
+    <section id="insights" className="snap-section relative flex w-full flex-col justify-center bg-black px-6 md:px-16">
+      <PixelBackdrop seed="bytewave-insights" />
+      <div className="relative z-10 mx-auto max-w-7xl">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -27,8 +29,7 @@ export default function Insights() {
           className="mb-12 flex items-end justify-between"
         >
           <div className="flex flex-col gap-4">
-            <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-              <span className="text-emerald-400">[ 05 ]</span>
+            <span className="text-xs font-medium tracking-widest text-white/50 uppercase">
               Insights
             </span>
             <h2 className="font-instrument text-4xl font-medium text-white md:text-5xl">

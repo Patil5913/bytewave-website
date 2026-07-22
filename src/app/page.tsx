@@ -14,11 +14,13 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Manifesto />
-      <Stats />
-      <Gateways />
-      <PlacementFeed />
-      <Insights />
-      <CallToAction />
+      <div className="snap-container">
+        <Stats />
+        <Gateways />
+        <PlacementFeed />
+        <Insights />
+        <CallToAction />
+      </div>
       <Footer />
     </>
   );

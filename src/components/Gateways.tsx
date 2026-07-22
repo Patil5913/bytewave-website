@@ -2,6 +2,7 @@
 
 import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import PixelBackdrop from "@components/PixelBackdrop";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -15,8 +16,8 @@ const fadeUp: Variants = {
 const ROUTES = [
   {
     href: "/companies",
-    index: "01",
     tag: "Companies",
+    seed: "bytewave-gateways-companies",
     headline: (
       <>
         Build your <br /> team.
@@ -26,8 +27,8 @@ const ROUTES = [
   },
   {
     href: "/professionals",
-    index: "02",
     tag: "Professionals",
+    seed: "bytewave-gateways-professionals",
     headline: (
       <>
         Find your <br /> next role.
@@ -39,10 +40,9 @@ const ROUTES = [
 
 export default function Gateways() {
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
-      <div className="mx-auto max-w-7xl">
-        <span className="mb-12 flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-          <span className="text-emerald-400">[ 03 ]</span>
+    <section id="gateways" className="snap-section relative flex w-full flex-col justify-center bg-black px-6 md:px-16">
+      <div className="mx-auto w-full max-w-7xl">
+        <span className="mb-12 flex items-center gap-2 text-xs font-medium tracking-widest text-white/50 uppercase">
           Choose Your Path
         </span>
 
@@ -62,20 +62,15 @@ export default function Gateways() {
                   : ""
               }`}
             >
-              <span className="pointer-events-none absolute -top-10 -right-4 font-instrument text-[13rem] leading-none font-medium text-white/[0.03] transition-colors duration-500 group-hover:text-white/[0.06]">
-                {route.index}
-              </span>
+              <PixelBackdrop seed={route.seed} />
 
-              <div className="relative flex items-start justify-between">
-                <span className="text-xs tracking-widest text-white/40 uppercase">
-                  Path // {route.index}
-                </span>
-                <span className="text-xs text-white/40 transition-colors duration-300 group-hover:text-white">
-                  [ {route.tag} ]
+              <div className="relative z-10 flex items-start justify-end">
+                <span className="text-xs text-white/40 transition-colors duration-300 group-hover:text-white uppercase">
+                  {route.tag}
                 </span>
               </div>
 
-              <div className="relative flex flex-col gap-6">
+              <div className="relative z-10 flex flex-col gap-6">
                 <h2 className="font-instrument text-4xl leading-tight font-medium text-white transition-colors duration-300 lg:text-5xl">
                   {route.headline}
                 </h2>

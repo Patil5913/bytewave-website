@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
+import PixelBackdrop from "@components/PixelBackdrop";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -73,10 +74,10 @@ const PLACEMENTS = [
 
 export default function PlacementFeed() {
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
-      <div className="mx-auto max-w-7xl">
-        <span className="mb-12 flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-          <span className="text-emerald-400">[ 04 ]</span>
+    <section id="placements" className="snap-section relative flex w-full flex-col justify-center bg-black px-6 md:px-16">
+      <PixelBackdrop seed="bytewave-placements" />
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <span className="mb-12 flex items-center gap-2 text-xs font-medium tracking-widest text-white/50 uppercase">
           Recent Placements
         </span>
 

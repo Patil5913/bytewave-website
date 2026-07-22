@@ -3,6 +3,7 @@
 html,
 body {
   background-color: #000;
+  overflow-x: clip;
 }
 
 @theme inline {
@@ -60,4 +61,26 @@ body {
     black 92%,
     transparent 100%
   );
+}
+
+.snap-container {
+  scroll-snap-type: y mandatory;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snap-container {
+    scroll-snap-type: none;
+  }
+}
+
+.pixel-bg {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
 }
