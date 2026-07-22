@@ -113,7 +113,7 @@ export default async function InsightArticle({
               </Link>
 
               <div className="mb-8 flex flex-col gap-4">
-                <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50 uppercase">
+                <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60 uppercase">
                   <span className="text-emerald-400">{post.tag}</span>
                   {post.updated ? "Updated " : ""}
                   {post.date}

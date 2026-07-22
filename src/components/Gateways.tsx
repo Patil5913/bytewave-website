@@ -34,8 +34,7 @@ export default function Gateways() {
     <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-black px-6 py-24 md:px-16">
       <PixelBackdrop variant="scan" className="absolute inset-0 z-0" />
       <div className="relative z-10 mx-auto w-full max-w-7xl">
-        <span className="mb-12 flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-          <span className="text-white/40">[ 03 ]</span>
+        <span className="mb-12 flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
           Choose Your Path
         </span>
 

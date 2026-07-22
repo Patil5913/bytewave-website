@@ -43,7 +43,7 @@ export default async function InsightsTopic({
           </div>
 
           <div className="mb-16 flex flex-col gap-4 md:max-w-2xl">
-            <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
+            <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
               <span className="text-white/40">[ Topic ]</span>
               {posts[0].tag}
             </span>

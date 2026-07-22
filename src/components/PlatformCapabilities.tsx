@@ -34,8 +34,7 @@ export default function PlatformCapabilities() {
     <section className="w-full bg-black px-6 py-24 md:px-16">
       <div className="mx-auto max-w-7xl">
         <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
-          <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-            <span className="text-white/40">[ 03 ]</span>
+          <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
             Platform Capabilities
           </span>
           <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">

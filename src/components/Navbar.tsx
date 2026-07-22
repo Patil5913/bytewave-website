@@ -15,7 +15,7 @@ export default function Navbar() {
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
         <Link
           href="/"
-          className="font-instrument text-xl font-normal text-brand transition-transform duration-200 hover:scale-105 hover:text-brand/80 active:scale-95 sm:text-2xl"
+          className="font-instrument text-xl font-normal text-white transition-transform duration-200 hover:scale-105 hover:text-white/80 active:scale-95 sm:text-2xl"
         >
           find &amp; hire
         </Link>

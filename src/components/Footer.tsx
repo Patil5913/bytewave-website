@@ -67,13 +67,9 @@ export default function Footer() {
 					<div className="flex flex-col gap-4">
 						<Link
 							href="/"
-							className="group flex w-fit items-end gap-1 font-instrument text-2xl font-bold text-brand transition-transform duration-200 hover:scale-105 hover:text-brand/80 active:scale-95"
+							className="w-fit font-instrument text-2xl font-normal text-white transition-transform duration-200 hover:scale-105 hover:text-white/80 active:scale-95"
 						>
 							find &amp; hire
-							<span
-								aria-hidden
-								className="mb-1.5 h-0.5 w-2.5 animate-blink bg-brand backdrop-blur-md"
-							/>
 						</Link>
 						<p className="max-w-xs text-sm leading-relaxed text-white/40">
 							Connecting verified professionals with the teams that need them.
@@ -99,7 +95,7 @@ export default function Footer() {
 						</div>
 
 						<div className="mt-4 flex max-w-xs flex-col gap-3">
-							<span className="text-xs font-medium tracking-widest text-white/50 uppercase">
+							<span className="text-sm font-medium tracking-widest text-white/60 uppercase">
 								Newsletter
 							</span>
 							<form className="flex items-center border-b border-white/20 focus-within:border-white/50">
@@ -122,7 +118,7 @@ export default function Footer() {
 					<div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
 						{LINK_GROUPS.map((group) => (
 							<div key={group.title} className="flex flex-col gap-4">
-								<span className="text-xs font-medium tracking-widest text-white/50 uppercase">
+								<span className="text-sm font-medium tracking-widest text-white/60 uppercase">
 									{group.title}
 								</span>
 								<div className="flex flex-col gap-3">
@@ -140,7 +136,7 @@ export default function Footer() {
 						))}
 
 						<div className="flex flex-col gap-4">
-							<span className="text-xs font-medium tracking-widest text-white/50 uppercase">
+							<span className="text-sm font-medium tracking-widest text-white/60 uppercase">
 								Status
 							</span>
 							<span className="flex items-center gap-2 text-sm text-white/60">
@@ -153,7 +149,7 @@ export default function Footer() {
 						</div>
 
 						<div className="flex flex-col gap-4">
-							<span className="text-xs font-medium tracking-widest text-white/50 uppercase">
+							<span className="text-sm font-medium tracking-widest text-white/60 uppercase">
 								Region
 							</span>
 							<span className="flex items-center gap-2 text-sm text-white/60">

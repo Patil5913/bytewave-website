@@ -82,9 +82,10 @@ export default function AgentIntro() {
                       {ch}
                     </span>
                   ))}
-                <span className="reveal-char">{" "}</span>
-              </span>
-            ))}
+                  <span className="reveal-char">&nbsp;</span>
+                </span>
+              )),
+            )}
           </p>
         ))}
       </div>

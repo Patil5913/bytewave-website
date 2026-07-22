@@ -53,8 +53,7 @@ export default function ClientStories() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <Reveal className="flex flex-col gap-4">
-            <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-              <span className="text-white/40">[ 05 ]</span>
+            <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
               Client Stories
             </span>
             <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
@@ -109,7 +108,7 @@ export default function ClientStories() {
       </div>
 
       <Reveal className="mx-auto mt-16 flex max-w-3xl flex-col items-center gap-5 px-6 text-center md:mt-20 md:px-16">
-        <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
+        <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
           <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />

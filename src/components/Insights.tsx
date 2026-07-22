@@ -14,8 +14,7 @@ export default function Insights() {
       <div className="relative z-10 mx-auto max-w-7xl">
         <Reveal className="mb-12 flex items-end justify-between">
           <div className="flex flex-col gap-4">
-            <span className="flex items-center gap-2 text-xs font-medium tracking-widest text-white/50">
-              <span className="text-white/40">[ 05 ]</span>
+            <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
               Insights
             </span>
             <h2 className="font-instrument text-4xl font-medium text-white md:text-5xl">
