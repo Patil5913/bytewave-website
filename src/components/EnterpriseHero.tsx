@@ -28,7 +28,7 @@ const COMPANIES = [
 
 export default function EnterpriseHero() {
   return (
-    <section className="relative flex min-h-svh w-full flex-col overflow-hidden">
+    <section data-hero className="relative flex min-h-svh w-full flex-col overflow-hidden">
       <Image
         src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2000&auto=format&fit=crop"
         alt="Enterprise hero background"

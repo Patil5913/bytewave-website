@@ -119,13 +119,20 @@
     border-radius: var(--style-radius-s);
   }
 
-  /* Live preview toolbar — compact, aligned control bar */
+  /* Live preview: hide the floating control bar, frame the preview instead */
   .live-preview-toolbar {
-    padding: 0.35rem 0.6rem;
+    display: none !important;
+  }
+  .live-preview-window__main,
+  .live-preview-iframe {
     border: 1px solid var(--theme-elevation-150);
-    border-radius: var(--style-radius-l);
-    background: var(--theme-elevation-50);
-    box-shadow: 0 6px 20px rgb(0 0 0 / 0.28);
+    border-radius: var(--style-radius-m);
+    overflow: hidden;
+    background: var(--theme-elevation-0);
+  }
+  /* separator between the form column and the preview column */
+  .live-preview-window__wrapper {
+    border-left: 1px solid var(--theme-elevation-150);
   }
   .live-preview-toolbar-controls {
     display: flex;

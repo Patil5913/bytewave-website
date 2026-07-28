@@ -248,6 +248,14 @@ body {
   list-style: none;
   padding-left: 0;
 }
+/* ==highlight== / text-state highlight */
+.article-richtext mark,
+.article-richtext .rt-highlight {
+  background-color: rgba(33, 145, 251, 0.22);
+  color: var(--color-ink);
+  border-radius: 2px;
+  padding: 0 3px;
+}
 .article-richtext s,
 .article-richtext del {
   color: color-mix(in srgb, var(--color-ink) 45%, transparent);

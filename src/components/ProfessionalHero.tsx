@@ -28,7 +28,7 @@ const COMPANIES = [
 
 export default function ProfessionalHero() {
   return (
-    <section className="relative flex min-h-svh w-full flex-col overflow-hidden">
+    <section data-hero className="relative flex min-h-svh w-full flex-col overflow-hidden">
       <Image
         src="https://images.pexels.com/photos/3182773/pexels-photo-3182773.jpeg"
         alt="Professional hero background"

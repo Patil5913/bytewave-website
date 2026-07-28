@@ -34,7 +34,7 @@ export default function Hero({
 }) {
   const PLATFORMS: Partner[] = partners.length ? partners : PARTNERS_HERO;
   return (
-    <section className="relative flex min-h-svh w-full flex-col overflow-hidden">
+    <section data-hero className="relative flex min-h-svh w-full flex-col overflow-hidden">
       {BG_MODE === "ascii" ? (
         <AsciiHero
           key={ACTIVE.src}

@@ -41,8 +41,39 @@ export function extractToc(
 // Only override headings — to attach TOC anchor ids and scroll offset. All
 // other nodes use Payload's defaults; visual styling is applied by the
 // `.article-richtext` scope in globals.css.
+// Lexical text format bitmask
+const IS_BOLD = 1;
+const IS_ITALIC = 2;
+const IS_STRIKETHROUGH = 4;
+const IS_UNDERLINE = 8;
+const IS_CODE = 16;
+const IS_SUBSCRIPT = 32;
+const IS_SUPERSCRIPT = 64;
+
+// Render a text node honouring both the format bitmask and any text-state
+// (e.g. the ==highlight== brand state) that the default converter ignores.
+function renderText(node: any, key: number) {
+  let el: React.ReactNode = node.text;
+  const f: number = node.format ?? 0;
+
+  if (f & IS_CODE) el = <code>{el}</code>;
+  if (f & IS_BOLD) el = <strong>{el}</strong>;
+  if (f & IS_ITALIC) el = <em>{el}</em>;
+  if (f & IS_STRIKETHROUGH) el = <s>{el}</s>;
+  if (f & IS_UNDERLINE) el = <u>{el}</u>;
+  if (f & IS_SUBSCRIPT) el = <sub>{el}</sub>;
+  if (f & IS_SUPERSCRIPT) el = <sup>{el}</sup>;
+
+  const state = node.$ as Record<string, string> | undefined;
+  if (state?.highlight) {
+    el = <mark className="rt-highlight">{el}</mark>;
+  }
+  return <React.Fragment key={key}>{el}</React.Fragment>;
+}
+
 const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
+  text: ({ node }: any) => renderText(node, 0),
   blocks: {
     // Premade CodeBlock — fenced ``` code with a language select.
     Code: ({ node }: any) => (

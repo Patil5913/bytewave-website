@@ -5,15 +5,28 @@ import Link from "next/link";
 import Reveal from "@components/Reveal";
 
 export default function Navbar() {
-  // The hero stays dark; the rest of the site is light. Swap the bar's
-  // treatment once scrolled past the hero so text stays legible on both.
-  const [scrolled, setScrolled] = useState(false);
+  // The bar is only transparent while it sits over a hero (dark imagery).
+  // Pages without a hero get the solid treatment immediately.
+  const [scrolled, setScrolled] = useState(true);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.6);
+    const hero = document.querySelector<HTMLElement>("[data-hero]");
+    if (!hero) {
+      setScrolled(true);
+      return;
+    }
+    const onScroll = () => {
+      // swap once the bar has passed most of the hero's own height
+      const threshold = hero.offsetHeight * 0.6;
+      setScrolled(window.scrollY > threshold);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   const fg = scrolled ? "text-ink" : "text-white";
@@ -25,7 +38,11 @@ export default function Navbar() {
       scroll={false}
       y={-10}
       duration={0.5}
-      className="fixed top-0 right-0 left-0 z-50 px-6 py-4 md:px-16 md:py-5"
+      className={`fixed top-0 right-0 left-0 z-50 px-6 py-4 transition-colors duration-300 md:px-16 md:py-5 ${
+        scrolled
+          ? "border-b border-ink/10 bg-canvas/80 backdrop-blur-md"
+          : "border-b border-transparent bg-transparent"
+      }`}
     >
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
         <Link
