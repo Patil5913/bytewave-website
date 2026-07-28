@@ -6,6 +6,8 @@ import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { buildHref } from "@/lib/insights";
 import { getPosts } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+
 const PER_PAGE = 5;
 const pageHref = (n: number) => (n <= 1 ? "/insights" : `/insights?page=${n}`);
 

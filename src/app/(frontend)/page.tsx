@@ -17,6 +17,8 @@ import {
   getPartners,
 } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const [placements, stats, posts, home, partners] = await Promise.all([
     getPlacements(),

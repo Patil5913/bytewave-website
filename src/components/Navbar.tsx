@@ -35,7 +35,7 @@ export default function Navbar() {
           <span className="inline-block transition-transform duration-300 ease-out group-hover:-translate-x-1.5">
             find
           </span>{" "}
-          <span className="inline-block text-brand transition-transform duration-300 ease-out group-hover:rotate-90">
+          <span className="inline-block transition-transform duration-300 ease-out group-hover:rotate-90">
             &amp;
           </span>{" "}
           <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1.5">

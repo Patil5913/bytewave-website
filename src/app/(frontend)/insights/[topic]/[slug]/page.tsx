@@ -10,6 +10,8 @@ import { buildHref, topicSlug } from "@/lib/insights";
 import { getPosts } from "@/lib/content";
 import { ArticleRichText, extractToc } from "@/lib/richtext";
 
+export const revalidate = 30;
+
 export async function generateStaticParams() {
   const all = await getPosts();
   return all.map((post) => ({

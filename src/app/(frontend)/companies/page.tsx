@@ -16,6 +16,8 @@ import {
   getSiteSettingsContent,
 } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+
 export default async function Companies() {
   const [certs, faqs, quotes, settings] = await Promise.all([
     getCertificationsContent(),

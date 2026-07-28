@@ -6,6 +6,8 @@ import { ArrowRight } from "lucide-react";
 import { buildHref, topicSlug } from "@/lib/insights";
 import { getPosts } from "@/lib/content";
 
+export const revalidate = 30;
+
 export async function generateStaticParams() {
   const all = await getPosts();
   const topics = new Set(all.map((post) => topicSlug(post)));
