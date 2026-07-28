@@ -70,6 +70,19 @@ export default buildConfig({
     },
     // Two-column editing: form on the left, live iframe preview on the right.
     livePreview: {
+      // Opt each collection/global in — without these arrays it's off everywhere.
+      collections: [
+        "posts",
+        "placements",
+        "partners",
+        "client-quotes",
+        "success-videos",
+        "faqs-companies",
+        "faqs-professionals",
+        "certifications",
+      ],
+      globals: ["homepage", "site-stats", "site-settings"],
+      openByDefault: true,
       breakpoints: [
         { label: "Desktop", name: "desktop", width: 1440, height: 900 },
         { label: "Tablet", name: "tablet", width: 768, height: 1024 },
