@@ -74,20 +74,41 @@ function renderText(node: any, key: number) {
 const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
   text: ({ node }: any) => renderText(node, 0),
-  // A paragraph whose text is entirely code-formatted came from a ``` fence —
-  // render it as a real code block instead of an inline-code paragraph.
   paragraph: ({ node, nodesToJSX }: any) => {
     const kids = node.children ?? [];
+    const raw = kids.map((c: any) => c?.text ?? "").join("");
+
+    // A paragraph whose text is entirely code-formatted came from a ``` fence.
+    // Strip the fence markers (kept for the editor) and render a code block.
     const allCode =
       kids.length > 0 &&
       kids.every((c: any) => c?.type === "text" && (c.format & IS_CODE) !== 0);
     if (allCode) {
+      const fence = raw.match(/^```([\w-]*)\r?\n([\s\S]*?)\r?\n?```$/);
+      const language = fence?.[1] || undefined;
+      const code = fence ? fence[2] : raw;
       return (
-        <pre>
-          <code>{kids.map((c: any) => c.text).join("")}</code>
+        <pre data-language={language}>
+          <code>{code}</code>
         </pre>
       );
     }
+
+    // Standalone image markdown: ![alt](src "caption")
+    const img = raw
+      .trim()
+      .match(/^!\[([^\]]*)\]\(\s*(\S+?)(?:\s+"([^"]*)")?\s*\)$/);
+    if (img) {
+      const [, alt, src, caption] = img;
+      return (
+        <figure className="rt-figure">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={src} alt={alt} loading="lazy" />
+          {caption ? <figcaption>{caption}</figcaption> : null}
+        </figure>
+      );
+    }
+
     return <p>{nodesToJSX({ nodes: kids })}</p>;
   },
   heading: ({ node, nodesToJSX }: any) => {

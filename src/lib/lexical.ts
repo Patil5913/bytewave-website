@@ -43,7 +43,9 @@ function textNode(
 
 // Fenced code stays a plain paragraph whose text carries lexical's code format
 // flag — no custom block, no extra editor feature, no new node types. The
-// frontend converter turns such a paragraph into <pre><code>.
+// fence markers (```py … ```) are kept in the text so authors still see the
+// language in the editor; the frontend converter strips them and renders
+// <pre><code>.
 function codeParagraphNode(code: string) {
   return {
     type: "paragraph",
@@ -112,12 +114,13 @@ function restoreCodeBlocks(root: any, fences: { code: string }[]): void {
 export async function mdToLexical(markdown: string) {
   const editorConfig = await getEditorConfig();
 
-  // pull fenced code out before conversion so it survives verbatim
+  // pull fenced code out before conversion so it survives verbatim, fence
+  // markers included (the editor shows ```py, the frontend strips them)
   const fences: { code: string }[] = [];
   const prepared = (markdown || "").replace(
-    /```[\w-]*\r?\n([\s\S]*?)```/g,
-    (_full, code: string) => {
-      fences.push({ code: code.replace(/\r?\n$/, "") });
+    /```[\w-]*\r?\n[\s\S]*?```/g,
+    (full: string) => {
+      fences.push({ code: full.replace(/\r?\n$/, "") });
       return CODE_TOKEN(fences.length - 1);
     },
   );
