@@ -2,7 +2,17 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import {
+  lexicalEditor,
+  ChecklistFeature,
+  FixedToolbarFeature,
+  HorizontalRuleFeature,
+  IndentFeature,
+  StrikethroughFeature,
+  SubscriptFeature,
+  SuperscriptFeature,
+  EXPERIMENTAL_TableFeature,
+} from "@payloadcms/richtext-lexical";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import sharp from "sharp";
 
@@ -125,7 +135,21 @@ export default buildConfig({
     Partners,
   ],
   globals: [SiteStats, Homepage, SiteSettings],
-  editor: lexicalEditor(),
+  // Full markdown coverage — features supply the markdown transformers used
+  // both by the editor's shortcuts/paste and by md <-> lexical conversion.
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      FixedToolbarFeature(),
+      HorizontalRuleFeature(),
+      StrikethroughFeature(),
+      SubscriptFeature(),
+      SuperscriptFeature(),
+      IndentFeature(),
+      ChecklistFeature(),
+      EXPERIMENTAL_TableFeature(),
+    ],
+  }),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),

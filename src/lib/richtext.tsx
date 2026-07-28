@@ -48,7 +48,7 @@ const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
 export function ArticleRichText({ data }: { data: any }) {
   if (!data) return null;
   return (
-    <div className="article-richtext flex flex-col gap-6">
+    <div className="article-richtext">
       <RichText data={data} converters={converters} />
     </div>
   );

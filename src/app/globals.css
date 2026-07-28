@@ -97,7 +97,36 @@ body {
   }
 }
 
-/* Rendered lexical article body — matches the editorial post styling. */
+/* Rendered lexical article body — matches the editorial post styling.
+   Payload nests all blocks inside a single .payload-richtext div, so vertical
+   rhythm is margin-based on its children (a flex gap on the wrapper would do
+   nothing). */
+.article-richtext .payload-richtext > * {
+  margin-block: 0;
+}
+.article-richtext .payload-richtext > * + * {
+  margin-top: 1.35rem;
+}
+/* More space above a heading than below it. */
+.article-richtext .payload-richtext > h2 + *,
+.article-richtext .payload-richtext > h3 + *,
+.article-richtext .payload-richtext > h4 + * {
+  margin-top: 0.85rem;
+}
+.article-richtext .payload-richtext > * + h2 {
+  margin-top: 3.25rem;
+}
+.article-richtext .payload-richtext > * + h3 {
+  margin-top: 2.5rem;
+}
+.article-richtext .payload-richtext > * + h4 {
+  margin-top: 2rem;
+}
+.article-richtext .payload-richtext > * + hr,
+.article-richtext .payload-richtext > hr + * {
+  margin-top: 2.5rem;
+}
+
 .article-richtext h2 {
   font-family: var(--font-instrument);
   font-weight: 500;
@@ -144,12 +173,9 @@ body {
 }
 .article-richtext ul,
 .article-richtext ol {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  padding-left: 1.25rem;
+  padding-left: 1.5rem;
   color: color-mix(in srgb, var(--color-ink) 70%, transparent);
-  line-height: 1.6;
+  line-height: 1.7;
 }
 .article-richtext ul {
   list-style: disc;
@@ -157,9 +183,16 @@ body {
 .article-richtext ol {
   list-style: decimal;
 }
-.article-richtext ul::marker,
-.article-richtext ol > li::marker {
+.article-richtext li + li {
+  margin-top: 0.5rem;
+}
+.article-richtext li::marker {
   color: var(--color-brand);
+}
+/* nested lists sit tighter under their parent item */
+.article-richtext li > ul,
+.article-richtext li > ol {
+  margin-top: 0.5rem;
 }
 .article-richtext blockquote {
   border-left: 2px solid color-mix(in srgb, var(--color-brand) 40%, transparent);
@@ -191,7 +224,37 @@ body {
 .article-richtext hr {
   border: 0;
   border-top: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
-  margin: 0.5rem 0;
+}
+.article-richtext table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  color: color-mix(in srgb, var(--color-ink) 70%, transparent);
+}
+.article-richtext th,
+.article-richtext td {
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+}
+.article-richtext th {
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  color: var(--color-ink);
+  font-weight: 600;
+}
+/* checklists render as a list with checkbox markers */
+.article-richtext ul.list-check,
+.article-richtext ul[class*="checklist"] {
+  list-style: none;
+  padding-left: 0;
+}
+.article-richtext s,
+.article-richtext del {
+  color: color-mix(in srgb, var(--color-ink) 45%, transparent);
+}
+.article-richtext sub,
+.article-richtext sup {
+  font-size: 0.75em;
 }
 
 .animate-marquee {
