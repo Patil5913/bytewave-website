@@ -4,7 +4,63 @@
  * Node/tsx top-level-await require bug with lexical). Idempotent-ish: skips
  * docs that already exist by a natural key.
  */
-import { ALL_POSTS } from "./lib/insights";
+import { ALL_POSTS, type Block, type Span } from "./lib/insights";
+
+type Faq = { question: string; answer: string };
+
+// Serialize a span back to inline markdown.
+function spanToMd(s: Span): string {
+  let t = s.text;
+  if (s.code) t = `\`${t}\``;
+  if (s.bold) t = `**${t}**`;
+  if (s.italic) t = `*${t}*`;
+  if (s.highlight) t = `==${t}==`;
+  if (s.href) t = `[${t}](${s.href})`;
+  return t;
+}
+
+// Serialize renderer blocks back to the markdown authoring format. FAQ blocks
+// are pulled out into a separate `faqs` array (kept in a structured field).
+function blocksToMarkdown(blocks: Block[]): { md: string; faqs: Faq[] } {
+  const faqs: Faq[] = [];
+  const out: string[] = [];
+  for (const b of blocks) {
+    switch (b.type) {
+      case "paragraph":
+        out.push(b.spans.map(spanToMd).join(""));
+        break;
+      case "heading":
+        out.push(`${"#".repeat(b.level)} ${b.text}`);
+        break;
+      case "quote":
+        out.push(`> ${b.text}`);
+        break;
+      case "list":
+        out.push(
+          b.items
+            .map((it, n) => (b.ordered ? `${n + 1}. ${it}` : `- ${it}`))
+            .join("\n"),
+        );
+        break;
+      case "image":
+        out.push(
+          `![${b.alt}](${b.src}${b.caption ? ` "${b.caption}"` : ""})`,
+        );
+        break;
+      case "code":
+        out.push(`\`\`\`${b.language}\n${b.code}\n\`\`\``);
+        break;
+      case "divider":
+        out.push("---");
+        break;
+      case "faq":
+        faqs.push(...b.items);
+        out.push("## Frequently asked questions");
+        break;
+    }
+  }
+  return { md: out.join("\n\n"), faqs };
+}
 
 const BASE = process.env.SEED_BASE ?? "http://localhost:3000";
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? "admin@findandhire.dev";
@@ -76,6 +132,7 @@ async function main() {
   // Posts
   if ((await count("posts", token)) === 0) {
     for (const post of ALL_POSTS) {
+      const { md, faqs } = blocksToMarkdown(post.content);
       const body = {
         articleId: post.id,
         title: post.title,
@@ -90,7 +147,8 @@ async function main() {
         authorBio: post.authorBio,
         authorLinkedIn: post.authorLinkedIn,
         authorAvatar: post.authorAvatar,
-        content: post.content,
+        content: md,
+        faqs,
       };
       const r = await api("/api/posts", { method: "POST", body: JSON.stringify(body) }, token);
       if (!r.ok) console.error("  post failed", post.id, r.status, await r.text());

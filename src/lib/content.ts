@@ -2,6 +2,7 @@ import "server-only";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { ALL_POSTS, type Post } from "./insights";
+import { parseMarkdown } from "./markdown";
 
 // Static fallbacks — used verbatim if Payload/DB is unreachable so the site
 // (and the production build) never hard-fails on a data source.
@@ -96,7 +97,13 @@ function toPost(d: Record<string, unknown>): Post {
     readTime: d.readTime as string,
     cover: d.cover as string,
     excerpt: d.excerpt as string,
-    content: d.content as Post["content"],
+    content: parseMarkdown(
+      (d.content as string) ?? "",
+      ((d.faqs as { question: string; answer: string }[]) ?? []).map((f) => ({
+        question: f.question,
+        answer: f.answer,
+      })),
+    ),
   };
 }
 

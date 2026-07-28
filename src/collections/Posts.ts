@@ -46,9 +46,26 @@ export const Posts: CollectionConfig = {
     },
     {
       name: "content",
-      type: "json",
+      type: "textarea",
       required: true,
-      admin: { description: "Block array (paragraph/heading/quote/list/...)." },
+      admin: {
+        rows: 24,
+        description:
+          "Markdown body. Supports ## / ### / #### headings, **bold**, *italic*, `code`, ==highlight==, [links](url), - and 1. lists, > quotes, ![alt](src \"caption\") images, ``` fenced code, and --- dividers. See content/insights/GUIDE.md. Do not use # H1 (the title is the H1).",
+      },
+    },
+    {
+      name: "faqs",
+      type: "array",
+      labels: { singular: "FAQ", plural: "FAQs" },
+      admin: {
+        description:
+          'Rendered as an accordion where a "## Frequently asked questions" heading appears in the body.',
+      },
+      fields: [
+        { name: "question", type: "text", required: true },
+        { name: "answer", type: "textarea", required: true },
+      ],
     },
   ],
 };
