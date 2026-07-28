@@ -108,6 +108,17 @@
     border: 1px solid color-mix(in srgb, var(--fh-brand) 40%, transparent);
   }
 
+  /* Sidebar polish */
+  .nav-group__label {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.68rem;
+    color: var(--theme-elevation-500);
+  }
+  .nav__link {
+    border-radius: var(--style-radius-s);
+  }
+
   /* Tabs underline + rich-text active toolbar buttons */
   .tabs-field__tab-button--active,
   .doc-tab--active {

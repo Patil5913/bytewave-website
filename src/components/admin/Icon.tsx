@@ -1,6 +1,7 @@
 import React from "react";
+import { Mark } from "./Mark";
 
-// Plain nav mark — no styling.
-export const Icon = () => <span>f&amp;h</span>;
+// Minimal sidebar/nav mark.
+export const Icon = () => <Mark size={24} />;
 
 export default Icon;

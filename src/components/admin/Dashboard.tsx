@@ -22,11 +22,18 @@ const GROUPS: { title: string; cards: Card[] }[] = [
     ],
   },
   {
-    title: "Companies & Professionals",
+    title: "Companies Page",
     cards: [
-      { label: "Testimonials", href: `${ADMIN}/collections/testimonials`, desc: "Client quotes + candidate videos", countKey: "testimonials" },
-      { label: "FAQs", href: `${ADMIN}/collections/faqs`, desc: "Company + professional FAQs", countKey: "faqs" },
-      { label: "Certifications", href: `${ADMIN}/collections/certifications`, desc: "Compliance credentials (companies)", countKey: "certifications" },
+      { label: "Client quotes", href: `${ADMIN}/collections/client-quotes`, desc: "Testimonial marquee", countKey: "client-quotes" },
+      { label: "Company FAQs", href: `${ADMIN}/collections/faqs-companies`, desc: "Questions on the companies page", countKey: "faqs-companies" },
+      { label: "Certifications", href: `${ADMIN}/collections/certifications`, desc: "Compliance credentials", countKey: "certifications" },
+    ],
+  },
+  {
+    title: "Professionals Page",
+    cards: [
+      { label: "Success videos", href: `${ADMIN}/collections/success-videos`, desc: "Candidate video marquee", countKey: "success-videos" },
+      { label: "Professional FAQs", href: `${ADMIN}/collections/faqs-professionals`, desc: "Questions on the professionals page", countKey: "faqs-professionals" },
     ],
   },
   {
@@ -52,8 +59,10 @@ async function loadCounts(): Promise<Record<string, number>> {
     const slugs = [
       "posts",
       "placements",
-      "testimonials",
-      "faqs",
+      "client-quotes",
+      "success-videos",
+      "faqs-companies",
+      "faqs-professionals",
       "certifications",
       "partners",
       "contacts",

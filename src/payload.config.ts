@@ -11,8 +11,10 @@ import { Media } from "./collections/Media";
 import { Contacts } from "./collections/Contacts";
 import { Posts } from "./collections/Posts";
 import { Placements } from "./collections/Placements";
-import { Testimonials } from "./collections/Testimonials";
-import { Faqs } from "./collections/Faqs";
+import { ClientQuotes } from "./collections/ClientQuotes";
+import { SuccessVideos } from "./collections/SuccessVideos";
+import { FaqsCompanies } from "./collections/FaqsCompanies";
+import { FaqsProfessionals } from "./collections/FaqsProfessionals";
 import { Certifications } from "./collections/Certifications";
 import { Partners } from "./collections/Partners";
 import { SiteStats } from "./globals/SiteStats";
@@ -60,6 +62,7 @@ export default buildConfig({
         Icon: "/components/admin/Icon#Icon",
       },
       beforeDashboard: ["/components/admin/Dashboard#Dashboard"],
+      beforeNavLinks: ["/components/admin/NavHeader#NavHeader"],
     },
     importMap: {
       baseDir: path.resolve(dirname),
@@ -71,8 +74,10 @@ export default buildConfig({
     Contacts,
     Posts,
     Placements,
-    Testimonials,
-    Faqs,
+    ClientQuotes,
+    SuccessVideos,
+    FaqsCompanies,
+    FaqsProfessionals,
     Certifications,
     Partners,
   ],

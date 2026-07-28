@@ -225,7 +225,9 @@ export async function getCertificationsContent(): Promise<CertItem[]> {
 export async function getFaqsContent(
   audience: "companies" | "professionals",
 ): Promise<FaqItem[]> {
-  const docs = (await findAll("faqs")).filter((d) => d.audience === audience);
+  const docs = await findAll(
+    audience === "companies" ? "faqs-companies" : "faqs-professionals",
+  );
   if (!docs.length)
     return audience === "companies" ? FAQS_COMPANIES : FAQS_PROFESSIONALS;
   return docs.map((d) => ({
@@ -235,7 +237,7 @@ export async function getFaqsContent(
 }
 
 export async function getTestimonialQuotes(): Promise<QuoteItem[]> {
-  const docs = (await findAll("testimonials")).filter((d) => d.kind === "quote");
+  const docs = await findAll("client-quotes");
   if (!docs.length) return TESTIMONIAL_QUOTES;
   return docs.map((d) => ({
     name: d.name as string,
@@ -248,7 +250,7 @@ export async function getTestimonialQuotes(): Promise<QuoteItem[]> {
 }
 
 export async function getTestimonialVideos(): Promise<VideoItem[]> {
-  const docs = (await findAll("testimonials")).filter((d) => d.kind === "video");
+  const docs = await findAll("success-videos");
   if (!docs.length) return TESTIMONIAL_VIDEOS;
   return docs.map((d) => ({
     name: d.name as string,

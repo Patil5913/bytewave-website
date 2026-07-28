@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { ALL_POSTS } from "@/lib/insights";
+import { randomArticleId } from "@/collections/Posts";
 import { blocksToMarkdown } from "@/lib/markdown";
 import { mdToLexical } from "@/lib/lexical";
 import {
@@ -57,17 +58,21 @@ export async function POST(req: Request) {
   );
 
   await seedMany(
-    "testimonials",
-    [
-      ...TESTIMONIAL_QUOTES.map((t, i) => ({ kind: "quote", ...t, order: i })),
-      ...TESTIMONIAL_VIDEOS.map((t, i) => ({ kind: "video", ...t, order: i })),
-    ],
+    "client-quotes",
+    TESTIMONIAL_QUOTES.map((t, i) => ({ ...t, order: i })),
   );
-
-  await seedMany("faqs", [
-    ...FAQS_COMPANIES.map((f, i) => ({ audience: "companies", ...f, order: i })),
-    ...FAQS_PROFESSIONALS.map((f, i) => ({ audience: "professionals", ...f, order: i })),
-  ]);
+  await seedMany(
+    "success-videos",
+    TESTIMONIAL_VIDEOS.map((t, i) => ({ ...t, order: i })),
+  );
+  await seedMany(
+    "faqs-companies",
+    FAQS_COMPANIES.map((f, i) => ({ ...f, order: i })),
+  );
+  await seedMany(
+    "faqs-professionals",
+    FAQS_PROFESSIONALS.map((f, i) => ({ ...f, order: i })),
+  );
 
   await seedMany(
     "certifications",
@@ -86,7 +91,7 @@ export async function POST(req: Request) {
         collection: "posts",
         overrideAccess: true,
         data: {
-          articleId: post.id,
+          articleId: randomArticleId(),
           title: post.title,
           tag: post.tag,
           date: post.date,

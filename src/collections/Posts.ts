@@ -1,8 +1,13 @@
 import type { CollectionConfig } from "payload";
 
-// Insights articles. `content` stays a JSON block array so the existing
-// block renderer in the insights route is a drop-in consumer — no lexical
-// migration required.
+// Random 7-char hexadecimal id (0-9a-f) used in article URLs.
+export function randomArticleId(): string {
+  let id = "";
+  while (id.length < 7) id += Math.floor(Math.random() * 16).toString(16);
+  return id.slice(0, 7);
+}
+
+// Insights articles — rich text body.
 export const Posts: CollectionConfig = {
   slug: "posts",
   admin: {
@@ -13,13 +18,24 @@ export const Posts: CollectionConfig = {
   access: {
     read: () => true,
   },
+  hooks: {
+    // Auto-assign a stable random hex id on create if one wasn't provided.
+    beforeValidate: [
+      ({ data }) => {
+        if (data && !data.articleId) data.articleId = randomArticleId();
+        return data;
+      },
+    ],
+  },
   fields: [
     {
       name: "articleId",
       type: "text",
-      required: true,
       unique: true,
-      admin: { description: 'Stable id used in URLs, e.g. "article-1".' },
+      admin: {
+        readOnly: true,
+        description: "Auto-generated 7-char hex id used in the URL.",
+      },
     },
     { name: "title", type: "text", required: true },
     { name: "tag", type: "text", required: true },
