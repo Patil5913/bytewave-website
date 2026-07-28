@@ -119,6 +119,70 @@
     border-radius: var(--style-radius-s);
   }
 
+  /* Live preview toolbar — compact, aligned control bar */
+  .live-preview-toolbar {
+    padding: 0.35rem 0.6rem;
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: var(--style-radius-l);
+    background: var(--theme-elevation-50);
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.28);
+  }
+  .live-preview-toolbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+  }
+  /* the raw width/height number inputs */
+  .live-preview-toolbar-controls__size,
+  .live-preview-toolbar-controls__device-size {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--theme-elevation-700);
+  }
+  .live-preview-toolbar-controls__size input,
+  .live-preview-toolbar-controls__zoom input {
+    width: 4.5ch;
+    padding: 0.15rem 0.3rem;
+    text-align: center;
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: var(--style-radius-s);
+    background: var(--theme-input-bg);
+    color: var(--theme-elevation-1000);
+  }
+  /* breakpoint + zoom selects */
+  .live-preview-toolbar-controls__breakpoint,
+  .live-preview-toolbar-controls__zoom {
+    font-size: 0.78rem;
+  }
+  .live-preview-toolbar-controls__breakpoint .rs__control,
+  .live-preview-toolbar-controls__zoom .rs__control {
+    min-height: 1.7rem;
+    border-radius: var(--style-radius-s);
+    border-color: var(--theme-elevation-150);
+    background: var(--theme-input-bg);
+  }
+  .live-preview-toolbar-controls__external {
+    display: inline-flex;
+    align-items: center;
+    opacity: 0.75;
+  }
+  .live-preview-toolbar-controls__external:hover {
+    opacity: 1;
+    color: var(--fh-brand);
+  }
+  .live-preview-toolbar__drag-handle {
+    opacity: 0.4;
+  }
+  .live-preview-toolbar__drag-handle:hover {
+    opacity: 0.8;
+  }
+
   /* Tabs underline + rich-text active toolbar buttons */
   .tabs-field__tab-button--active,
   .doc-tab--active {
