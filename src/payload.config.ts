@@ -11,7 +11,13 @@ import { Media } from "./collections/Media";
 import { Contacts } from "./collections/Contacts";
 import { Posts } from "./collections/Posts";
 import { Placements } from "./collections/Placements";
+import { Testimonials } from "./collections/Testimonials";
+import { Faqs } from "./collections/Faqs";
+import { Certifications } from "./collections/Certifications";
+import { Partners } from "./collections/Partners";
 import { SiteStats } from "./globals/SiteStats";
+import { Homepage } from "./globals/Homepage";
+import { SiteSettings } from "./globals/SiteSettings";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -53,13 +59,24 @@ export default buildConfig({
         Logo: "/components/admin/Logo#Logo",
         Icon: "/components/admin/Icon#Icon",
       },
+      beforeDashboard: ["/components/admin/Dashboard#Dashboard"],
     },
     importMap: {
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Contacts, Posts, Placements],
-  globals: [SiteStats],
+  collections: [
+    Users,
+    Media,
+    Contacts,
+    Posts,
+    Placements,
+    Testimonials,
+    Faqs,
+    Certifications,
+    Partners,
+  ],
+  globals: [SiteStats, Homepage, SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

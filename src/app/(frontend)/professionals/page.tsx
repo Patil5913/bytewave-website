@@ -9,8 +9,19 @@ import SystemDocumentation from "@components/SystemDocumentation";
 import PricingReferral from "@components/PricingReferral";
 import ContactTerminal from "@components/ContactTerminal";
 import Footer from "@components/Footer";
+import {
+  getTestimonialVideos,
+  getFaqsContent,
+  getSiteSettingsContent,
+} from "@/lib/content";
 
-export default function Professionals() {
+export default async function Professionals() {
+  const [videos, faqs, settings] = await Promise.all([
+    getTestimonialVideos(),
+    getFaqsContent("professionals"),
+    getSiteSettingsContent(),
+  ]);
+
   return (
     <>
       <Navbar />
@@ -19,11 +30,11 @@ export default function Professionals() {
       <CareerClimb />
       <AdvocacyProtocol />
       <HistoricalTelemetry />
-      <VideoTelemetry />
+      <VideoTelemetry items={videos} />
       <PricingReferral />
-      <SystemDocumentation />
+      <SystemDocumentation items={faqs} />
       <ContactTerminal />
-      <Footer />
+      <Footer settings={settings} />
     </>
   );
 }

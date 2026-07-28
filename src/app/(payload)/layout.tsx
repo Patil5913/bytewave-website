@@ -1,6 +1,7 @@
 import type { ServerFunctionClient } from "payload";
 import config from "@payload-config";
 import "@payloadcms/next/css";
+import "./custom.css";
 import { handleServerFunctions, RootLayout } from "@payloadcms/next/layouts";
 import { Instrument_Serif } from "next/font/google";
 import React from "react";

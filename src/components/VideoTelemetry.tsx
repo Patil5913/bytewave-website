@@ -5,120 +5,14 @@ import Reveal from "@components/Reveal";
 import { ArrowRight, BadgeCheck, Play } from "lucide-react";
 
 type Video = {
-  id: string;
   name: string;
   role: string;
   company: string;
   domain: string;
   duration: string;
   thumbnail: string;
+  row?: string;
 };
-
-const VIDEO_LOGS: Video[] = [
-  {
-    id: "01",
-    name: "David K.",
-    role: "Backend Developer",
-    company: "Stripe",
-    domain: "stripe.com",
-    duration: "02:45",
-    thumbnail:
-      "https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: "02",
-    name: "Sarah M.",
-    role: "Cloud Engineer",
-    company: "Notion",
-    domain: "notion.so",
-    duration: "03:12",
-    thumbnail:
-      "https://images.unsplash.com/photo-1531384441138-2736e62e0919?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: "03",
-    name: "Marcus T.",
-    role: "Operations Manager",
-    company: "Vercel",
-    domain: "vercel.com",
-    duration: "01:58",
-    thumbnail:
-      "https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: "04",
-    name: "Elena R.",
-    role: "Data Analyst",
-    company: "Figma",
-    domain: "figma.com",
-    duration: "02:20",
-    thumbnail:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: "05",
-    name: "James O.",
-    role: "Frontend Developer",
-    company: "Linear",
-    domain: "linear.app",
-    duration: "03:40",
-    thumbnail:
-      "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800&auto=format&fit=crop",
-  },
-];
-
-const ROW_TWO: Video[] = [
-  {
-    id: "06",
-    name: "Priya S.",
-    role: "Platform Engineer",
-    company: "Ramp",
-    domain: "ramp.com",
-    duration: "02:08",
-    thumbnail:
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: "07",
-    name: "Leo B.",
-    role: "Product Designer",
-    company: "Retool",
-    domain: "retool.com",
-    duration: "03:05",
-    thumbnail:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: "08",
-    name: "Amara D.",
-    role: "ML Engineer",
-    company: "Airtable",
-    domain: "airtable.com",
-    duration: "02:52",
-    thumbnail:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: "09",
-    name: "Nikolai V.",
-    role: "Database Engineer",
-    company: "Neon",
-    domain: "neon.tech",
-    duration: "01:47",
-    thumbnail:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: "10",
-    name: "Grace L.",
-    role: "Fullstack Engineer",
-    company: "Resend",
-    domain: "resend.com",
-    duration: "03:24",
-    thumbnail:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop",
-  },
-];
 
 function VideoRow({ items, anim }: { items: Video[]; anim: string }) {
   return (
@@ -184,7 +78,12 @@ function VideoRow({ items, anim }: { items: Video[]; anim: string }) {
   );
 }
 
-export default function VideoTelemetry() {
+export default function VideoTelemetry({ items }: { items: Video[] }) {
+  const rowOne = items.filter((v) => v.row !== "two");
+  const rowTwo = items.filter((v) => v.row === "two");
+  const one = rowOne.length ? rowOne : items;
+  const two = rowTwo.length ? rowTwo : items;
+
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas py-24">
       <div className="mx-auto w-full max-w-7xl px-6 md:px-16">
@@ -211,8 +110,8 @@ export default function VideoTelemetry() {
 
       {/* video marquees — opposite directions */}
       <div className="flex flex-col gap-6">
-        <VideoRow items={VIDEO_LOGS} anim="animate-marquee-slow" />
-        <VideoRow items={ROW_TWO} anim="animate-marquee-slow-reverse" />
+        <VideoRow items={one} anim="animate-marquee-slow" />
+        <VideoRow items={two} anim="animate-marquee-slow-reverse" />
       </div>
     </section>
   );

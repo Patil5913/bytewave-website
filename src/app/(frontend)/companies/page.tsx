@@ -9,8 +9,21 @@ import EnterpriseFAQ from "@components/EnterpriseFAQ";
 import EnterpriseEconomics from "@components/EnterpriseEconomics";
 import ContactTerminal from "@components/ContactTerminal";
 import Footer from "@components/Footer";
+import {
+  getCertificationsContent,
+  getFaqsContent,
+  getTestimonialQuotes,
+  getSiteSettingsContent,
+} from "@/lib/content";
 
-export default function Companies() {
+export default async function Companies() {
+  const [certs, faqs, quotes, settings] = await Promise.all([
+    getCertificationsContent(),
+    getFaqsContent("companies"),
+    getTestimonialQuotes(),
+    getSiteSettingsContent(),
+  ]);
+
   return (
     <>
       <Navbar />
@@ -18,12 +31,12 @@ export default function Companies() {
       <TalentTelemetry />
       <PlatformCapabilities />
       <HiringFlow />
-      <Certifications />
-      <ClientStories />
+      <Certifications items={certs} />
+      <ClientStories items={quotes} />
       <EnterpriseEconomics />
-      <EnterpriseFAQ />
+      <EnterpriseFAQ items={faqs} />
       <ContactTerminal mode="enterprise" />
-      <Footer />
+      <Footer settings={settings} />
     </>
   );
 }

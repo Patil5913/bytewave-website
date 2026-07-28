@@ -97,6 +97,103 @@ body {
   }
 }
 
+/* Rendered lexical article body — matches the editorial post styling. */
+.article-richtext h2 {
+  font-family: var(--font-instrument);
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: var(--color-ink);
+}
+@media (min-width: 768px) {
+  .article-richtext h2 {
+    font-size: 1.875rem;
+  }
+}
+.article-richtext h3 {
+  font-family: var(--font-instrument);
+  font-weight: 500;
+  font-size: 1.25rem;
+  color: var(--color-ink);
+}
+.article-richtext h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-ink) 70%, transparent);
+}
+.article-richtext p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--color-ink) 70%, transparent);
+}
+@media (min-width: 768px) {
+  .article-richtext p {
+    font-size: 1.125rem;
+  }
+}
+.article-richtext a {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.article-richtext strong {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+.article-richtext ul,
+.article-richtext ol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-left: 1.25rem;
+  color: color-mix(in srgb, var(--color-ink) 70%, transparent);
+  line-height: 1.6;
+}
+.article-richtext ul {
+  list-style: disc;
+}
+.article-richtext ol {
+  list-style: decimal;
+}
+.article-richtext ul::marker,
+.article-richtext ol > li::marker {
+  color: var(--color-brand);
+}
+.article-richtext blockquote {
+  border-left: 2px solid color-mix(in srgb, var(--color-brand) 40%, transparent);
+  padding-left: 1.5rem;
+  font-style: italic;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--color-ink) 80%, transparent);
+}
+.article-richtext code {
+  background: color-mix(in srgb, var(--color-ink) 10%, transparent);
+  color: var(--color-brand);
+  padding: 0.05rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.article-richtext pre {
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.article-richtext pre code {
+  background: none;
+  color: color-mix(in srgb, var(--color-ink) 70%, transparent);
+  padding: 0;
+}
+.article-richtext hr {
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+  margin: 0.5rem 0;
+}
+
 .animate-marquee {
   animation: marquee 30s linear infinite;
 }

@@ -4,104 +4,14 @@ import { Fragment } from "react";
 import { ArrowRight, Quote } from "lucide-react";
 import Reveal from "@components/Reveal";
 
-const CLIENT_LOGS = [
-  {
-    id: "01",
-    name: "Priya N.",
-    title: "VP Engineering",
-    company: "Stripe",
-    domain: "stripe.com",
-    quote:
-      "We filled a platform lead role in under two weeks, with a candidate who was already screened to our exact bar.",
-  },
-  {
-    id: "02",
-    name: "Tom R.",
-    title: "Head of Talent",
-    company: "Notion",
-    domain: "notion.so",
-    quote:
-      "The screening quality meant every interview we ran actually went somewhere. No more wasted loops.",
-  },
-  {
-    id: "03",
-    name: "Alicia F.",
-    title: "COO",
-    company: "Vercel",
-    domain: "vercel.com",
-    quote:
-      "Bytewave handled the entire back office. We just met candidates and made decisions.",
-  },
-  {
-    id: "04",
-    name: "Derek M.",
-    title: "Engineering Manager",
-    company: "Figma",
-    domain: "figma.com",
-    quote:
-      "Every profile that reached us was a real fit. That never happened with job boards.",
-  },
-  {
-    id: "05",
-    name: "Nina W.",
-    title: "Director of Operations",
-    company: "Linear",
-    domain: "linear.app",
-    quote:
-      "The replacement guarantee gave us the confidence to move fast on a critical hire.",
-  },
-];
-
-// distinct testimonials for the second (reverse) lane
-const ROW_TWO = [
-  {
-    id: "06",
-    name: "Marcus B.",
-    title: "CTO",
-    company: "Ramp",
-    domain: "ramp.com",
-    quote:
-      "We closed three senior backend seats in a month — each one pre-vetted to a standard our own loops rarely hit.",
-  },
-  {
-    id: "07",
-    name: "Sofia L.",
-    title: "Head of People",
-    company: "Retool",
-    domain: "retool.com",
-    quote:
-      "No sourcing spreadsheets, no cold outreach. Qualified people just showed up in our pipeline.",
-  },
-  {
-    id: "08",
-    name: "Jamal K.",
-    title: "VP Product",
-    company: "Airtable",
-    domain: "airtable.com",
-    quote:
-      "The match precision is the real story — we interviewed four people and hired two.",
-  },
-  {
-    id: "09",
-    name: "Elena V.",
-    title: "Director of Engineering",
-    company: "Neon",
-    domain: "neon.tech",
-    quote:
-      "Time-to-offer dropped from months to days. Our roadmap stopped waiting on headcount.",
-  },
-  {
-    id: "10",
-    name: "Chris D.",
-    title: "Founder",
-    company: "Resend",
-    domain: "resend.com",
-    quote:
-      "As a small team, the back-office handling alone paid for itself. We just met great people.",
-  },
-];
-
-type Client = (typeof CLIENT_LOGS)[number];
+type Client = {
+  name: string;
+  title: string;
+  company: string;
+  domain: string;
+  quote: string;
+  row?: string;
+};
 
 function MarqueeRow({ items, anim }: { items: Client[]; anim: string }) {
   return (
@@ -142,7 +52,12 @@ function MarqueeRow({ items, anim }: { items: Client[]; anim: string }) {
   );
 }
 
-export default function ClientStories() {
+export default function ClientStories({ items }: { items: Client[] }) {
+  const rowOne = items.filter((c) => c.row !== "two");
+  const rowTwo = items.filter((c) => c.row === "two");
+  const one = rowOne.length ? rowOne : items;
+  const two = rowTwo.length ? rowTwo : items;
+
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas py-24">
       <div className="mx-auto w-full max-w-7xl px-6 md:px-16">
@@ -169,8 +84,8 @@ export default function ClientStories() {
 
       {/* testimonial marquees — opposite directions */}
       <div className="flex flex-col gap-6">
-        <MarqueeRow items={CLIENT_LOGS} anim="animate-marquee-slow" />
-        <MarqueeRow items={ROW_TWO} anim="animate-marquee-slow-reverse" />
+        <MarqueeRow items={one} anim="animate-marquee-slow" />
+        <MarqueeRow items={two} anim="animate-marquee-slow-reverse" />
       </div>
     </section>
   );

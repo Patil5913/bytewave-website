@@ -3,61 +3,14 @@
 import Link from "next/link";
 import { ArrowRight, Globe } from "lucide-react";
 import Reveal from "@components/Reveal";
+import { SITE_SETTINGS } from "@/lib/siteContent";
 
-const LINK_GROUPS = [
-	{
-		title: "Product",
-		links: [
-			{ label: "For Companies", href: "/companies" },
-			{ label: "For Professionals", href: "/professionals" },
-			{ label: "Pricing", href: "/pricing" },
-		],
-	},
-	{
-		title: "Company",
-		links: [
-			{ label: "About", href: "/about" },
-			{ label: "Insights", href: "/insights" },
-			{ label: "Careers", href: "/careers" },
-			{ label: "Refer & Earn", href: "/refer" },
-		],
-	},
-	{
-		title: "Resources",
-		links: [
-			{ label: "Help Center", href: "/help" },
-			{ label: "Case Studies", href: "/case-studies" },
-			{ label: "API Docs", href: "/docs" },
-		],
-	},
-	{
-		title: "Talent",
-		links: [
-			{ label: "Job Placement", href: "/placement" },
-			{ label: "IT Skills Training", href: "/training" },
-			{ label: "Resume & Interview Prep", href: "/prep" },
-		],
-	},
-	{
-		title: "Enterprise",
-		links: [
-			{ label: "Technical Staffing", href: "/staffing" },
-			{ label: "Talent Acquisition", href: "/acquisition" },
-			{ label: "Background Verification", href: "/verification" },
-			{ label: "Payroll & Compliance", href: "/payroll" },
-		],
-	},
-	{
-		title: "Legal",
-		links: [
-			{ label: "Privacy Policy", href: "/privacy" },
-			{ label: "Terms of Service", href: "/terms" },
-			{ label: "Refund Policy", href: "/refunds" },
-		],
-	},
-];
-
-export default function Footer() {
+export default function Footer({
+	settings = SITE_SETTINGS,
+}: {
+	settings?: typeof SITE_SETTINGS;
+}) {
+	const LINK_GROUPS = settings.footerGroups;
 	return (
 		<footer className="relative w-full overflow-hidden bg-canvas px-6 pt-24 pb-8 md:px-16">
 			<div className="relative z-10 mx-auto max-w-7xl">
@@ -78,26 +31,27 @@ export default function Footer() {
 							</span>
 						</Link>
 						<p className="max-w-xs text-sm leading-relaxed text-ink/60">
-							Connecting verified professionals with the teams that need them.
+							{settings.tagline}
 						</p>
-						<p className="text-xs text-ink/50">
-							find &amp; hire is the trading name of Bytewave, Inc.
-						</p>
+						<p className="text-xs text-ink/50">{settings.legalLine}</p>
 						<address className="max-w-xs text-sm leading-relaxed text-ink/55 not-italic">
-							548 Market St, Suite 95000
-							<br />
-							San Francisco, CA 94104
+							{settings.address.split("\n").map((line, i) => (
+								<span key={i}>
+									{line}
+									<br />
+								</span>
+							))}
 						</address>
 						<div className="mt-2 flex items-center gap-6 text-xs text-ink/60">
-							<Link href="#" className="transition-colors hover:text-ink">
-								Twitter
-							</Link>
-							<Link href="#" className="transition-colors hover:text-ink">
-								LinkedIn
-							</Link>
-							<Link href="#" className="transition-colors hover:text-ink">
-								Instagram
-							</Link>
+							{settings.socials.map((s) => (
+								<Link
+									key={s.label}
+									href={s.href}
+									className="transition-colors hover:text-ink"
+								>
+									{s.label}
+								</Link>
+							))}
 						</div>
 
 						<div className="mt-4 flex max-w-xs flex-col gap-3">

@@ -3,46 +3,17 @@
 import { Check } from "lucide-react";
 import Reveal from "@components/Reveal";
 
-const CERTIFICATIONS = [
-  {
-    code: "ISO 9001",
-    ref: "QMS-9001",
-    year: "2026",
-    label: "Quality Management",
-    description:
-      "Aligned with global quality standards for consistent, reliable workforce solutions.",
-    logoName: "iso",
-  },
-  {
-    code: "ISO 27001",
-    ref: "ISMS-27001",
-    year: "2026",
-    label: "Information Security",
-    description:
-      "Advanced data security and strict protection across every system we run.",
-    logoName: "iso",
-  },
-  {
-    code: "GDPR",
-    ref: "EU-2016/679",
-    year: "2026",
-    label: "Data Privacy",
-    description:
-      "Transparent, privacy-first handling of candidate and client data end to end.",
-    logoName: "gdpr",
-  },
-  {
-    code: "E-Verify",
-    ref: "US-DHS",
-    year: "2023",
-    label: "Employment Eligibility",
-    description:
-      "Compliant with U.S. employment standards for a fully verified workforce.",
-    logoName: "e-verify",
-  },
-];
+type Cert = {
+  code: string;
+  ref: string;
+  year: string;
+  label: string;
+  description: string;
+  logoName: string;
+};
 
-export default function Certifications() {
+export default function Certifications({ items }: { items: Cert[] }) {
+  const CERTIFICATIONS = items;
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto w-full max-w-7xl">

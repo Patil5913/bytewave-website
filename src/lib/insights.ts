@@ -52,15 +52,17 @@ function trimTitleSlug(title: string, maxWords = 6) {
   return slugify(title).split("-").slice(0, maxWords).join("-");
 }
 
-export function topicSlug(post: Post) {
+// Accept any object carrying the needed fields so both Post and the rich-text
+// PostView satisfy these helpers.
+export function topicSlug(post: { tag: string }) {
   return slugify(post.tag);
 }
 
-export function articleSlug(post: Post) {
+export function articleSlug(post: { id: string; title: string }) {
   return `${post.id}-${trimTitleSlug(post.title)}`;
 }
 
-export function buildHref(post: Post) {
+export function buildHref(post: { id: string; title: string; tag: string }) {
   return `/insights/${topicSlug(post)}/${articleSlug(post)}`;
 }
 

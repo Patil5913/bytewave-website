@@ -3,10 +3,15 @@
 import { useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import Reveal from "@components/Reveal";
+import { HOMEPAGE, splitBrand } from "@/lib/siteContent";
 
 type Status = "idle" | "sending" | "done" | "error";
 
-export default function CallToAction() {
+export default function CallToAction({
+  content = HOMEPAGE,
+}: {
+  content?: typeof HOMEPAGE;
+}) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
 
@@ -43,14 +48,19 @@ export default function CallToAction() {
     <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-32 md:px-16">
       <Reveal className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center">
         <h2 className="mb-6 font-instrument text-5xl leading-[1.05] font-medium text-balance text-ink md:text-7xl">
-          Hiring for <span className="text-brand">scale</span>?
-          <br />
-          Let&apos;s talk.
+          {splitBrand(content.ctaHeadline).map((seg, i) =>
+            seg.brand ? (
+              <span key={i} className="text-brand">
+                {seg.text}
+              </span>
+            ) : (
+              <span key={i}>{seg.text}</span>
+            ),
+          )}
         </h2>
 
         <p className="mb-12 max-w-xl text-lg leading-relaxed text-ink/70">
-          Whether you&apos;re scaling your workforce or advancing your career,
-          connect with us to bypass the noise and find your exact match.
+          {content.ctaBody}
         </p>
 
         {status === "done" ? (
@@ -112,7 +122,7 @@ export default function CallToAction() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-75" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand" />
           </span>
-          Avg. response under 4 hours
+          {content.ctaResponseNote}
         </span>
       </Reveal>
     </section>

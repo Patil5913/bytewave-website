@@ -5,34 +5,23 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import { HOMEPAGE, splitBrand } from "@/lib/siteContent";
+
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type Segment = { text: string; brand?: boolean };
 type Panel = { eyebrow?: string; lines: Segment[][]; detail: string };
 
-const PANELS: Panel[] = [
-  {
-    eyebrow: "The Shift",
-    lines: [[{ text: "The résumé pile is where" }], [{ text: "good people disappear." }]],
-    detail:
-      "The average role draws 400+ applicants. Great candidates get buried under keywords, and teams settle for whoever surfaces first.",
-  },
-  {
-    lines: [
-      [{ text: "We replaced it with" }],
-      [{ text: "proof", brand: true }, { text: " you can trust." }],
-    ],
-    detail:
-      "Every professional is skill-verified before they enter the network — so what you see is demonstrated ability, not a self-reported list.",
-  },
-  {
-    lines: [[{ text: "Real talent, matched" }], [{ text: "directly to real needs." }]],
-    detail:
-      "We connect verified people to the teams actively hiring for their exact strengths. Intros happen direct, and offers close in days.",
-  },
-];
-
-export default function ScrollStory() {
+export default function ScrollStory({
+  content = HOMEPAGE,
+}: {
+  content?: typeof HOMEPAGE;
+}) {
+  const PANELS: Panel[] = content.storyPanels.map((p) => ({
+    eyebrow: p.eyebrow || undefined,
+    lines: [[{ text: p.line1 }], splitBrand(p.line2 ?? "")],
+    detail: p.detail,
+  }));
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(

@@ -6,52 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ChevronRight, ExternalLink } from "lucide-react";
-import type { ReactNode } from "react";
-import {
-  buildHref,
-  slugify,
-  topicSlug,
-  type Block,
-  type Span,
-} from "@/lib/insights";
+import { buildHref, topicSlug } from "@/lib/insights";
 import { getPosts } from "@/lib/content";
-
-function renderSpans(spans: Span[]): ReactNode {
-  return spans.map((span, i) => {
-    let node: ReactNode = span.text;
-
-    if (span.code) {
-      node = (
-        <code className="rounded bg-ink/10 px-1.5 py-0.5 text-[0.9em] text-brand">
-          {node}
-        </code>
-      );
-    }
-    if (span.highlight) {
-      node = (
-        <mark className="bg-brand/20 px-1 text-ink">{node}</mark>
-      );
-    }
-    if (span.bold) {
-      node = <strong className="font-semibold text-ink">{node}</strong>;
-    }
-    if (span.italic) {
-      node = <em className="italic">{node}</em>;
-    }
-    if (span.href) {
-      node = (
-        <Link
-          href={span.href}
-          className="text-brand underline underline-offset-4 transition-colors hover:text-brand"
-        >
-          {node}
-        </Link>
-      );
-    }
-
-    return <span key={i}>{node}</span>;
-  });
-}
+import { ArticleRichText, extractToc } from "@/lib/richtext";
 
 export async function generateStaticParams() {
   const all = await getPosts();
@@ -77,16 +34,8 @@ export default async function InsightArticle({
     notFound();
   }
 
-  const toc = post.content
-    .filter(
-      (block): block is Extract<Block, { type: "heading" }> =>
-        block.type === "heading" && block.level !== 4,
-    )
-    .map((block) => ({
-      id: slugify(block.text),
-      text: block.text,
-      level: block.level,
-    }));
+  const toc = extractToc(post.content);
+  const faqs = post.faqs ?? [];
 
   // related: same topic first, then fill from the rest — up to 3
   const related = [
@@ -156,148 +105,31 @@ export default async function InsightArticle({
                 />
               </div>
 
-              <div className="flex flex-col gap-8">
-                {post.content.map((block, i) => {
-                  if (block.type === "heading") {
-                    const id = slugify(block.text);
-                    if (block.level === 2) {
-                      return (
-                        <h2
-                          key={i}
-                          id={id}
-                          className="scroll-mt-28 font-instrument text-2xl font-medium text-ink md:text-3xl"
-                        >
-                          {block.text}
-                        </h2>
-                      );
-                    }
-                    if (block.level === 3) {
-                      return (
-                        <h3
-                          key={i}
-                          id={id}
-                          className="scroll-mt-28 font-instrument text-xl font-medium text-ink md:text-2xl"
-                        >
-                          {block.text}
-                        </h3>
-                      );
-                    }
-                    return (
-                      <h4
-                        key={i}
-                        id={id}
-                        className="scroll-mt-28 text-sm font-semibold tracking-widest text-ink/70 uppercase"
-                      >
-                        {block.text}
-                      </h4>
-                    );
-                  }
+              <ArticleRichText data={post.content} />
 
-                  if (block.type === "quote") {
-                    return (
-                      <p
-                        key={i}
-                        className="border-l-2 border-brand/40 pl-6 text-lg leading-relaxed text-ink/80 italic"
-                      >
-                        {block.text}
-                      </p>
-                    );
-                  }
-
-                  if (block.type === "list") {
-                    const ListTag = block.ordered ? "ol" : "ul";
-                    return (
-                      <ListTag key={i} className="flex flex-col gap-3">
-                        {block.items.map((item, j) => (
-                          <li
-                            key={j}
-                            className="flex items-start gap-3 text-base leading-relaxed text-ink/60"
-                          >
-                            {block.ordered ? (
-                              <span className="mt-0.5 shrink-0 text-sm font-medium text-brand">
-                                {j + 1}.
-                              </span>
-                            ) : (
-                              <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-brand" />
-                            )}
-                            {item}
-                          </li>
-                        ))}
-                      </ListTag>
-                    );
-                  }
-
-                  if (block.type === "image") {
-                    return (
-                      <figure key={i} className="flex flex-col gap-3">
-                        <div className="relative aspect-[16/9] w-full overflow-hidden">
-                          <Image
-                            src={block.src}
-                            alt={block.alt}
-                            fill
-                            sizes="(min-width: 768px) 768px, 100vw"
-                            className="object-cover"
-                          />
-                        </div>
-                        {block.caption && (
-                          <figcaption className="text-xs tracking-wide text-ink/40">
-                            {block.caption}
-                          </figcaption>
-                        )}
-                      </figure>
-                    );
-                  }
-
-                  if (block.type === "code") {
-                    return (
-                      <pre
-                        key={i}
-                        className="overflow-x-auto bg-ink/[0.04] p-5 text-sm leading-relaxed text-ink/70"
-                      >
-                        <code>{block.code}</code>
-                      </pre>
-                    );
-                  }
-
-                  if (block.type === "faq") {
-                    return (
-                      <div key={i} className="flex flex-col">
-                        {block.items.map((faq, j) => (
-                          <details
-                            key={j}
-                            className="group border-b border-ink/10 py-5 first:pt-0"
-                          >
-                            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-medium text-ink/80 transition-colors group-open:text-ink">
-                              {faq.question}
-                              <span className="shrink-0 text-lg leading-none text-ink/40 transition-transform duration-300 group-open:rotate-45 group-open:text-brand">
-                                +
-                              </span>
-                            </summary>
-                            <p className="mt-4 text-sm leading-relaxed text-ink/50">
-                              {faq.answer}
-                            </p>
-                          </details>
-                        ))}
-                      </div>
-                    );
-                  }
-
-                  if (block.type === "divider") {
-                    return (
-                      <div key={i} className="my-2 h-px w-full bg-ink/10" />
-                    );
-                  }
-
-                  return (
-                    <p
-                      key={i}
-                      className="text-base leading-relaxed text-ink/60 md:text-lg"
+              {faqs.length > 0 && (
+                <div className="mt-12 flex flex-col">
+                  <h2 className="mb-4 scroll-mt-28 font-instrument text-2xl font-medium text-ink md:text-3xl">
+                    Frequently asked questions
+                  </h2>
+                  {faqs.map((faq, j) => (
+                    <details
+                      key={j}
+                      className="group border-b border-ink/10 py-5 first:pt-0"
                     >
-                      {renderSpans(block.spans)}
-                    </p>
-                  );
-                })}
-              </div>
+                      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-medium text-ink/80 transition-colors group-open:text-ink">
+                        {faq.question}
+                        <span className="shrink-0 text-lg leading-none text-ink/40 transition-transform duration-300 group-open:rotate-45 group-open:text-brand">
+                          +
+                        </span>
+                      </summary>
+                      <p className="mt-4 text-sm leading-relaxed text-ink/60">
+                        {faq.answer}
+                      </p>
+                    </details>
+                  ))}
+                </div>
+              )}
 
               <div className="mt-20 flex flex-col gap-4 bg-ink/[0.03] p-6">
                 <span className="text-xs font-medium tracking-widest text-ink/40 uppercase">

@@ -1,10 +1,11 @@
 "use client";
 
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { buildHref, type Post } from "@/lib/insights";
+import { buildHref } from "@/lib/insights";
+import type { PostView } from "@/lib/content";
 import Reveal from "@components/Reveal";
 
-export default function Insights({ posts }: { posts: Post[] }) {
+export default function Insights({ posts }: { posts: PostView[] }) {
   const ARTICLES = posts.slice(0, 4);
   const [LEAD, ...REST] = ARTICLES;
   return (

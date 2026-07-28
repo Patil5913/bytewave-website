@@ -1,0 +1,61 @@
+/* find & hire admin theme — brand accent (#2191fb) over Payload's dark UI. */
+:root {
+  --fh-brand: #2191fb;
+  --fh-brand-hover: #1a7fe0;
+}
+
+/* Primary actions */
+.btn--style-primary .btn__content,
+.btn--style-primary {
+  --color: var(--fh-brand);
+}
+.btn--style-primary {
+  background-color: var(--fh-brand);
+  border-color: var(--fh-brand);
+  color: #fff;
+}
+.btn--style-primary:hover,
+.btn--style-primary:focus {
+  background-color: var(--fh-brand-hover);
+  border-color: var(--fh-brand-hover);
+}
+
+/* Links + interactive accents */
+a:not(.btn):not(.card),
+.doc-tab--active a {
+  color: var(--fh-brand);
+}
+
+/* Left nav: active + hover accent */
+.nav__link:hover,
+.nav-group__toggle:hover,
+.step-nav a:hover {
+  color: var(--fh-brand);
+}
+.nav__link.active,
+.nav__link--active {
+  color: var(--fh-brand);
+  box-shadow: inset 2px 0 0 var(--fh-brand);
+}
+
+/* Focus ring + form focus */
+.field-type input:focus,
+.field-type textarea:focus,
+.field-type .rs__control--is-focused,
+input:focus,
+textarea:focus {
+  border-color: var(--fh-brand) !important;
+  box-shadow: 0 0 0 1px var(--fh-brand) !important;
+}
+
+/* Pill / checkbox / toggle accents */
+.checkbox-input__input:checked ~ .checkbox-input__icon,
+.pill--has-action:hover {
+  border-color: var(--fh-brand);
+}
+
+/* Rich-text / relationship active chips */
+.rs__option--is-focused,
+.rs__option--is-selected {
+  background-color: color-mix(in srgb, var(--fh-brand) 18%, transparent);
+}

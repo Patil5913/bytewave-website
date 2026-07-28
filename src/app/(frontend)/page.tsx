@@ -9,27 +9,41 @@ import PlacementFeed from "@components/PlacementFeed";
 import Insights from "@components/Insights";
 import CallToAction from "@components/CallToAction";
 import Footer from "@components/Footer";
-import { getPlacements, getSiteStats, getPosts } from "@/lib/content";
+import {
+  getPlacements,
+  getSiteStats,
+  getPosts,
+  getHomepageContent,
+  getPartners,
+} from "@/lib/content";
 
 export default async function Home() {
-  const [placements, stats, posts] = await Promise.all([
+  const [placements, stats, posts, home, partners] = await Promise.all([
     getPlacements(),
     getSiteStats(),
     getPosts(),
+    getHomepageContent(),
+    getPartners(),
   ]);
 
   return (
     <>
       <Navbar />
-      <Hero />
-      <Manifesto />
-      <AgentIntro />
+      <Hero
+        content={home}
+        partners={partners.map((p) => ({
+          name: String(p.name),
+          slug: String(p.slug),
+        }))}
+      />
+      <Manifesto content={home} />
+      <AgentIntro content={home} />
       <Stats stats={stats} />
       <Gateways />
-      <ScrollStory />
+      <ScrollStory content={home} />
       <PlacementFeed items={placements} />
       <Insights posts={posts} />
-      <CallToAction />
+      <CallToAction content={home} />
       <Footer />
     </>
   );

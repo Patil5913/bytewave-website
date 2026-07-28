@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "seed": "bun src/seed.ts"
+    "seed": "curl -fsS -X POST \"http://localhost:3000/seed-content?secret=${SEED_SECRET:-dev-seed}\" && echo"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, BadgeCheck, Building2, Check, MapPin } from "lucide-react";
 import Reveal from "@components/Reveal";
+import { HOMEPAGE } from "@/lib/siteContent";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -306,21 +307,21 @@ function MatchWindow() {
   );
 }
 
-export default function Manifesto() {
+export default function Manifesto({
+  content = HOMEPAGE,
+}: {
+  content?: typeof HOMEPAGE;
+}) {
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16">
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16">
           <Reveal className="flex flex-col gap-6 md:col-span-6">
             <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
-              The traditional hiring loop is broken. We built a better
-              mechanism.
+              {content.manifestoHeadline}
             </h2>
             <p className="max-w-prose text-base leading-relaxed text-ink/70 md:text-lg">
-              Most staffing agencies rely on keyword matching and endless
-              resume piles, frustrating companies and candidates alike. We see
-              hiring as a matching problem — connecting real needs directly
-              with a network of verified professionals, cutting out the noise.
+              {content.manifestoBody}
             </p>
           </Reveal>
 
@@ -330,24 +331,14 @@ export default function Manifesto() {
         </div>
 
         <Reveal className="grid grid-cols-1 gap-8 border-t border-ink/10 pt-8 sm:grid-cols-2 md:gap-16">
-          <div>
-            <h4 className="mb-2 text-sm font-medium tracking-wider text-ink uppercase">
-              01. No Guesswork
-            </h4>
-            <p className="text-sm leading-snug text-ink/70">
-              Every match is backed by verified skills, not a keyword-stuffed
-              resume.
-            </p>
-          </div>
-          <div>
-            <h4 className="mb-2 text-sm font-medium tracking-wider text-ink uppercase">
-              02. Straight to the Point
-            </h4>
-            <p className="text-sm leading-snug text-ink/70">
-              Skip the application black hole and talk directly to the people
-              making the hire.
-            </p>
-          </div>
+          {content.manifestoPoints.map((point, i) => (
+            <div key={i}>
+              <h4 className="mb-2 text-sm font-medium tracking-wider text-ink uppercase">
+                {String(i + 1).padStart(2, "0")}. {point.title}
+              </h4>
+              <p className="text-sm leading-snug text-ink/70">{point.body}</p>
+            </div>
+          ))}
         </Reveal>
       </div>
     </section>
