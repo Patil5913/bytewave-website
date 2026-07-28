@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import PixelBackdrop from "@components/PixelBackdrop";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -62,14 +61,13 @@ export default function AgentIntro() {
   return (
     <section
       ref={ref}
-      className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-black px-6 py-24 md:px-16"
+      className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16"
     >
-      <PixelBackdrop variant="grid" className="absolute inset-0 z-0" />
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-8 xl:max-w-6xl 2xl:max-w-7xl">
         {PARAGRAPHS.map((segments, pi) => (
           <p
             key={pi}
-            className="font-instrument text-2xl leading-snug font-medium text-white sm:text-3xl lg:text-5xl lg:leading-[1.25] xl:text-6xl 2xl:text-7xl 2xl:leading-[1.2]"
+            className="font-instrument text-2xl leading-snug font-medium text-ink sm:text-3xl lg:text-5xl lg:leading-[1.25] xl:text-6xl 2xl:text-7xl 2xl:leading-[1.2]"
           >
             {segments.map((seg, si) =>
               seg.text.split(" ").map((word, wi) => (

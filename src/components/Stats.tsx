@@ -4,16 +4,134 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import PixelBackdrop from "@components/PixelBackdrop";
+import { Activity, BadgeCheck } from "lucide-react";
+import Reveal from "@components/Reveal";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const STATS = [
-  { value: 94, decimals: 0, suffix: "%", label: "Placement Success Rate" },
-  { value: 14, decimals: 0, suffix: "d", label: "Avg. Time-to-Placement" },
-  { value: 1.2, decimals: 1, suffix: "k", label: "Verified Professionals" },
-  { value: 150, decimals: 0, suffix: "+", label: "Partner Organizations" },
+  {
+    value: 94,
+    decimals: 0,
+    suffix: "%",
+    label: "Placement Success Rate",
+    note: "of matched roles close on the first shortlist.",
+  },
+  {
+    value: 14,
+    decimals: 0,
+    suffix: "d",
+    label: "Avg. Time-to-Placement",
+    note: "from first intro to signed offer.",
+  },
+  {
+    value: 1.2,
+    decimals: 1,
+    suffix: "k",
+    label: "Verified Professionals",
+    note: "skills confirmed, not keyword-matched.",
+  },
+  {
+    value: 150,
+    decimals: 0,
+    suffix: "+",
+    label: "Partner Organizations",
+    note: "hiring directly through the network.",
+  },
 ];
+
+// weekly placements — drives the mini bar chart
+const WEEKS = [12, 18, 15, 22, 19, 26, 31];
+const WEEK_MAX = Math.max(...WEEKS);
+
+const FEED = [
+  { who: "S. Okafor", role: "Staff Engineer", co: "Northwind", match: 96 },
+  { who: "M. Delgado", role: "Product Designer", co: "Lumen", match: 91 },
+  { who: "A. Petrov", role: "DevOps Lead", co: "Corewave", match: 88 },
+];
+
+function NetworkWindow() {
+  return (
+    <div className="w-full rounded-2xl border border-ink/10 bg-ink/[0.04] p-1.5 backdrop-blur-sm">
+      <div className="overflow-hidden rounded-xl border border-ink/10 bg-canvas/50">
+        {/* window title bar */}
+        <div className="flex items-center justify-between gap-3 border-b border-ink/10 bg-ink/[0.02] px-4 py-3">
+          <div className="flex items-center gap-1.5">
+            <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+            <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
+            <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-ink/40">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+            network · live
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6 p-5">
+          {/* KPI row */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1 rounded-lg border border-ink/10 bg-ink/[0.02] p-3">
+              <span className="text-xs text-ink/40">Active roles</span>
+              <span className="font-instrument text-2xl font-medium text-ink tabular-nums">
+                312
+              </span>
+            </div>
+            <div className="flex flex-col gap-1 rounded-lg border border-ink/10 bg-ink/[0.02] p-3">
+              <span className="text-xs text-ink/40">Matches today</span>
+              <span className="font-instrument text-2xl font-medium text-brand tabular-nums">
+                +31
+              </span>
+            </div>
+          </div>
+
+          {/* weekly placements bar chart */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-1.5 text-xs tracking-wider text-ink/40 uppercase">
+                <Activity className="h-3 w-3" />
+                Placements / week
+              </span>
+              <span className="text-xs text-brand">▲ 18%</span>
+            </div>
+            <div className="flex h-28 items-end gap-2">
+              {WEEKS.map((v, i) => (
+                <div
+                  key={i}
+                  className="chart-bar flex-1 origin-bottom rounded-t bg-gradient-to-t from-brand/20 to-brand/70"
+                  style={{ height: `${(v / WEEK_MAX) * 100}%` }}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* live feed */}
+          <div className="flex flex-col divide-y divide-ink/5 rounded-lg border border-ink/10">
+            {FEED.map((f) => (
+              <div
+                key={f.who}
+                className="flex items-center justify-between gap-3 px-3 py-2.5"
+              >
+                <div className="flex items-center gap-2.5">
+                  <BadgeCheck className="h-4 w-4 shrink-0 text-brand" />
+                  <div className="flex flex-col">
+                    <span className="text-sm text-ink/90">
+                      {f.role}
+                      <span className="text-ink/40"> · {f.co}</span>
+                    </span>
+                    <span className="text-xs text-ink/40">{f.who}</span>
+                  </div>
+                </div>
+                <span className="text-xs font-medium text-brand tabular-nums">
+                  {f.match}%
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Stats() {
   const ref = useRef<HTMLDivElement>(null);
@@ -33,6 +151,15 @@ export default function Stats() {
           ease: "power3.out",
           stagger: 0.1,
           scrollTrigger: { trigger: grid, start: "top 85%", once: true },
+        });
+
+        gsap.from(".chart-bar", {
+          scaleY: 0,
+          transformOrigin: "bottom",
+          duration: 0.8,
+          ease: "power3.out",
+          stagger: 0.06,
+          scrollTrigger: { trigger: ".chart-bar", start: "top 90%", once: true },
         });
 
         gsap.utils.toArray<HTMLElement>(root.querySelectorAll(".stat-num")).forEach(
@@ -60,32 +187,57 @@ export default function Stats() {
   );
 
   return (
-    <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-black px-6 py-24 md:px-16">
-      <PixelBackdrop variant="dots" className="absolute inset-0 z-0" />
-      <div ref={ref} className="relative z-10 mx-auto w-full max-w-7xl">
-        <span className="mb-12 flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
-          By the Numbers
-        </span>
+    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
+      <div
+        ref={ref}
+        className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16"
+      >
+        {/* left — heading + stats */}
+        <div className="flex flex-col gap-10 md:col-span-6">
+          <div className="flex flex-col gap-6">
+            <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
+              By the Numbers
+            </span>
+            <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
+              Proof, not promises.
+            </h2>
+            <p className="max-w-prose text-base leading-relaxed text-ink/60 md:text-lg">
+              Every match runs through the same verified pipeline. The result is
+              a hiring loop measured in days — and outcomes we can put a number
+              on.
+            </p>
+          </div>
 
-        <div className="stats-grid grid grid-cols-2 gap-y-12 lg:grid-cols-4 lg:gap-8">
-          {STATS.map((stat) => (
-            <div key={stat.label} className="stat-block flex flex-col gap-4">
-              <h3 className="font-instrument text-6xl font-medium tracking-tight text-white tabular-nums md:text-7xl">
-                <span
-                  className="stat-num"
-                  data-value={stat.value}
-                  data-decimals={stat.decimals}
-                >
-                  {stat.value.toFixed(stat.decimals)}
-                </span>
-                <span className="text-4xl text-white/30">{stat.suffix}</span>
-              </h3>
-              <p className="text-xs font-medium tracking-wider text-white/50 uppercase">
-                {stat.label}
-              </p>
-            </div>
-          ))}
+          <div className="stats-grid grid grid-cols-2 gap-x-8 gap-y-10 border-t border-ink/10 pt-10">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="stat-block flex flex-col gap-3">
+                <h3 className="font-instrument text-5xl font-medium tracking-tight text-ink tabular-nums lg:text-6xl">
+                  <span
+                    className="stat-num"
+                    data-value={stat.value}
+                    data-decimals={stat.decimals}
+                  >
+                    {stat.value.toFixed(stat.decimals)}
+                  </span>
+                  <span className="text-3xl text-ink/30">{stat.suffix}</span>
+                </h3>
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-xs font-medium tracking-wider text-ink/50 uppercase">
+                    {stat.label}
+                  </p>
+                  <p className="max-w-[26ch] text-sm leading-snug text-ink/40">
+                    {stat.note}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+
+        {/* right — live network window */}
+        <Reveal x={24} y={0} className="md:col-span-6">
+          <NetworkWindow />
+        </Reveal>
       </div>
     </section>
   );

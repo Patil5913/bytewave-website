@@ -95,13 +95,13 @@ export default function HistoricalTelemetry() {
   );
 
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
+    <section className="w-full bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto max-w-7xl">
         <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
-          <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
+          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Track Record
           </span>
-          <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
+          <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
             Proven scale. Global reach.
           </h2>
         </Reveal>
@@ -109,10 +109,10 @@ export default function HistoricalTelemetry() {
         <Reveal className="mb-16 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-6">
           {STATS.map((stat) => (
             <div key={stat.label} className="flex items-baseline gap-2">
-              <span className="font-instrument text-2xl font-medium text-white">
+              <span className="font-instrument text-2xl font-medium text-ink">
                 {stat.value}
               </span>
-              <span className="text-xs tracking-widest text-white/40 uppercase">
+              <span className="text-xs tracking-widest text-ink/40 uppercase">
                 {stat.label}
               </span>
             </div>
@@ -120,7 +120,7 @@ export default function HistoricalTelemetry() {
         </Reveal>
 
         <div ref={chartRef}>
-          <span className="mb-8 block text-sm font-medium tracking-widest text-white/60 uppercase">
+          <span className="mb-8 block text-sm font-medium tracking-widest text-ink/60 uppercase">
             Placement Volume, Year Over Year
           </span>
 
@@ -148,7 +148,7 @@ export default function HistoricalTelemetry() {
                     y1={valueToY(tick)}
                     y2={valueToY(tick)}
                     stroke={
-                      edge ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.06)"
+                      edge ? "rgba(10,10,10,0.2)" : "rgba(10,10,10,0.06)"
                     }
                     strokeDasharray={edge ? "4 4" : undefined}
                     vectorEffect="non-scaling-stroke"
@@ -167,7 +167,7 @@ export default function HistoricalTelemetry() {
                     y1={0}
                     y2={CHART_H}
                     stroke={
-                      edge ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.06)"
+                      edge ? "rgba(10,10,10,0.2)" : "rgba(10,10,10,0.06)"
                     }
                     strokeDasharray={edge ? "4 4" : undefined}
                     vectorEffect="non-scaling-stroke"
@@ -198,7 +198,7 @@ export default function HistoricalTelemetry() {
                   left: `${(p.x / CHART_W) * 100}%`,
                   top: `${(p.y / CHART_H) * 100}%`,
                 }}
-                className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400"
+                className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand"
               />
             ))}
           </div>
@@ -211,13 +211,13 @@ export default function HistoricalTelemetry() {
                 style={{ left: `${(p.x / CHART_W) * 100}%` }}
                 className="absolute flex -translate-x-1/2 flex-col items-center gap-1"
               >
-                <span className="text-xs font-medium text-white sm:text-sm">
+                <span className="text-xs font-medium text-ink sm:text-sm">
                   {p.value}+
                 </span>
-                <span className="text-[10px] text-white/40 sm:text-xs">
+                <span className="text-[10px] text-ink/40 sm:text-xs">
                   {p.year}
                   {p.label && (
-                    <span className="ml-1 hidden text-white/25 sm:inline">
+                    <span className="ml-1 hidden text-ink/25 sm:inline">
                       /{p.label}
                     </span>
                   )}

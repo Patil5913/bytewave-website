@@ -4,6 +4,7 @@ import Manifesto from "@components/Manifesto";
 import AgentIntro from "@components/AgentIntro";
 import Stats from "@components/Stats";
 import Gateways from "@components/Gateways";
+import ScrollStory from "@components/ScrollStory";
 import PlacementFeed from "@components/PlacementFeed";
 import Insights from "@components/Insights";
 import CallToAction from "@components/CallToAction";
@@ -18,6 +19,7 @@ export default function Home() {
       <AgentIntro />
       <Stats />
       <Gateways />
+      <ScrollStory />
       <PlacementFeed />
       <Insights />
       <CallToAction />

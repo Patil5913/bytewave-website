@@ -364,7 +364,7 @@ function DebugPicker({
     >
       {box && (
         <div
-          className="absolute border-2 border-emerald-400 bg-emerald-400/15"
+          className="absolute border-2 border-brand bg-brand/15"
           style={{
             left: `${box.x * 100}%`,
             top: `${box.y * 100}%`,

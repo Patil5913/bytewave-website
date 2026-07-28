@@ -63,21 +63,21 @@ export default function MarketTelemetry() {
   );
 
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
+    <section className="w-full bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 md:grid-cols-12 md:gap-16">
         <Reveal className="flex flex-col gap-4 md:col-span-4">
-          <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
+          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Market Telemetry
           </span>
-          <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
+          <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
             We show you the real range, not a guess.
           </h2>
-          <p className="text-sm leading-relaxed text-white/50">
+          <p className="text-sm leading-relaxed text-ink/50">
             Every compensation band below is pulled from live placements
             across our network. Transparency here means leverage — walk into
             every conversation knowing exactly where you stand.
           </p>
-          <p className="mt-2 text-xs font-medium tracking-widest text-white/40 uppercase">
+          <p className="mt-2 text-xs font-medium tracking-widest text-ink/40 uppercase">
             USD base / year · trailing 90 days
           </p>
         </Reveal>
@@ -95,7 +95,7 @@ export default function MarketTelemetry() {
                 >
                   <span
                     className={`truncate text-[11px] font-medium tracking-wide whitespace-nowrap transition-colors lg:text-sm xl:text-[11px] ${
-                      active === i ? "text-white" : "text-white/60"
+                      active === i ? "text-ink" : "text-ink/60"
                     }`}
                   >
                     {stack.label}
@@ -119,8 +119,8 @@ export default function MarketTelemetry() {
                     <div
                       className={`h-full border-l ${
                         edge
-                          ? "border-dashed border-white/20"
-                          : "border-white/6"
+                          ? "border-dashed border-ink/20"
+                          : "border-ink/6"
                       }`}
                     />
                   </div>
@@ -141,32 +141,32 @@ export default function MarketTelemetry() {
                       onMouseLeave={() => setActive(null)}
                       className="relative h-9"
                     >
-                      <div className="absolute inset-x-0 top-1/2 border-t border-white/6" />
+                      <div className="absolute inset-x-0 top-1/2 border-t border-ink/6" />
                       <div
                         style={{ left: `${left}%`, width: `${width}%` }}
                         className={`absolute inset-y-0 flex items-center justify-between overflow-hidden border-l-2 bg-linear-to-r px-2.5 backdrop-blur-md transition-all duration-300 ${
                           isActive
-                            ? "border-emerald-400/60 from-emerald-400/70 via-amber-300/55 to-rose-300/60"
-                            : "border-emerald-400/30 from-emerald-400/12 via-amber-300/10 to-rose-300/[0.07] hover:from-emerald-400/25 hover:via-amber-300/18 hover:to-rose-300/12"
+                            ? "border-brand/60 from-brand/70 via-amber-300/55 to-rose-300/60"
+                            : "border-brand/30 from-brand/12 via-amber-300/10 to-rose-300/[0.07] hover:from-brand/25 hover:via-amber-300/18 hover:to-rose-300/12"
                         }`}
                       >
                         <span
                           className={`text-[10px] tracking-wide whitespace-nowrap transition-colors ${
-                            isActive ? "text-white" : "text-white/60"
+                            isActive ? "text-ink" : "text-ink/60"
                           }`}
                         >
                           ${stack.min}k
                         </span>
                         <span
                           className={`text-[10px] font-medium tracking-wide whitespace-nowrap transition-colors ${
-                            isActive ? "text-white" : "text-white/80"
+                            isActive ? "text-ink" : "text-ink/80"
                           }`}
                         >
                           ${stack.max}k
                         </span>
                         <div
                           data-bar-wipe
-                          className="absolute inset-0 origin-right bg-black"
+                          className="absolute inset-0 origin-right bg-canvas"
                         />
                       </div>
                     </div>
@@ -179,7 +179,7 @@ export default function MarketTelemetry() {
                 {TICKS.map((tick) => (
                   <span
                     key={tick}
-                    className="absolute -translate-x-1/2 text-[10px] tracking-wide text-white/30"
+                    className="absolute -translate-x-1/2 text-[10px] tracking-wide text-ink/30"
                     style={{ left: `${toPercent(tick)}%` }}
                   >
                     ${tick}k

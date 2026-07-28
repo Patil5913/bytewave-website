@@ -49,14 +49,14 @@ const CLIENT_LOGS = [
 
 export default function ClientStories() {
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
+    <section className="w-full bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <Reveal className="flex flex-col gap-4">
-            <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
+            <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
               Client Stories
             </span>
-            <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
+            <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
               Teams that stopped guessing.
             </h2>
           </Reveal>
@@ -64,7 +64,7 @@ export default function ClientStories() {
           <Reveal
             as="a"
             href="#"
-            className="group flex w-fit items-center gap-2 text-xs tracking-wider text-white/50 uppercase transition-colors hover:text-white"
+            className="group flex w-fit items-center gap-2 text-xs tracking-wider text-ink/50 uppercase transition-colors hover:text-ink"
           >
             Read All Case Studies
             <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -79,10 +79,10 @@ export default function ClientStories() {
               {CLIENT_LOGS.map((client, i) => (
                 <div
                   key={`${dup}-${i}`}
-                  className="flex w-[300px] shrink-0 flex-col justify-between gap-6 bg-white/[0.03] p-6 sm:w-[360px]"
+                  className="flex w-[300px] shrink-0 flex-col justify-between gap-6 bg-ink/[0.03] p-6 sm:w-[360px]"
                 >
-                  <Quote className="h-5 w-5 text-emerald-400/60" />
-                  <p className="text-sm leading-relaxed text-white/70">
+                  <Quote className="h-5 w-5 text-brand/60" />
+                  <p className="text-sm leading-relaxed text-ink/70">
                     &ldquo;{client.quote}&rdquo;
                   </p>
                   <div className="flex items-center gap-3">
@@ -92,10 +92,10 @@ export default function ClientStories() {
                       className="h-6 w-6 shrink-0 object-contain opacity-80"
                     />
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-sm font-medium text-white">
+                      <span className="text-sm font-medium text-ink">
                         {client.name}
                       </span>
-                      <span className="text-xs text-white/50">
+                      <span className="text-xs text-ink/50">
                         {client.title}, {client.company}
                       </span>
                     </div>
@@ -108,23 +108,23 @@ export default function ClientStories() {
       </div>
 
       <Reveal className="mx-auto mt-16 flex max-w-3xl flex-col items-center gap-5 px-6 text-center md:mt-20 md:px-16">
-        <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
+        <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-75" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand" />
           </span>
           Now onboarding companies
         </span>
-        <h3 className="font-instrument text-3xl font-medium text-white sm:text-4xl md:text-5xl">
+        <h3 className="font-instrument text-3xl font-medium text-ink sm:text-4xl md:text-5xl">
           Your next hire could be this easy.
         </h3>
-        <p className="max-w-md text-sm leading-relaxed text-white/50 sm:text-base">
+        <p className="max-w-md text-sm leading-relaxed text-ink/50 sm:text-base">
           Tell us what you're hiring for and we'll route verified specialists
           straight to your team.
         </p>
         <a
           href="#"
-          className="group mt-2 flex w-full max-w-xs items-center justify-center gap-2 bg-white/10 px-6 py-3 text-sm text-white backdrop-blur-md transition hover:bg-white/20 sm:w-auto"
+          className="group mt-2 flex w-full max-w-xs items-center justify-center gap-2 bg-ink/10 px-6 py-3 text-sm text-ink backdrop-blur-md transition hover:bg-ink/20 sm:w-auto"
         >
           Start Hiring
           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
