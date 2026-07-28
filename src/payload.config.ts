@@ -12,8 +12,6 @@ import {
   SubscriptFeature,
   SuperscriptFeature,
   EXPERIMENTAL_TableFeature,
-  BlocksFeature,
-  CodeBlock,
   TextStateFeature,
   defaultColors,
 } from "@payloadcms/richtext-lexical";
@@ -152,8 +150,6 @@ export default buildConfig({
       IndentFeature(),
       ChecklistFeature(),
       EXPERIMENTAL_TableFeature(),
-      // ``` fenced code blocks (premade Code block, with language select)
-      BlocksFeature({ blocks: [CodeBlock({})] }),
       // ==highlight== / coloured text
       TextStateFeature({
         state: {
@@ -161,7 +157,8 @@ export default buildConfig({
             brand: {
               label: "Brand highlight",
               css: {
-                "background-color": "rgba(33, 145, 251, 0.2)",
+                "background-color": "#bcd6f0",
+                color: "#0a0a0a",
                 "border-radius": "2px",
                 padding: "0 3px",
               },

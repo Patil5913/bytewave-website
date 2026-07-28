@@ -22,61 +22,37 @@ async function getEditorConfig() {
 
 const CODE_TOKEN = (i: number) => `@@FHCODEBLOCK${i}@@`;
 
-// The premade CodeBlock validates `language` against a fixed option list
-// (Monaco's). Map common markdown fence aliases onto valid keys.
-const LANG_ALIASES: Record<string, string> = {
-  "": "plaintext",
-  text: "plaintext",
-  txt: "plaintext",
-  sh: "shell",
-  bash: "shell",
-  zsh: "shell",
-  js: "javascript",
-  jsx: "javascript",
-  ts: "typescript",
-  tsx: "typescript",
-  yml: "yaml",
-  md: "markdown",
-  py: "python",
-};
+const IS_CODE = 16;
 
-function safeLanguage(lang: string): string {
-  const key = (lang || "").toLowerCase();
-  return LANG_ALIASES[key] ?? key ?? "plaintext";
-}
-
-function objectId() {
-  // 24-char hex, matching the id shape Payload assigns to block rows
-  let s = "";
-  while (s.length < 24) s += Math.floor(Math.random() * 16).toString(16);
-  return s.slice(0, 24);
-}
-
-function codeBlockNode(language: string, code: string) {
-  return {
-    type: "block",
-    format: "",
-    version: 2,
-    fields: {
-      id: objectId(),
-      blockName: "",
-      blockType: "Code",
-      language: safeLanguage(language),
-      code,
-    },
-  };
-}
-
-function textNode(text: string, state?: Record<string, string>) {
+function textNode(
+  text: string,
+  state?: Record<string, string>,
+  format = 0,
+) {
   return {
     type: "text",
     text,
     detail: 0,
-    format: 0,
+    format,
     mode: "normal",
     style: "",
     version: 1,
     ...(state ? { $: state } : {}),
+  };
+}
+
+// Fenced code stays a plain paragraph whose text carries lexical's code format
+// flag — no custom block, no extra editor feature, no new node types. The
+// frontend converter turns such a paragraph into <pre><code>.
+function codeParagraphNode(code: string) {
+  return {
+    type: "paragraph",
+    format: "",
+    indent: 0,
+    version: 1,
+    direction: "ltr",
+    textFormat: IS_CODE,
+    children: [textNode(code, undefined, IS_CODE)],
   };
 }
 
@@ -112,11 +88,8 @@ function applyHighlights(node: any): void {
   node.children = out;
 }
 
-/** Swap placeholder paragraphs back into real Code block nodes. */
-function restoreCodeBlocks(
-  root: any,
-  fences: { language: string; code: string }[],
-): void {
+/** Swap placeholder paragraphs back into code paragraphs. */
+function restoreCodeBlocks(root: any, fences: { code: string }[]): void {
   const children = root?.root?.children;
   if (!Array.isArray(children)) return;
   root.root.children = children.map((child: any) => {
@@ -127,7 +100,7 @@ function restoreCodeBlocks(
     const m = text.match(/^@@FHCODEBLOCK(\d+)@@$/);
     if (m) {
       const fence = fences[Number(m[1])];
-      if (fence) return codeBlockNode(fence.language, fence.code);
+      if (fence) return codeParagraphNode(fence.code);
     }
     return child;
   });
@@ -139,15 +112,12 @@ function restoreCodeBlocks(
 export async function mdToLexical(markdown: string) {
   const editorConfig = await getEditorConfig();
 
-  // pull fenced code out before conversion so it survives as a Code block
-  const fences: { language: string; code: string }[] = [];
+  // pull fenced code out before conversion so it survives verbatim
+  const fences: { code: string }[] = [];
   const prepared = (markdown || "").replace(
-    /```([\w-]*)\r?\n([\s\S]*?)```/g,
-    (_full, lang: string, code: string) => {
-      fences.push({
-        language: safeLanguage(lang),
-        code: code.replace(/\r?\n$/, ""),
-      });
+    /```[\w-]*\r?\n([\s\S]*?)```/g,
+    (_full, code: string) => {
+      fences.push({ code: code.replace(/\r?\n$/, "") });
       return CODE_TOKEN(fences.length - 1);
     },
   );

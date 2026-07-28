@@ -74,13 +74,21 @@ function renderText(node: any, key: number) {
 const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
   text: ({ node }: any) => renderText(node, 0),
-  blocks: {
-    // Premade CodeBlock — fenced ``` code with a language select.
-    Code: ({ node }: any) => (
-      <pre data-language={node?.fields?.language}>
-        <code>{node?.fields?.code}</code>
-      </pre>
-    ),
+  // A paragraph whose text is entirely code-formatted came from a ``` fence —
+  // render it as a real code block instead of an inline-code paragraph.
+  paragraph: ({ node, nodesToJSX }: any) => {
+    const kids = node.children ?? [];
+    const allCode =
+      kids.length > 0 &&
+      kids.every((c: any) => c?.type === "text" && (c.format & IS_CODE) !== 0);
+    if (allCode) {
+      return (
+        <pre>
+          <code>{kids.map((c: any) => c.text).join("")}</code>
+        </pre>
+      );
+    }
+    return <p>{nodesToJSX({ nodes: kids })}</p>;
   },
   heading: ({ node, nodesToJSX }: any) => {
     const Tag = (node.tag ?? "h2") as "h2" | "h3" | "h4";
