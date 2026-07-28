@@ -2,7 +2,8 @@
 
 html,
 body {
-  background-color: #000000;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
 }
 
 @theme inline {
@@ -10,8 +11,59 @@ body {
   --font-instrument: var(--font-instrument-sans);
   --font-archivo: var(--font-archivo);
 
-  /* brand: black bg, white text, blue accent (used sparingly — brand name) */
+  /* Semantic surface tokens. Light theme by default. `ink` = foreground
+     (text, subtle surfaces, borders — used with /alpha everywhere the old
+     dark theme used `white`). `canvas` = page background (old `black`).
+     Swap these two values to return to a dark theme. */
+  --color-canvas: #0a0a0a;
+  --color-ink: #f7f6f3;
+
+  /* brand: blue accent (used sparingly — brand name) */
   --color-brand: #2191fb;
+}
+
+/* Custom cursor — hide the native pointer only on fine-pointer devices. */
+@media (pointer: fine) {
+  html,
+  body,
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  label,
+  [role="button"] {
+    cursor: none;
+  }
+}
+
+/* Magnetic cursor box (driven per-frame in JS). Sharp-cornered highlight that
+   wraps interactive elements with a faint brand fill + brand border. */
+.cursor-box {
+  opacity: 0;
+  box-sizing: border-box;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    opacity 0.2s ease;
+}
+.cursor-box[data-state="default"] {
+  background-color: var(--color-ink);
+  border: 0 solid transparent;
+}
+/* caret blinks only when idle (not while moving) */
+.cursor-caret[data-moving="false"] > span {
+  animation: blink 1.1s steps(1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor-caret > span {
+    animation: none;
+  }
+}
+
+.cursor-box[data-state="target"] {
+  background-color: color-mix(in srgb, var(--color-brand) 10%, transparent);
+  border: 1.5px solid var(--color-brand);
 }
 
 @keyframes marquee {

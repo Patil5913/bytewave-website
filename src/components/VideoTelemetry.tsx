@@ -59,14 +59,14 @@ const VIDEO_LOGS = [
 
 export default function VideoTelemetry() {
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
+    <section className="w-full bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <Reveal className="flex flex-col gap-4">
-            <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
+            <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
               Success Stories
             </span>
-            <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
+            <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
               Verified execution. On record.
             </h2>
           </Reveal>
@@ -74,7 +74,7 @@ export default function VideoTelemetry() {
           <Reveal
             as="a"
             href="#"
-            className="group flex w-fit items-center gap-2 text-xs tracking-wider text-white/50 uppercase transition-colors hover:text-white"
+            className="group flex w-fit items-center gap-2 text-xs tracking-wider text-ink/50 uppercase transition-colors hover:text-ink"
           >
             View Full Archive
             <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -105,13 +105,13 @@ export default function VideoTelemetry() {
               {/* Play button */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-black/50 backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
-                  <Play className="ml-0.5 h-4 w-4 fill-white text-white transition-colors group-hover:fill-emerald-400 group-hover:text-emerald-400" />
+                  <Play className="ml-0.5 h-4 w-4 fill-white text-white transition-colors group-hover:fill-brand group-hover:text-brand" />
                 </div>
               </div>
 
               {/* Verified badge */}
               <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 backdrop-blur-md">
-                <BadgeCheck className="h-3.5 w-3.5 fill-emerald-400/20 text-emerald-400" />
+                <BadgeCheck className="h-3.5 w-3.5 fill-brand/20 text-brand" />
                 <span className="text-[10px] tracking-widest text-white uppercase">
                   Verified
                 </span>
@@ -144,23 +144,23 @@ export default function VideoTelemetry() {
       </div>
 
       <Reveal className="mx-auto mt-16 flex max-w-3xl flex-col items-center gap-5 px-6 text-center md:mt-20 md:px-16">
-        <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
+        <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-75" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand" />
           </span>
           Now onboarding
         </span>
-        <h3 className="font-instrument text-3xl font-medium text-white sm:text-4xl md:text-5xl">
+        <h3 className="font-instrument text-3xl font-medium text-ink sm:text-4xl md:text-5xl">
           Your placement is the next one on record.
         </h3>
-        <p className="max-w-md text-sm leading-relaxed text-white/50 sm:text-base">
+        <p className="max-w-md text-sm leading-relaxed text-ink/50 sm:text-base">
           Get verified once. Skip the applications, and let the right companies
           come to you.
         </p>
         <a
           href="#"
-          className="group mt-2 flex w-full max-w-xs items-center justify-center gap-2 bg-white/10 px-6 py-3 text-sm text-white backdrop-blur-md transition hover:bg-white/20 sm:w-auto"
+          className="group mt-2 flex w-full max-w-xs items-center justify-center gap-2 bg-ink px-6 py-3 text-sm text-canvas backdrop-blur-md transition hover:bg-ink/90 sm:w-auto"
         >
           Apply for Verification
           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

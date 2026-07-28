@@ -21,18 +21,18 @@ function renderSpans(spans: Span[]): ReactNode {
 
     if (span.code) {
       node = (
-        <code className="rounded bg-white/10 px-1.5 py-0.5 text-[0.9em] text-emerald-400">
+        <code className="rounded bg-ink/10 px-1.5 py-0.5 text-[0.9em] text-brand">
           {node}
         </code>
       );
     }
     if (span.highlight) {
       node = (
-        <mark className="bg-emerald-400/20 px-1 text-white">{node}</mark>
+        <mark className="bg-brand/20 px-1 text-ink">{node}</mark>
       );
     }
     if (span.bold) {
-      node = <strong className="font-semibold text-white">{node}</strong>;
+      node = <strong className="font-semibold text-ink">{node}</strong>;
     }
     if (span.italic) {
       node = <em className="italic">{node}</em>;
@@ -41,7 +41,7 @@ function renderSpans(spans: Span[]): ReactNode {
       node = (
         <Link
           href={span.href}
-          className="text-emerald-400 underline underline-offset-4 transition-colors hover:text-emerald-400"
+          className="text-brand underline underline-offset-4 transition-colors hover:text-brand"
         >
           {node}
         </Link>
@@ -85,45 +85,45 @@ export default async function InsightArticle({
   return (
     <>
       <Navbar />
-      <article className="w-full bg-black px-6 pt-32 pb-24 md:px-16">
+      <article className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
         <div className="mx-auto max-w-7xl">
-          <nav className="mb-6 flex items-center gap-2 text-xs tracking-wide text-white/40">
-            <Link href="/" className="transition-colors hover:text-white">
+          <nav className="mb-6 flex items-center gap-2 text-xs tracking-wide text-ink/40">
+            <Link href="/" className="transition-colors hover:text-ink">
               Home
             </Link>
             <ChevronRight className="h-3 w-3" />
             <Link
               href={`/insights/${topic}`}
-              className="text-white/60 transition-colors hover:text-white"
+              className="text-ink/60 transition-colors hover:text-ink"
             >
               {post.tag}
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="truncate text-white/60">{post.title}</span>
+            <span className="truncate text-ink/60">{post.title}</span>
           </nav>
 
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-12">
             <div className="mx-auto w-full max-w-3xl lg:col-span-9 lg:mx-0">
               <Link
                 href="/insights"
-                className="group mb-10 flex w-fit items-center gap-2 text-xs tracking-wider text-white/50 uppercase transition-colors hover:text-white lg:hidden"
+                className="group mb-10 flex w-fit items-center gap-2 text-xs tracking-wider text-ink/50 uppercase transition-colors hover:text-ink lg:hidden"
               >
                 <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-1" />
                 Back to Insights
               </Link>
 
               <div className="mb-8 flex flex-col gap-4">
-                <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60 uppercase">
-                  <span className="text-emerald-400">{post.tag}</span>
+                <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45 uppercase">
+                  <span className="text-brand">{post.tag}</span>
                   {post.updated ? "Updated " : ""}
                   {post.date}
-                  <span className="text-white/30">·</span>
+                  <span className="text-ink/30">·</span>
                   {post.readTime}
                 </span>
-                <h1 className="font-instrument text-3xl leading-tight font-medium text-white sm:text-4xl md:text-5xl">
+                <h1 className="font-instrument text-3xl leading-tight font-medium text-ink sm:text-4xl md:text-5xl">
                   {post.title}
                 </h1>
-                <span className="text-sm tracking-wider text-white/40 uppercase">
+                <span className="text-sm tracking-wider text-ink/40 uppercase">
                   Written by {post.author}
                 </span>
               </div>
@@ -148,7 +148,7 @@ export default async function InsightArticle({
                         <h2
                           key={i}
                           id={id}
-                          className="scroll-mt-28 font-instrument text-2xl font-medium text-white md:text-3xl"
+                          className="scroll-mt-28 font-instrument text-2xl font-medium text-ink md:text-3xl"
                         >
                           {block.text}
                         </h2>
@@ -159,7 +159,7 @@ export default async function InsightArticle({
                         <h3
                           key={i}
                           id={id}
-                          className="scroll-mt-28 font-instrument text-xl font-medium text-white md:text-2xl"
+                          className="scroll-mt-28 font-instrument text-xl font-medium text-ink md:text-2xl"
                         >
                           {block.text}
                         </h3>
@@ -169,7 +169,7 @@ export default async function InsightArticle({
                       <h4
                         key={i}
                         id={id}
-                        className="scroll-mt-28 text-sm font-semibold tracking-widest text-white/70 uppercase"
+                        className="scroll-mt-28 text-sm font-semibold tracking-widest text-ink/70 uppercase"
                       >
                         {block.text}
                       </h4>
@@ -180,7 +180,7 @@ export default async function InsightArticle({
                     return (
                       <p
                         key={i}
-                        className="border-l-2 border-emerald-400/40 pl-6 text-lg leading-relaxed text-white/80 italic"
+                        className="border-l-2 border-brand/40 pl-6 text-lg leading-relaxed text-ink/80 italic"
                       >
                         {block.text}
                       </p>
@@ -194,14 +194,14 @@ export default async function InsightArticle({
                         {block.items.map((item, j) => (
                           <li
                             key={j}
-                            className="flex items-start gap-3 text-base leading-relaxed text-white/60"
+                            className="flex items-start gap-3 text-base leading-relaxed text-ink/60"
                           >
                             {block.ordered ? (
-                              <span className="mt-0.5 shrink-0 text-sm font-medium text-emerald-400">
+                              <span className="mt-0.5 shrink-0 text-sm font-medium text-brand">
                                 {j + 1}.
                               </span>
                             ) : (
-                              <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-emerald-400" />
+                              <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-brand" />
                             )}
                             {item}
                           </li>
@@ -223,7 +223,7 @@ export default async function InsightArticle({
                           />
                         </div>
                         {block.caption && (
-                          <figcaption className="text-xs tracking-wide text-white/40">
+                          <figcaption className="text-xs tracking-wide text-ink/40">
                             {block.caption}
                           </figcaption>
                         )}
@@ -235,7 +235,7 @@ export default async function InsightArticle({
                     return (
                       <pre
                         key={i}
-                        className="overflow-x-auto bg-white/[0.04] p-5 text-sm leading-relaxed text-white/70"
+                        className="overflow-x-auto bg-ink/[0.04] p-5 text-sm leading-relaxed text-ink/70"
                       >
                         <code>{block.code}</code>
                       </pre>
@@ -248,15 +248,15 @@ export default async function InsightArticle({
                         {block.items.map((faq, j) => (
                           <details
                             key={j}
-                            className="group border-b border-white/10 py-5 first:pt-0"
+                            className="group border-b border-ink/10 py-5 first:pt-0"
                           >
-                            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-medium text-white/80 transition-colors group-open:text-white">
+                            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-medium text-ink/80 transition-colors group-open:text-ink">
                               {faq.question}
-                              <span className="shrink-0 text-lg leading-none text-white/40 transition-transform duration-300 group-open:rotate-45 group-open:text-emerald-400">
+                              <span className="shrink-0 text-lg leading-none text-ink/40 transition-transform duration-300 group-open:rotate-45 group-open:text-brand">
                                 +
                               </span>
                             </summary>
-                            <p className="mt-4 text-sm leading-relaxed text-white/50">
+                            <p className="mt-4 text-sm leading-relaxed text-ink/50">
                               {faq.answer}
                             </p>
                           </details>
@@ -267,14 +267,14 @@ export default async function InsightArticle({
 
                   if (block.type === "divider") {
                     return (
-                      <div key={i} className="my-2 h-px w-full bg-white/10" />
+                      <div key={i} className="my-2 h-px w-full bg-ink/10" />
                     );
                   }
 
                   return (
                     <p
                       key={i}
-                      className="text-base leading-relaxed text-white/60 md:text-lg"
+                      className="text-base leading-relaxed text-ink/60 md:text-lg"
                     >
                       {renderSpans(block.spans)}
                     </p>
@@ -282,8 +282,8 @@ export default async function InsightArticle({
                 })}
               </div>
 
-              <div className="mt-20 flex flex-col gap-4 bg-white/[0.03] p-6">
-                <span className="text-xs font-medium tracking-widest text-white/40 uppercase">
+              <div className="mt-20 flex flex-col gap-4 bg-ink/[0.03] p-6">
+                <span className="text-xs font-medium tracking-widest text-ink/40 uppercase">
                   About the Author
                 </span>
                 <div className="flex items-start gap-4">
@@ -298,7 +298,7 @@ export default async function InsightArticle({
                       />
                     </div>
                   ) : (
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/10 font-instrument text-lg font-medium text-white">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-ink/10 font-instrument text-lg font-medium text-ink">
                       {post.author
                         .split(" ")
                         .map((n) => n[0])
@@ -306,21 +306,21 @@ export default async function InsightArticle({
                     </div>
                   )}
                   <div className="flex flex-col gap-1">
-                    <span className="text-base font-medium text-white">
+                    <span className="text-base font-medium text-ink">
                       {post.author}
                     </span>
-                    <span className="text-xs text-white/40">
+                    <span className="text-xs text-ink/40">
                       {post.authorTitle}
                     </span>
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed text-white/50">
+                <p className="text-sm leading-relaxed text-ink/50">
                   {post.authorBio}
                 </p>
                 {post.authorLinkedIn && (
                   <a
                     href={post.authorLinkedIn}
-                    className="group flex w-fit items-center gap-2 text-xs tracking-wider text-white/50 uppercase transition-colors hover:text-white"
+                    className="group flex w-fit items-center gap-2 text-xs tracking-wider text-ink/50 uppercase transition-colors hover:text-ink"
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
                     LinkedIn
@@ -330,10 +330,10 @@ export default async function InsightArticle({
             </div>
 
             <aside className="hidden lg:col-span-3 lg:block">
-              <nav className="sticky top-28 flex flex-col gap-6 border-l border-white/10 pl-6">
+              <nav className="sticky top-28 flex flex-col gap-6 border-l border-ink/10 pl-6">
                 <Link
                   href="/insights"
-                  className="group flex w-fit items-center gap-2 text-xs tracking-wider text-white/50 uppercase transition-colors hover:text-white"
+                  className="group flex w-fit items-center gap-2 text-xs tracking-wider text-ink/50 uppercase transition-colors hover:text-ink"
                 >
                   <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-1" />
                   Back to Insights
@@ -341,14 +341,14 @@ export default async function InsightArticle({
 
                 {toc.length > 0 && (
                   <div className="flex flex-col gap-3">
-                    <span className="text-xs font-medium tracking-widest text-white/40 uppercase">
+                    <span className="text-xs font-medium tracking-widest text-ink/40 uppercase">
                       On this page
                     </span>
                     {toc.map((item) => (
                       <a
                         key={item.id}
                         href={`#${item.id}`}
-                        className={`text-sm leading-snug text-white/50 transition-colors hover:text-white ${
+                        className={`text-sm leading-snug text-ink/50 transition-colors hover:text-ink ${
                           item.level === 3 ? "pl-3" : ""
                         }`}
                       >

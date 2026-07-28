@@ -31,13 +31,13 @@ const PHASES = [
 
 export default function AdvocacyProtocol() {
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
+    <section className="w-full bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto max-w-7xl">
         <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
-          <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
+          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             The Advocacy Protocol
           </span>
-          <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
+          <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
             We don&apos;t just place you. We engineer your leverage.
           </h2>
         </Reveal>
@@ -48,14 +48,14 @@ export default function AdvocacyProtocol() {
               key={phase.id}
               className="group flex-1 transition-colors duration-300"
             >
-              <span className="mb-6 flex items-center gap-2 text-3xl font-medium text-white/15 transition-colors duration-300 group-hover:text-emerald-400/60">
+              <span className="mb-6 flex items-center gap-2 text-3xl font-medium text-ink/15 transition-colors duration-300 group-hover:text-brand/60">
                 {phase.id}
-                <span className="h-1.5 w-1.5 rounded-full bg-white/15 transition-colors duration-300 group-hover:bg-emerald-400" />
+                <span className="h-1.5 w-1.5 rounded-full bg-ink/15 transition-colors duration-300 group-hover:bg-brand" />
               </span>
-              <h3 className="mb-3 text-base font-medium text-white/90 transition-colors duration-300 group-hover:text-white">
+              <h3 className="mb-3 text-base font-medium text-ink/90 transition-colors duration-300 group-hover:text-ink">
                 {phase.title}
               </h3>
-              <p className="text-sm leading-relaxed text-white/50">
+              <p className="text-sm leading-relaxed text-ink/50">
                 {phase.description}
               </p>
             </div>

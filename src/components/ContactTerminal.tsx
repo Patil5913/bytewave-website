@@ -46,16 +46,16 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
   const copy = COPY[mode];
 
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
+    <section className="w-full bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto max-w-7xl">
         <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
-          <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
+          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Get In Touch
           </span>
-          <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
+          <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
             Start your intake.
           </h2>
-          <p className="max-w-md text-base leading-relaxed text-white/50">
+          <p className="max-w-md text-base leading-relaxed text-ink/50">
             {mode === "talent"
               ? "Get verified and routed to companies actively hiring for your exact stack."
               : "Tell us what you need and we'll route pre-verified specialists to your team."}
@@ -68,15 +68,15 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
         >
           {/* Context column */}
           <div className="flex flex-col gap-8 lg:col-span-4">
-            <span className="flex w-fit items-center gap-2 rounded-full bg-white/5 px-4 py-2 text-sm font-medium text-white">
+            <span className="flex w-fit items-center gap-2 rounded-full bg-ink/5 px-4 py-2 text-sm font-medium text-ink">
               {copy.tag}
             </span>
 
             <div className="flex flex-col gap-4">
-              <span className="text-xs tracking-widest text-white/40 uppercase">
+              <span className="text-xs tracking-widest text-ink/40 uppercase">
                 {copy.eyebrow}
               </span>
-              <p className="max-w-xs text-sm leading-relaxed text-white/50">
+              <p className="max-w-xs text-sm leading-relaxed text-ink/50">
                 {copy.blurb}
               </p>
             </div>
@@ -89,7 +89,7 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
                 <div key={field.id} className="flex flex-col gap-2">
                   <label
                     htmlFor={field.id}
-                    className="text-sm font-medium tracking-widest text-white/60 uppercase"
+                    className="text-sm font-medium tracking-widest text-ink/60 uppercase"
                   >
                     {field.label}
                   </label>
@@ -97,7 +97,7 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
                     id={field.id}
                     type={field.type}
                     placeholder={field.placeholder}
-                    className="w-full border-b border-white/15 bg-transparent py-2.5 text-sm text-white placeholder:text-white/30 focus:border-white/40 focus:outline-none"
+                    className="w-full border-b border-ink/15 bg-transparent py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-ink/40 focus:outline-none"
                   />
                 </div>
               ))}
@@ -105,7 +105,7 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
               <div className="flex flex-col gap-2 sm:col-span-2">
                 <label
                   htmlFor="message"
-                  className="text-sm font-medium tracking-widest text-white/60 uppercase"
+                  className="text-sm font-medium tracking-widest text-ink/60 uppercase"
                 >
                   {copy.messageLabel}
                 </label>
@@ -113,13 +113,13 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
                   id="message"
                   rows={3}
                   placeholder={copy.messagePlaceholder}
-                  className="w-full resize-none border-b border-white/15 bg-transparent py-2.5 text-sm text-white placeholder:text-white/30 focus:border-white/40 focus:outline-none"
+                  className="w-full resize-none border-b border-ink/15 bg-transparent py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-ink/40 focus:outline-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="group mt-2 flex w-fit items-center justify-center gap-2 bg-white/10 px-6 py-3 text-sm text-white backdrop-blur-md transition hover:bg-white/20 sm:col-span-2"
+                className="group mt-2 flex w-fit items-center justify-center gap-2 bg-ink/10 px-6 py-3 text-sm text-ink backdrop-blur-md transition hover:bg-ink/20 sm:col-span-2"
               >
                 {copy.cta}
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

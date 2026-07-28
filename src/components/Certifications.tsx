@@ -40,13 +40,13 @@ const CERTIFICATIONS = [
 
 export default function Certifications() {
   return (
-    <section className="w-full bg-black px-6 py-24 md:px-16">
+    <section className="w-full bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto max-w-7xl">
         <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
-          <span className="flex items-center gap-2 text-sm font-medium tracking-widest text-white/60">
+          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Compliance
           </span>
-          <h2 className="font-instrument text-4xl leading-tight font-medium text-white lg:text-5xl">
+          <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
             Certified where it counts.
           </h2>
         </Reveal>
@@ -57,16 +57,16 @@ export default function Certifications() {
         >
           {CERTIFICATIONS.map((cert) => (
             <div key={cert.id} className="group flex flex-col gap-4">
-              <cert.icon className="h-6 w-6 text-white/30 transition-colors duration-300 group-hover:text-emerald-400" />
+              <cert.icon className="h-6 w-6 text-ink/30 transition-colors duration-300 group-hover:text-brand" />
               <div className="flex items-baseline gap-2">
-                <h3 className="text-base font-medium text-white/90 transition-colors duration-300 group-hover:text-white">
+                <h3 className="text-base font-medium text-ink/90 transition-colors duration-300 group-hover:text-ink">
                   {cert.title}
                 </h3>
-                <span className="text-xs tracking-widest text-white/30">
+                <span className="text-xs tracking-widest text-ink/30">
                   {cert.year}
                 </span>
               </div>
-              <p className="text-sm leading-relaxed text-white/50">
+              <p className="text-sm leading-relaxed text-ink/50">
                 {cert.description}
               </p>
             </div>
