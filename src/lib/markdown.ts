@@ -54,8 +54,9 @@ export function blocksToMarkdown(blocks: Block[]): {
         out.push("---");
         break;
       case "faq":
+        // FAQs live in their own structured field; the article page renders
+        // the heading, so don't emit one into the body (it would duplicate).
         faqs.push(...b.items);
-        out.push("## Frequently asked questions");
         break;
     }
   }

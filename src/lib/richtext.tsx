@@ -16,6 +16,15 @@ function headingText(node: any): string {
   return (node.children ?? []).map(walk).join("");
 }
 
+// True when the body already contains a heading matching `re` — used to avoid
+// rendering a duplicate section heading (e.g. "Frequently asked questions").
+export function hasHeading(data: any, re: RegExp): boolean {
+  const children = data?.root?.children ?? [];
+  return children.some(
+    (n: any) => n?.type === "heading" && re.test(headingText(n)),
+  );
+}
+
 // Table-of-contents entries from a lexical editor state (h2 / h3 only).
 export function extractToc(
   data: any,

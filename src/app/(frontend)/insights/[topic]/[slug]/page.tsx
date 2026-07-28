@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ChevronRight, ExternalLink } from "lucide-react";
 import { buildHref, topicSlug } from "@/lib/insights";
 import { getPosts } from "@/lib/content";
-import { ArticleRichText, extractToc } from "@/lib/richtext";
+import { ArticleRichText, extractToc, hasHeading } from "@/lib/richtext";
 
 export const revalidate = 30;
 
@@ -38,6 +38,12 @@ export default async function InsightArticle({
 
   const toc = extractToc(post.content);
   const faqs = post.faqs ?? [];
+  // The body may already carry its own "Frequently asked questions" heading —
+  // don't render a second one above the accordion.
+  const faqHeadingInBody = hasHeading(
+    post.content,
+    /^\s*frequently asked questions\s*$/i,
+  );
 
   // related: same topic first, then fill from the rest — up to 3
   const related = [
@@ -110,10 +116,15 @@ export default async function InsightArticle({
               <ArticleRichText data={post.content} />
 
               {faqs.length > 0 && (
-                <div className="mt-12 flex flex-col">
-                  <h2 className="mb-4 scroll-mt-28 font-instrument text-2xl font-medium text-ink md:text-3xl">
-                    Frequently asked questions
-                  </h2>
+                <div className={faqHeadingInBody ? "flex flex-col" : "mt-12 flex flex-col"}>
+                  {!faqHeadingInBody && (
+                    <h2
+                      id="frequently-asked-questions"
+                      className="mb-4 scroll-mt-28 font-instrument text-2xl font-medium text-ink md:text-3xl"
+                    >
+                      Frequently asked questions
+                    </h2>
+                  )}
                   {faqs.map((faq, j) => (
                     <details
                       key={j}
