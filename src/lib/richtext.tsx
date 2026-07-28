@@ -34,6 +34,14 @@ export function extractToc(
 // `.article-richtext` scope in globals.css.
 const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
+  blocks: {
+    // Premade CodeBlock — fenced ``` code with a language select.
+    Code: ({ node }: any) => (
+      <pre data-language={node?.fields?.language}>
+        <code>{node?.fields?.code}</code>
+      </pre>
+    ),
+  },
   heading: ({ node, nodesToJSX }: any) => {
     const Tag = (node.tag ?? "h2") as "h2" | "h3" | "h4";
     const id = slugify(headingText(node));

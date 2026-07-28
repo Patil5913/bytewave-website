@@ -12,6 +12,10 @@ import {
   SubscriptFeature,
   SuperscriptFeature,
   EXPERIMENTAL_TableFeature,
+  BlocksFeature,
+  CodeBlock,
+  TextStateFeature,
+  defaultColors,
 } from "@payloadcms/richtext-lexical";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import sharp from "sharp";
@@ -148,6 +152,25 @@ export default buildConfig({
       IndentFeature(),
       ChecklistFeature(),
       EXPERIMENTAL_TableFeature(),
+      // ``` fenced code blocks (premade Code block, with language select)
+      BlocksFeature({ blocks: [CodeBlock({})] }),
+      // ==highlight== / coloured text
+      TextStateFeature({
+        state: {
+          highlight: {
+            brand: {
+              label: "Brand highlight",
+              css: {
+                "background-color": "rgba(33, 145, 251, 0.2)",
+                "border-radius": "2px",
+                padding: "0 3px",
+              },
+            },
+            ...defaultColors.background,
+          },
+          color: defaultColors.text,
+        },
+      }),
     ],
   }),
   secret: process.env.PAYLOAD_SECRET || "",
