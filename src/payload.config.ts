@@ -20,6 +20,7 @@ import { Partners } from "./collections/Partners";
 import { SiteStats } from "./globals/SiteStats";
 import { Homepage } from "./globals/Homepage";
 import { SiteSettings } from "./globals/SiteSettings";
+import { slugify } from "./lib/insights";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -66,6 +67,35 @@ export default buildConfig({
     },
     importMap: {
       baseDir: path.resolve(dirname),
+    },
+    // Two-column editing: form on the left, live iframe preview on the right.
+    livePreview: {
+      breakpoints: [
+        { label: "Desktop", name: "desktop", width: 1440, height: 900 },
+        { label: "Tablet", name: "tablet", width: 768, height: 1024 },
+        { label: "Mobile", name: "mobile", width: 390, height: 844 },
+      ],
+      url: ({ data, collectionConfig, globalConfig }) => {
+        const base =
+          process.env.NEXT_PUBLIC_SERVER_URL ?? "http://localhost:3000";
+        const slug = collectionConfig?.slug ?? globalConfig?.slug;
+        switch (slug) {
+          case "posts":
+            return data?.tag && data?.articleId
+              ? `${base}/insights/${slugify(String(data.tag))}/${data.articleId}`
+              : `${base}/insights`;
+          case "client-quotes":
+          case "faqs-companies":
+          case "certifications":
+            return `${base}/companies`;
+          case "success-videos":
+          case "faqs-professionals":
+            return `${base}/professionals`;
+          default:
+            // homepage, site-stats, placements, partners, site-settings, …
+            return base;
+        }
+      },
     },
   },
   collections: [

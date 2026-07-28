@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Instrument_Serif, Archivo } from "next/font/google";
 import SmoothScroll from "@components/SmoothScroll";
 import CustomCursor from "@components/CustomCursor";
+import RefreshOnSave from "@components/RefreshOnSave";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -36,6 +37,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${instrumentSerif.variable} ${archivo.variable} antialiased`}
     >
       <body className="overflow-x-hidden">
+        <RefreshOnSave />
         <SmoothScroll />
         <CustomCursor />
         {children}
