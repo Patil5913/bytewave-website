@@ -29,29 +29,37 @@ export const Posts: CollectionConfig = {
   },
   fields: [
     {
-      name: "articleId",
-      type: "text",
-      unique: true,
-      admin: {
-        readOnly: true,
-        description: "Auto-generated 7-char hex id used in the URL.",
-      },
+      type: "collapsible",
+      label: "Article details",
+      admin: { initCollapsed: false },
+      fields: [
+        {
+          name: "articleId",
+          type: "text",
+          unique: true,
+          admin: {
+            readOnly: true,
+            description: "Auto-generated 7-char hex id used in the URL.",
+          },
+        },
+        { name: "title", type: "text", required: true },
+        { name: "tag", type: "text", required: true },
+        {
+          name: "date",
+          type: "text",
+          required: true,
+          admin: { description: 'Display date, e.g. "October 12, 2026".' },
+        },
+        { name: "updated", type: "checkbox", defaultValue: false },
+        { name: "readTime", type: "text", required: true },
+        { name: "cover", type: "text", required: true },
+        { name: "excerpt", type: "textarea", required: true },
+      ],
     },
-    { name: "title", type: "text", required: true },
-    { name: "tag", type: "text", required: true },
-    {
-      name: "date",
-      type: "text",
-      required: true,
-      admin: { description: 'Display date, e.g. "October 12, 2026".' },
-    },
-    { name: "updated", type: "checkbox", defaultValue: false },
-    { name: "readTime", type: "text", required: true },
-    { name: "cover", type: "text", required: true },
-    { name: "excerpt", type: "textarea", required: true },
     {
       type: "collapsible",
       label: "Author",
+      admin: { initCollapsed: true },
       fields: [
         { name: "author", type: "text", required: true },
         { name: "authorTitle", type: "text" },
@@ -70,16 +78,23 @@ export const Posts: CollectionConfig = {
       },
     },
     {
-      name: "faqs",
-      type: "array",
-      labels: { singular: "FAQ", plural: "FAQs" },
-      admin: {
-        description:
-          'Rendered as an accordion where a "## Frequently asked questions" heading appears in the body.',
-      },
+      type: "collapsible",
+      label: "FAQs",
+      admin: { initCollapsed: true },
       fields: [
-        { name: "question", type: "text", required: true },
-        { name: "answer", type: "textarea", required: true },
+        {
+          name: "faqs",
+          type: "array",
+          labels: { singular: "FAQ", plural: "FAQs" },
+          admin: {
+            description:
+              'Rendered as an accordion where a "## Frequently asked questions" heading appears in the body.',
+          },
+          fields: [
+            { name: "question", type: "text", required: true },
+            { name: "answer", type: "textarea", required: true },
+          ],
+        },
       ],
     },
   ],
