@@ -33,7 +33,7 @@ const serverFunction: ServerFunctionClient = async function (args) {
 const Layout = ({ children }: Args) => (
   <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
     <div
-      className={`${instrument.variable} ${geist.variable}`}
+      className={`${instrument.variable} ${geist.variable} ${geist.className}`}
       style={{ display: "contents" }}
     >
       {children}

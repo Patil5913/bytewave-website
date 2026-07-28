@@ -130,8 +130,8 @@ export const Dashboard = async () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-              gap: "0.75rem",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+              gap: "1.1rem",
             }}
           >
             {group.cards.map((card) => (
@@ -139,9 +139,13 @@ export const Dashboard = async () => {
                 key={card.href}
                 href={card.href}
                 style={{
-                  display: "block",
-                  padding: "1rem 1.1rem",
-                  borderRadius: 6,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  gap: "1.25rem",
+                  minHeight: 128,
+                  padding: "1.5rem 1.6rem",
+                  borderRadius: 8,
                   border: "1px solid var(--theme-elevation-150)",
                   background: "var(--theme-elevation-50)",
                   textDecoration: "none",
@@ -153,21 +157,21 @@ export const Dashboard = async () => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    gap: 8,
+                    gap: 10,
                   }}
                 >
-                  <span style={{ fontWeight: 600, fontSize: "0.98rem" }}>
+                  <span style={{ fontWeight: 600, fontSize: "1.2rem" }}>
                     {card.label}
                   </span>
                   {card.countKey !== undefined && (
                     <span
                       style={{
-                        fontSize: "0.72rem",
+                        fontSize: "0.82rem",
                         fontVariantNumeric: "tabular-nums",
                         color: "#2191fb",
                         border: "1px solid var(--theme-elevation-150)",
                         borderRadius: 999,
-                        padding: "1px 8px",
+                        padding: "2px 11px",
                       }}
                     >
                       {counts[card.countKey] ?? 0}
@@ -177,8 +181,8 @@ export const Dashboard = async () => {
                 <span
                   style={{
                     display: "block",
-                    marginTop: 4,
-                    fontSize: "0.8rem",
+                    fontSize: "0.9rem",
+                    lineHeight: 1.4,
                     color: "var(--theme-elevation-600)",
                   }}
                 >

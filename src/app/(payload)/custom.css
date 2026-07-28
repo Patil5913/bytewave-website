@@ -46,21 +46,10 @@
     --theme-border-color: var(--theme-elevation-150);
   }
 
-  /* Brand fonts — Geist body, Instrument display for headings. */
-  body,
-  .payload-default {
+  /* Geist as the admin typeface (forced via the layout wrapper className too). */
+  body {
     --font-body: var(--font-geist-sans), -apple-system, BlinkMacSystemFont,
       "Segoe UI", Roboto, sans-serif;
-  }
-  h1,
-  h2,
-  h3,
-  .step-nav,
-  .doc-header__title,
-  .list-header h1,
-  .dashboard__label {
-    font-family: var(--font-instrument-sans), Georgia, serif;
-    letter-spacing: -0.01em;
   }
 
   /* Primary buttons */
