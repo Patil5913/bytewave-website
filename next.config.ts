@@ -16,7 +16,10 @@ const nextConfig: NextConfig = {
     ],
     qualities: [75, 85],
   },
-  allowedDevOrigins: ['10.0.0.176']
+  allowedDevOrigins: ['10.0.0.176'],
+  // Load sharp from node_modules instead of bundling it, so its native
+  // .node binary keeps the rpath to libvips-cpp.so and can dlopen it.
+  serverExternalPackages: ["sharp"],
 };
 
 export default withPayload(nextConfig);
