@@ -1,6 +1,7 @@
 {
   "asciiEnabled": false,
   "active": 0,
+  "asciiEnabled": false,
   "variants": [
     {
       "label": "Skyward",
@@ -43,7 +44,8 @@
         "stretchHi": 0.985,
         "gamma": 0.6,
         "trailPeak": 0.78,
-        "trailAvgMax": 0.5
+        "trailAvgMax": 0.5,
+        "edgeAmount": 1.6
       }
     }
   ]
