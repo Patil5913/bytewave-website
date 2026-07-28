@@ -51,7 +51,10 @@ export const Posts: CollectionConfig = {
       admin: {
         rows: 24,
         description:
-          "Markdown body. Supports ## / ### / #### headings, **bold**, *italic*, `code`, ==highlight==, [links](url), - and 1. lists, > quotes, ![alt](src \"caption\") images, ``` fenced code, and --- dividers. See content/insights/GUIDE.md. Do not use # H1 (the title is the H1).",
+          "Markdown body with live preview. Supports ## / ### / #### headings, **bold**, *italic*, `code`, ==highlight==, [links](url), - and 1. lists, > quotes, ![alt](src \"caption\") images, ``` fenced code, and --- dividers. See content/insights/GUIDE.md. Do not use # H1 (the title is the H1).",
+        components: {
+          Field: "/components/admin/MarkdownField#MarkdownField",
+        },
       },
     },
     {

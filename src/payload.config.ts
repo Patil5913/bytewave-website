@@ -44,9 +44,8 @@ export default buildConfig({
     user: Users.slug,
     theme: "dark",
     meta: {
-      title: "find & hire",
       titleSuffix: " · find & hire",
-      description: "find & hire — verified hiring control room.",
+      description: "find & hire — verified hiring dashboard.",
       icons: [{ rel: "icon", type: "image/x-icon", url: "/favicon.ico" }],
     },
     components: {

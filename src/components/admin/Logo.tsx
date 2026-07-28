@@ -1,21 +1,21 @@
 import React from "react";
 
-// Login-screen / large brand mark for the Payload admin.
+// Login-screen / large brand mark for the Payload admin. Kept as plain
+// single-line text so it never wraps or clips inside Payload's logo slot.
 export const Logo = () => (
-  <div
+  <span
     style={{
       fontFamily: "var(--font-instrument-sans), Georgia, serif",
-      fontSize: "2.25rem",
+      fontSize: "2rem",
       fontWeight: 500,
+      lineHeight: 1,
       letterSpacing: "-0.01em",
+      whiteSpace: "nowrap",
       color: "var(--theme-elevation-1000)",
-      display: "flex",
-      alignItems: "center",
-      gap: "0.15em",
     }}
   >
     find <span style={{ color: "#2191fb" }}>&amp;</span> hire
-  </div>
+  </span>
 );
 
 export default Logo;
