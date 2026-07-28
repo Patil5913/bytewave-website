@@ -10,68 +10,27 @@ const STATUS_COLORS: Record<string, string> = {
   Negotiating: "bg-violet-400",
 };
 
-const PLACEMENTS = [
-  {
-    role: "Backend Developer",
-    stack: "Python, FastAPI, SQLAlchemy",
-    candidate: "M. Davis",
-    company: "stripe.com",
-    companyName: "Stripe",
-    location: "New York, NY",
-    pay: "$165k Base",
-    status: "Placed",
-  },
-  {
-    role: "Product Designer",
-    stack: "Figma, Design Systems",
-    candidate: "A. Chen",
-    company: "notion.so",
-    companyName: "Notion",
-    location: "Remote",
-    pay: "$140k Base",
-    status: "Offer",
-  },
-  {
-    role: "Frontend Engineer",
-    stack: "React, TypeScript, Next.js",
-    candidate: "J. Okafor",
-    company: "linear.app",
-    companyName: "Linear",
-    location: "San Francisco, CA",
-    pay: "$155k Base",
-    status: "Interviewing",
-  },
-  {
-    role: "Data Analyst",
-    stack: "SQL, Python, Looker",
-    candidate: "R. Foster",
-    company: "figma.com",
-    companyName: "Figma",
-    location: "Austin, TX",
-    pay: "$120k Base",
-    status: "Placed",
-  },
-  {
-    role: "DevOps Engineer",
-    stack: "Kubernetes, Terraform, AWS",
-    candidate: "S. Kim",
-    company: "vercel.com",
-    companyName: "Vercel",
-    location: "Seattle, WA",
-    pay: "$175k Base",
-    status: "Negotiating",
-  },
-];
+type PlacementItem = {
+  role: string;
+  stack: string;
+  candidate: string;
+  company: string;
+  companyName: string;
+  location: string;
+  pay: string;
+  status: string;
+};
 
-export default function PlacementFeed() {
+export default function PlacementFeed({ items }: { items: PlacementItem[] }) {
+  const PLACEMENTS = items;
   return (
     <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="mb-12 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
-            Recent Placements
-          </span>
-          <span className="text-xs tracking-wider text-ink/60 uppercase">
+          <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl">
+            Recent placements.
+          </h2>
+          <span className="text-xs tracking-wider text-ink/65 uppercase">
             {PLACEMENTS.length} of 1,240+ this year
           </span>
         </div>
@@ -95,10 +54,13 @@ export default function PlacementFeed() {
               <div className="flex flex-col gap-1 lg:col-span-4">
                 <div className="flex items-center gap-2.5 text-sm text-ink/70">
                   <span className="shrink-0">{item.candidate}</span>
-                  <span className="shrink-0 text-ink/45">→</span>
+                  <span className="shrink-0 text-ink/55">→</span>
                   <img
                     src={`https://img.logo.dev/${item.company}?token=${process.env.NEXT_PUBLIC_LOGO_DEV_KEY}&size=40&format=png&theme=dark`}
                     alt={item.companyName}
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
                     className="h-4 w-4 shrink-0 object-contain opacity-70 transition-opacity duration-300 group-hover:opacity-100"
                   />
                   <span className="truncate text-ink">{item.companyName}</span>

@@ -77,18 +77,18 @@ export default function Footer() {
 								hire
 							</span>
 						</Link>
-						<p className="max-w-xs text-sm leading-relaxed text-ink/40">
+						<p className="max-w-xs text-sm leading-relaxed text-ink/60">
 							Connecting verified professionals with the teams that need them.
 						</p>
-						<p className="text-xs text-ink/30">
+						<p className="text-xs text-ink/50">
 							find &amp; hire is the trading name of Bytewave, Inc.
 						</p>
-						<address className="max-w-xs text-sm leading-relaxed text-ink/40 not-italic">
+						<address className="max-w-xs text-sm leading-relaxed text-ink/55 not-italic">
 							548 Market St, Suite 95000
 							<br />
 							San Francisco, CA 94104
 						</address>
-						<div className="mt-2 flex items-center gap-6 text-xs text-ink/40">
+						<div className="mt-2 flex items-center gap-6 text-xs text-ink/60">
 							<Link href="#" className="transition-colors hover:text-ink">
 								Twitter
 							</Link>
@@ -166,7 +166,7 @@ export default function Footer() {
 					</div>
 				</Reveal>
 
-				<div className="mt-20 flex flex-col items-start justify-between gap-4 border-t border-ink/10 pt-8 text-xs text-ink/40 sm:flex-row sm:items-center">
+				<div className="mt-20 flex flex-col items-start justify-between gap-4 border-t border-ink/10 pt-8 text-xs text-ink/55 sm:flex-row sm:items-center">
 					<span>© 2026 find &amp; hire, a Bytewave company. All rights reserved.</span>
 					<a
 						href="https://rudr.me"

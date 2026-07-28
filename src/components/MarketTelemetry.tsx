@@ -63,16 +63,16 @@ export default function MarketTelemetry() {
   );
 
   return (
-    <section className="w-full bg-canvas px-6 py-24 md:px-16">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 md:grid-cols-12 md:gap-16">
-        <Reveal className="flex flex-col gap-4 md:col-span-4">
+    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-12">
+        <Reveal className="flex flex-col gap-4 md:max-w-3xl">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Market Telemetry
           </span>
-          <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
+          <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
             We show you the real range, not a guess.
           </h2>
-          <p className="text-sm leading-relaxed text-ink/50">
+          <p className="max-w-2xl text-sm leading-relaxed text-ink/50">
             Every compensation band below is pulled from live placements
             across our network. Transparency here means leverage — walk into
             every conversation knowing exactly where you stand.
@@ -82,7 +82,7 @@ export default function MarketTelemetry() {
           </p>
         </Reveal>
 
-        <Reveal delay={0.15} className="md:col-span-8">
+        <Reveal delay={0.15} className="w-full">
           <div ref={chartRef} className="flex gap-4 sm:gap-6">
             {/* Row labels */}
             <div className="flex w-28 shrink-0 flex-col gap-3 sm:w-36 lg:w-44">

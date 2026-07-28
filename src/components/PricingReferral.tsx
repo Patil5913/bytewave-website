@@ -30,116 +30,134 @@ const MODULES = [
   },
 ];
 
+// zig-zag torn paper edges (radial-gradient mask, repeated horizontally)
+const TORN_TOP: React.CSSProperties = {
+  maskImage: "radial-gradient(7px at 12px 3px, transparent 96%, black 100%)",
+  maskSize: "24px 100%",
+  maskRepeat: "repeat-x",
+  WebkitMaskImage: "radial-gradient(7px at 12px 3px, transparent 96%, black 100%)",
+  WebkitMaskSize: "24px 100%",
+  WebkitMaskRepeat: "repeat-x",
+};
+const TORN_BOTTOM: React.CSSProperties = {
+  maskImage: "radial-gradient(7px at 12px 9px, transparent 96%, black 100%)",
+  maskSize: "24px 100%",
+  maskRepeat: "repeat-x",
+  WebkitMaskImage: "radial-gradient(7px at 12px 9px, transparent 96%, black 100%)",
+  WebkitMaskSize: "24px 100%",
+  WebkitMaskRepeat: "repeat-x",
+};
+
 export default function PricingReferral() {
   return (
-    <section className="w-full bg-canvas px-6 py-24 md:px-16">
-      <div className="mx-auto max-w-7xl">
-        <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
+    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-20">
+        {/* left — intro */}
+        <Reveal className="flex flex-col gap-6">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Pricing
           </span>
-          <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
+          <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-6xl">
             Free to start. Pay only for what helps.
           </h2>
           <p className="max-w-md text-base leading-relaxed text-ink/50">
-            Joining costs nothing, and your first strategy call is free.
-            Afterward, we&apos;ll point you toward specific add-ons — but
-            only if there&apos;s a real gap between where you are and the
-            offer you want.
+            Joining costs nothing and your first strategy call is free. Add-ons
+            come later — only if there&apos;s a real gap between where you are
+            and the offer you want.
           </p>
-        </Reveal>
-
-        {/* Core entry point */}
-        <Reveal className="mb-10 flex flex-col justify-between gap-8 md:flex-row md:items-center md:gap-12">
-          <div className="flex flex-col gap-3">
-            <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45 uppercase">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand" />
-              Where we start
-            </span>
-            <h3 className="font-instrument text-2xl font-medium text-ink md:text-3xl">
-              Free strategy call
-            </h3>
-            <p className="max-w-xl text-sm leading-relaxed text-ink/50">
-              A 1-on-1 conversation about your background, the roles and pay
-              you&apos;re aiming for, and what&apos;s standing between you and
-              your next offer.
-            </p>
-          </div>
-
-          <div className="flex flex-col items-start gap-4 md:items-end">
-            <div className="flex items-baseline gap-2">
-              <span className="font-instrument text-3xl font-medium text-ink">
-                $0.00
-              </span>
-              <span className="text-xs tracking-widest text-ink/40 uppercase">
-                Always free
-              </span>
-            </div>
-            <a
-              href="#"
-              className="group flex w-fit items-center gap-2 bg-ink/10 px-6 py-3 text-sm text-ink backdrop-blur-md transition hover:bg-ink/20"
-            >
-              Book your call
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </a>
-          </div>
-        </Reveal>
-
-        {/* Modular add-ons — segmented strip, matches Advocacy Protocol */}
-        <Reveal
-          stagger={0.08}
-          className="flex flex-col gap-10 md:flex-row md:gap-12"
-        >
-          {MODULES.map((mod) => (
-            <div
-              key={mod.id}
-              className="group flex-1 transition-colors duration-300"
-            >
-              <span className="mb-6 flex items-center gap-2 text-3xl font-medium text-ink/15 transition-colors duration-300 group-hover:text-brand/60">
-                {mod.id}
-                <span className="h-1.5 w-1.5 rounded-full bg-ink/15 transition-colors duration-300 group-hover:bg-brand" />
-              </span>
-              <span className="mb-2 block text-xs tracking-widest text-ink/40 uppercase">
-                {mod.tag}
-              </span>
-              <h4 className="mb-3 text-base font-medium text-ink/90 transition-colors duration-300 group-hover:text-ink">
-                {mod.title}
-              </h4>
-              <p className="mb-4 text-sm leading-relaxed text-ink/50">
-                {mod.description}
-              </p>
-              <span className="text-xs font-medium tracking-widest text-ink/40 uppercase">
-                {mod.price}
-              </span>
-            </div>
-          ))}
-        </Reveal>
-
-        {/* Referral */}
-        <Reveal className="mt-16 flex flex-col justify-between gap-8 md:flex-row md:items-center md:gap-12">
-          <div className="flex flex-col gap-3">
-            <span className="text-sm font-medium tracking-widest text-ink/60 uppercase">
-              Referrals
-            </span>
-            <h3 className="font-instrument text-2xl font-medium text-ink md:text-3xl">
-              Know someone good? Get paid to say so.
-            </h3>
-            <p className="max-w-xl text-sm leading-relaxed text-ink/50">
-              Most of our best candidates come through people already in our
-              network. Refer someone strong, and once they land a role
-              through us, you get a cash reward — no cap.
-            </p>
-          </div>
-
           <a
             href="#"
-            className="group flex w-fit shrink-0 items-center gap-2 bg-ink/10 px-6 py-3 text-sm text-ink backdrop-blur-md transition hover:bg-ink/20"
+            className="group mt-2 flex w-fit items-center gap-2 bg-ink px-6 py-3 text-sm font-medium text-canvas transition hover:bg-ink/90"
           >
-            Get your referral link
+            Book your free strategy call
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
         </Reveal>
+
+        {/* right — itemized statement / receipt */}
+        <Reveal x={24} y={0}>
+          <div className="ml-auto w-full max-w-md font-mono text-sm">
+            {/* torn top edge */}
+            <div aria-hidden className="h-3 bg-ink/[0.04]" style={TORN_TOP} />
+
+            <div className="bg-ink/[0.04] px-7 py-6">
+              {/* statement header */}
+              <div className="flex items-center justify-between border-b border-dashed border-ink/20 pb-5">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-base tracking-tight text-ink/70 lowercase">
+                    find <span className="text-brand">&amp;</span> hire
+                  </span>
+                  <span className="whitespace-nowrap text-[9px] tracking-normal text-ink/35 lowercase">
+                    a bytewave company
+                  </span>
+                </div>
+                <span className="text-right text-[9px] tracking-[0.25em] text-ink/40 uppercase">
+                  Career Statement
+                </span>
+              </div>
+
+              {/* line items */}
+              <div className="flex flex-col gap-4 py-6">
+                {MODULES.map((mod) => (
+                  <div key={mod.id} className="flex flex-col gap-1">
+                    <div className="flex items-end gap-2">
+                      <span className="text-ink/80">{mod.title}</span>
+                      <span className="mb-[5px] flex-1 border-b border-dotted border-ink/25" />
+                      <span className="shrink-0 tabular-nums text-ink">
+                        {mod.price}
+                      </span>
+                    </div>
+                    <p className="max-w-[40ch] font-sans text-xs leading-relaxed text-ink/45">
+                      {mod.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* due today */}
+              <div className="flex items-center justify-between border-t border-dashed border-ink/20 pt-5">
+                <span className="tracking-widest text-ink/50 uppercase">
+                  Due today
+                </span>
+                <span className="font-instrument text-3xl font-medium text-brand tabular-nums">
+                  $0.00
+                </span>
+              </div>
+
+              <p className="mt-5 text-center font-sans text-[11px] leading-relaxed text-ink/40">
+                — Join free · you keep 100% of your negotiated pay —
+              </p>
+            </div>
+
+            {/* torn bottom edge */}
+            <div aria-hidden className="h-3 bg-ink/[0.04]" style={TORN_BOTTOM} />
+          </div>
+        </Reveal>
       </div>
+
+      {/* referral */}
+      <Reveal className="mx-auto mt-20 flex w-full max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-center md:gap-12">
+        <div className="flex flex-col gap-3">
+          <span className="text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
+            Referrals
+          </span>
+          <h3 className="font-instrument text-2xl leading-tight font-medium text-ink md:text-3xl">
+            Know someone good? Get paid to say so.
+          </h3>
+          <p className="max-w-xl text-sm leading-relaxed text-ink/50">
+            Refer someone strong — once they land a role through us, you get a
+            cash reward. No cap.
+          </p>
+        </div>
+
+        <a
+          href="#"
+          className="group flex w-fit shrink-0 items-center gap-2 bg-ink/10 px-6 py-3 text-sm text-ink backdrop-blur-md transition hover:bg-ink/20"
+        >
+          Get your referral link
+          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </a>
+      </Reveal>
     </section>
   );
 }

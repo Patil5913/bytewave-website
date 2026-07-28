@@ -95,18 +95,18 @@ export default function HistoricalTelemetry() {
   );
 
   return (
-    <section className="w-full bg-canvas px-6 py-24 md:px-16">
-      <div className="mx-auto max-w-7xl">
-        <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
+    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col md:min-h-[78vh]">
+        <Reveal className="mb-14 flex max-w-2xl flex-col gap-4">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Track Record
           </span>
-          <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
+          <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
             Proven scale. Global reach.
           </h2>
         </Reveal>
 
-        <Reveal className="mb-16 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-6">
+        <Reveal className="mb-14 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-6">
           {STATS.map((stat) => (
             <div key={stat.label} className="flex items-baseline gap-2">
               <span className="font-instrument text-2xl font-medium text-ink">
@@ -119,12 +119,12 @@ export default function HistoricalTelemetry() {
           ))}
         </Reveal>
 
-        <div ref={chartRef}>
+        <div ref={chartRef} className="flex flex-1 flex-col">
           <span className="mb-8 block text-sm font-medium tracking-widest text-ink/60 uppercase">
             Placement Volume, Year Over Year
           </span>
 
-          <div className="relative h-52 w-full sm:h-64">
+          <div className="relative min-h-[220px] w-full flex-1">
             <svg
               viewBox={`0 0 ${CHART_W} ${CHART_H}`}
               className="absolute inset-0 h-full w-full"
@@ -132,8 +132,8 @@ export default function HistoricalTelemetry() {
             >
               <defs>
                 <linearGradient id="telemetry-fade" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#34d399" stopOpacity="0.12" />
-                  <stop offset="100%" stopColor="#34d399" stopOpacity="0" />
+                  <stop offset="0%" stopColor="var(--color-brand)" stopOpacity="0.14" />
+                  <stop offset="100%" stopColor="var(--color-brand)" stopOpacity="0" />
                 </linearGradient>
               </defs>
 
@@ -181,7 +181,7 @@ export default function HistoricalTelemetry() {
                 data-line
                 d={linePath}
                 fill="none"
-                stroke="#34d399"
+                stroke="var(--color-brand)"
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"

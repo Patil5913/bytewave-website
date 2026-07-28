@@ -88,14 +88,14 @@ export default function Hero() {
           className="mt-2 flex w-full max-w-xs flex-col items-center gap-3 text-sm sm:w-auto sm:max-w-none sm:flex-row sm:gap-4 sm:text-base"
         >
           <a
-            href="#"
-            className="group flex w-full items-center justify-center gap-2 bg-white px-4 py-2.5 font-medium text-black transition hover:bg-white/90 sm:w-auto sm:py-1.5"
+            href="/professionals"
+            className="group flex w-full items-center justify-center gap-2 bg-white/10 px-4 py-2.5 text-white backdrop-blur-md transition hover:bg-white/20 sm:w-auto sm:py-1.5"
           >
             Advance Your Career
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
           <a
-            href="#"
+            href="/companies"
             className="border-b border-white/60 pb-1 text-white transition-colors duration-300 hover:border-white/20 hover:text-white/70"
           >
             Build Your Team
@@ -158,6 +158,12 @@ export default function Hero() {
                       <img
                         src={`https://jobspipe.dev/favicons/${platform.slug}.png`}
                         alt={platform.name}
+                        onError={(e) => {
+                          e.currentTarget.parentElement?.style.setProperty(
+                            "display",
+                            "none",
+                          );
+                        }}
                         className="absolute inset-0 h-5 w-5 grayscale invert opacity-70 transition-opacity duration-200 group-hover:opacity-0"
                       />
                       <img

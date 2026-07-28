@@ -312,14 +312,11 @@ export default function Manifesto() {
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16">
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16">
           <Reveal className="flex flex-col gap-6 md:col-span-6">
-            <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
-              Why We Exist
-            </span>
             <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
               The traditional hiring loop is broken. We built a better
               mechanism.
             </h2>
-            <p className="max-w-prose text-base leading-relaxed text-ink/60 md:text-lg">
+            <p className="max-w-prose text-base leading-relaxed text-ink/70 md:text-lg">
               Most staffing agencies rely on keyword matching and endless
               resume piles, frustrating companies and candidates alike. We see
               hiring as a matching problem — connecting real needs directly
@@ -337,7 +334,7 @@ export default function Manifesto() {
             <h4 className="mb-2 text-sm font-medium tracking-wider text-ink uppercase">
               01. No Guesswork
             </h4>
-            <p className="text-sm leading-snug text-ink/50">
+            <p className="text-sm leading-snug text-ink/70">
               Every match is backed by verified skills, not a keyword-stuffed
               resume.
             </p>
@@ -346,7 +343,7 @@ export default function Manifesto() {
             <h4 className="mb-2 text-sm font-medium tracking-wider text-ink uppercase">
               02. Straight to the Point
             </h4>
-            <p className="text-sm leading-snug text-ink/50">
+            <p className="text-sm leading-snug text-ink/70">
               Skip the application black hole and talk directly to the people
               making the hire.
             </p>

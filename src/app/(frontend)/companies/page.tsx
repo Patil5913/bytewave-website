@@ -2,6 +2,7 @@ import Navbar from "@components/Navbar";
 import EnterpriseHero from "@components/EnterpriseHero";
 import TalentTelemetry from "@components/TalentTelemetry";
 import PlatformCapabilities from "@components/PlatformCapabilities";
+import HiringFlow from "@components/HiringFlow";
 import Certifications from "@components/Certifications";
 import ClientStories from "@components/ClientStories";
 import EnterpriseFAQ from "@components/EnterpriseFAQ";
@@ -16,10 +17,11 @@ export default function Companies() {
       <EnterpriseHero />
       <TalentTelemetry />
       <PlatformCapabilities />
+      <HiringFlow />
       <Certifications />
       <ClientStories />
-      <EnterpriseFAQ />
       <EnterpriseEconomics />
+      <EnterpriseFAQ />
       <ContactTerminal mode="enterprise" />
       <Footer />
     </>

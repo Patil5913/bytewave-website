@@ -98,7 +98,7 @@ export default function ScrollStory() {
                   </span>
                 ))}
               </h2>
-              <p className="max-w-md text-base leading-relaxed text-ink/50 md:text-lg">
+              <p className="max-w-md text-base leading-relaxed text-ink/70 md:text-lg">
                 {panel.detail}
               </p>
             </div>

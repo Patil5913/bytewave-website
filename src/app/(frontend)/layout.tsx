@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Instrument_Serif, Archivo } from "next/font/google";
 import SmoothScroll from "@components/SmoothScroll";
 import CustomCursor from "@components/CustomCursor";
-import "./globals.css";
+import "../globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

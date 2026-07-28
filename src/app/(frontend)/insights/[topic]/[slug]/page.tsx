@@ -1,19 +1,20 @@
 import Navbar from "@components/Navbar";
 import Footer from "@components/Footer";
+import ReadingProgress from "@components/ReadingProgress";
+import ArticleToc from "@components/ArticleToc";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronRight, ExternalLink } from "lucide-react";
 import type { ReactNode } from "react";
 import {
-  ALL_POSTS,
   buildHref,
-  findPost,
   slugify,
   topicSlug,
   type Block,
   type Span,
 } from "@/lib/insights";
+import { getPosts } from "@/lib/content";
 
 function renderSpans(spans: Span[]): ReactNode {
   return spans.map((span, i) => {
@@ -52,8 +53,9 @@ function renderSpans(spans: Span[]): ReactNode {
   });
 }
 
-export function generateStaticParams() {
-  return ALL_POSTS.map((post) => ({
+export async function generateStaticParams() {
+  const all = await getPosts();
+  return all.map((post) => ({
     topic: topicSlug(post),
     slug: buildHref(post).split("/").pop() as string,
   }));
@@ -65,7 +67,11 @@ export default async function InsightArticle({
   params: Promise<{ topic: string; slug: string }>;
 }) {
   const { topic, slug } = await params;
-  const post = findPost(topic, slug);
+  const allPosts = await getPosts();
+  const post = allPosts.find(
+    (p) =>
+      topicSlug(p) === topic && (slug === p.id || slug.startsWith(`${p.id}-`)),
+  );
 
   if (!post) {
     notFound();
@@ -82,8 +88,19 @@ export default async function InsightArticle({
       level: block.level,
     }));
 
+  // related: same topic first, then fill from the rest — up to 3
+  const related = [
+    ...allPosts.filter(
+      (p) => p.id !== post.id && topicSlug(p) === topicSlug(post),
+    ),
+    ...allPosts.filter(
+      (p) => p.id !== post.id && topicSlug(p) !== topicSlug(post),
+    ),
+  ].slice(0, 3);
+
   return (
     <>
+      <ReadingProgress />
       <Navbar />
       <article className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
         <div className="mx-auto max-w-7xl">
@@ -327,6 +344,52 @@ export default async function InsightArticle({
                   </a>
                 )}
               </div>
+
+              {/* keep reading */}
+              {related.length > 0 && (
+                <div className="mt-20 flex flex-col gap-8 border-t border-ink/10 pt-10">
+                  <div className="flex items-end justify-between">
+                    <span className="text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
+                      Keep Reading
+                    </span>
+                    <Link
+                      href="/insights"
+                      className="group flex items-center gap-2 text-xs tracking-wider text-ink/50 uppercase transition-colors hover:text-ink"
+                    >
+                      All Insights
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                    </Link>
+                  </div>
+                  <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+                    {related.map((r) => (
+                      <Link
+                        key={r.id}
+                        href={buildHref(r)}
+                        className="group flex flex-col gap-3"
+                      >
+                        <div className="relative aspect-[16/10] w-full overflow-hidden">
+                          <Image
+                            src={r.cover}
+                            alt={r.title}
+                            fill
+                            sizes="(min-width: 640px) 240px, 100vw"
+                            className="object-cover grayscale transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0"
+                          />
+                        </div>
+                        <span className="text-[11px] tracking-widest text-brand uppercase">
+                          {r.tag}
+                        </span>
+                        <h3 className="font-instrument text-lg leading-snug font-medium text-ink transition-colors group-hover:text-brand">
+                          {r.title}
+                        </h3>
+                        <span className="text-xs tracking-wider text-ink/40 uppercase">
+                          {r.readTime}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <aside className="hidden lg:col-span-3 lg:block">
@@ -339,24 +402,7 @@ export default async function InsightArticle({
                   Back to Insights
                 </Link>
 
-                {toc.length > 0 && (
-                  <div className="flex flex-col gap-3">
-                    <span className="text-xs font-medium tracking-widest text-ink/40 uppercase">
-                      On this page
-                    </span>
-                    {toc.map((item) => (
-                      <a
-                        key={item.id}
-                        href={`#${item.id}`}
-                        className={`text-sm leading-snug text-ink/50 transition-colors hover:text-ink ${
-                          item.level === 3 ? "pl-3" : ""
-                        }`}
-                      >
-                        {item.text}
-                      </a>
-                    ))}
-                  </div>
-                )}
+                <ArticleToc items={toc} />
               </nav>
             </aside>
           </div>

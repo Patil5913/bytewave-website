@@ -1,6 +1,7 @@
 import Navbar from "@components/Navbar";
 import ProfessionalHero from "@components/ProfessionalHero";
 import MarketTelemetry from "@components/MarketTelemetry";
+import CareerClimb from "@components/CareerClimb";
 import AdvocacyProtocol from "@components/AdvocacyProtocol";
 import HistoricalTelemetry from "@components/HistoricalTelemetry";
 import VideoTelemetry from "@components/VideoTelemetry";
@@ -15,11 +16,12 @@ export default function Professionals() {
       <Navbar />
       <ProfessionalHero />
       <MarketTelemetry />
+      <CareerClimb />
       <AdvocacyProtocol />
       <HistoricalTelemetry />
       <VideoTelemetry />
-      <SystemDocumentation />
       <PricingReferral />
+      <SystemDocumentation />
       <ContactTerminal />
       <Footer />
     </>

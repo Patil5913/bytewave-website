@@ -3,10 +3,12 @@ import Footer from "@components/Footer";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-import { ALL_POSTS, buildHref, postsByTopic, topicSlug } from "@/lib/insights";
+import { buildHref, topicSlug } from "@/lib/insights";
+import { getPosts } from "@/lib/content";
 
-export function generateStaticParams() {
-  const topics = new Set(ALL_POSTS.map((post) => topicSlug(post)));
+export async function generateStaticParams() {
+  const all = await getPosts();
+  const topics = new Set(all.map((post) => topicSlug(post)));
   return Array.from(topics).map((topic) => ({ topic }));
 }
 
@@ -16,7 +18,8 @@ export default async function InsightsTopic({
   params: Promise<{ topic: string }>;
 }) {
   const { topic } = await params;
-  const posts = postsByTopic(topic);
+  const all = await getPosts();
+  const posts = all.filter((post) => topicSlug(post) === topic);
 
   if (posts.length === 0) {
     notFound();
@@ -60,8 +63,8 @@ export default async function InsightsTopic({
                 className="group grid grid-cols-1 gap-x-8 gap-y-3 border-b border-ink/10 py-8 transition-colors hover:bg-ink/[0.02] md:grid-cols-12 md:items-baseline"
               >
                 <div className="flex items-center gap-2 text-xs tracking-widest text-ink/40 uppercase md:col-span-3 md:flex-col md:items-start md:gap-2">
-                  <span className="text-brand">{post.date}</span>
-                  <span className="text-ink/50">{post.tag}</span>
+                  <span className="text-ink/50">{post.date}</span>
+                  <span className="text-ink/40">{post.tag}</span>
                 </div>
 
                 <div className="flex flex-col gap-3 md:col-span-8">

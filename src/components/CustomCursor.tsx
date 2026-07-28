@@ -2,16 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const INTERACTIVE =
-  'a, button, [role="button"], select, label, input, textarea, .cursor-target';
-
 type Box = { x: number; y: number; w: number; h: number; r: number };
 
 /**
- * Modern magnetic cursor. Idle it's a small dot that trails the pointer; over
- * an interactive element it morphs into a rounded highlight that wraps the
- * element itself (position + size + radius glide toward the target). Colours
- * come from theme tokens. Disabled on touch / reduced-motion.
+ * Modern cursor: a small square that trails the pointer with a blinking brand
+ * underscore/caret that leads while moving and settles beside the square when
+ * idle. Colours come from theme tokens. Disabled on touch / reduced-motion.
  */
 export default function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
@@ -33,7 +29,6 @@ export default function CustomCursor() {
     const DOT = 12; // idle square size
     let px = window.innerWidth / 2;
     let py = window.innerHeight / 2;
-    let hovered: Element | null = null;
     let visible = false;
     let raf = 0;
 
@@ -49,24 +44,17 @@ export default function CustomCursor() {
     let lastPx = px;
     let lastPy = py;
     let idleF = 1;
+    // smoothed velocity so the caret angle doesn't twitch on raw jitter
+    let svx = 0;
+    let svy = 0;
 
     const computeTarget = () => {
-      if (hovered) {
-        const rect = hovered.getBoundingClientRect();
-        const pad = 4;
-        tgt.x = rect.left - pad;
-        tgt.y = rect.top - pad;
-        tgt.w = rect.width + pad * 2;
-        tgt.h = rect.height + pad * 2;
-        tgt.r = 0; // sharp corners
-      } else {
-        // square trails the pointer while moving, catches up when idle
-        tgt.x = px - DOT / 2;
-        tgt.y = py - DOT / 2;
-        tgt.w = DOT;
-        tgt.h = DOT;
-        tgt.r = 0;
-      }
+      // square trails the pointer while moving, catches up when idle
+      tgt.x = px - DOT / 2;
+      tgt.y = py - DOT / 2;
+      tgt.w = DOT;
+      tgt.h = DOT;
+      tgt.r = 0;
     };
 
     const GAP_X = DOT / 2 + 7; // idle caret offset beside the square
@@ -83,9 +71,14 @@ export default function CustomCursor() {
       lastPy = py;
       idleF += ((speed < 0.4 ? 1 : 0) - idleF) * 0.12;
 
+      // low-pass the velocity vector -> stable heading
+      svx += (vx - svx) * 0.2;
+      svy += (vy - svy) * 0.2;
+      const sSpeed = Math.hypot(svx, svy);
+
       // square: slow lerp so it lags behind the caret while moving, and lands
       // on the pointer when idle (becomes the main mark).
-      const be = hovered ? 0.2 : 0.09;
+      const be = 0.09;
       cur.x += (tgt.x - cur.x) * be;
       cur.y += (tgt.y - cur.y) * be;
       cur.w += (tgt.w - cur.w) * be;
@@ -101,11 +94,17 @@ export default function CustomCursor() {
       const targetY = py + idleF * GAP_Y;
       caretX += (targetX - caretX) * 0.65;
       caretY += (targetY - caretY) * 0.65;
-      if (speed > 0.6) {
-        caretAng = (Math.atan2(vy, vx) * 180) / Math.PI;
+      if (sSpeed > 1.5) {
+        // ease toward the smoothed heading along the shortest arc (no ±180 flip).
+        // rotation authority scales with speed: slow drags keep the last angle
+        // (their heading is mostly noise), fast flicks snap to direction.
+        const target = (Math.atan2(svy, svx) * 180) / Math.PI;
+        const delta = ((target - caretAng + 540) % 360) - 180;
+        const k = Math.min(0.25, (sSpeed - 1.5) * 0.05);
+        caretAng += delta * k;
       } else {
         // ease back to horizontal when settling
-        caretAng += (0 - caretAng) * 0.15;
+        caretAng += (0 - caretAng) * 0.1;
       }
       caret.style.transform = `translate3d(${caretX}px, ${caretY}px, 0) translate(-50%, -50%) rotate(${caretAng}deg)`;
       caret.dataset.moving = idleF < 0.5 ? "true" : "false";
@@ -117,21 +116,11 @@ export default function CustomCursor() {
       if (!visible) {
         visible = true;
         box.style.opacity = "1";
+        caret.style.opacity = "1";
       }
-      const el = (ev.target as Element | null)?.closest?.(INTERACTIVE) ?? null;
-      if (el !== hovered) {
-        hovered = el;
-        box.dataset.state = el ? "target" : "default";
-      }
-      // caret fades out as the box expands into the overlay (feels absorbed);
-      // fades back in when returning to idle.
-      caret.style.opacity = !hovered && visible ? "1" : "0";
       computeTarget();
     };
 
-    const onScroll = () => {
-      if (hovered) computeTarget();
-    };
     const onLeave = (ev: PointerEvent) => {
       if (ev.relatedTarget === null) {
         visible = false;
@@ -149,13 +138,11 @@ export default function CustomCursor() {
     raf = requestAnimationFrame(loop);
 
     window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("scroll", onScroll, { passive: true, capture: true });
     document.addEventListener("pointerout", onLeave);
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("scroll", onScroll, { capture: true } as EventListenerOptions);
       document.removeEventListener("pointerout", onLeave);
     };
   }, [enabled]);

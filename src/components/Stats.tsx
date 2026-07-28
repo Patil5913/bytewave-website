@@ -9,36 +9,13 @@ import Reveal from "@components/Reveal";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const STATS = [
-  {
-    value: 94,
-    decimals: 0,
-    suffix: "%",
-    label: "Placement Success Rate",
-    note: "of matched roles close on the first shortlist.",
-  },
-  {
-    value: 14,
-    decimals: 0,
-    suffix: "d",
-    label: "Avg. Time-to-Placement",
-    note: "from first intro to signed offer.",
-  },
-  {
-    value: 1.2,
-    decimals: 1,
-    suffix: "k",
-    label: "Verified Professionals",
-    note: "skills confirmed, not keyword-matched.",
-  },
-  {
-    value: 150,
-    decimals: 0,
-    suffix: "+",
-    label: "Partner Organizations",
-    note: "hiring directly through the network.",
-  },
-];
+type StatItem = {
+  value: number;
+  decimals: number;
+  suffix: string;
+  label: string;
+  note: string;
+};
 
 // weekly placements — drives the mini bar chart
 const WEEKS = [12, 18, 15, 22, 19, 26, 31];
@@ -133,7 +110,8 @@ function NetworkWindow() {
   );
 }
 
-export default function Stats() {
+export default function Stats({ stats }: { stats: StatItem[] }) {
+  const STATS = stats;
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -195,13 +173,10 @@ export default function Stats() {
         {/* left — heading + stats */}
         <div className="flex flex-col gap-10 md:col-span-6">
           <div className="flex flex-col gap-6">
-            <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
-              By the Numbers
-            </span>
             <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
               Proof, not promises.
             </h2>
-            <p className="max-w-prose text-base leading-relaxed text-ink/60 md:text-lg">
+            <p className="max-w-prose text-base leading-relaxed text-ink/70 md:text-lg">
               Every match runs through the same verified pipeline. The result is
               a hiring loop measured in days — and outcomes we can put a number
               on.
@@ -222,10 +197,10 @@ export default function Stats() {
                   <span className="text-3xl text-ink/30">{stat.suffix}</span>
                 </h3>
                 <div className="flex flex-col gap-1.5">
-                  <p className="text-xs font-medium tracking-wider text-ink/50 uppercase">
+                  <p className="text-xs font-medium tracking-wider text-ink/65 uppercase">
                     {stat.label}
                   </p>
-                  <p className="max-w-[26ch] text-sm leading-snug text-ink/40">
+                  <p className="max-w-[26ch] text-sm leading-snug text-ink/60">
                     {stat.note}
                   </p>
                 </div>

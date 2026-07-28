@@ -31,31 +31,30 @@ const PHASES = [
 
 export default function AdvocacyProtocol() {
   return (
-    <section className="w-full bg-canvas px-6 py-24 md:px-16">
-      <div className="mx-auto max-w-7xl">
-        <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
+    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-16">
+        <Reveal className="flex max-w-3xl flex-col gap-5">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             The Advocacy Protocol
           </span>
-          <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
+          <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-6xl">
             We don&apos;t just place you. We engineer your leverage.
           </h2>
         </Reveal>
 
-        <Reveal stagger={0.1} className="flex flex-col gap-10 md:flex-row md:gap-12">
+        <Reveal
+          stagger={0.1}
+          className="grid grid-cols-1 gap-x-16 gap-y-14 sm:grid-cols-2"
+        >
           {PHASES.map((phase) => (
-            <div
-              key={phase.id}
-              className="group flex-1 transition-colors duration-300"
-            >
-              <span className="mb-6 flex items-center gap-2 text-3xl font-medium text-ink/15 transition-colors duration-300 group-hover:text-brand/60">
+            <div key={phase.id} className="group flex flex-col gap-4">
+              <span className="font-instrument text-5xl font-medium tabular-nums text-ink/15 transition-colors duration-300 group-hover:text-brand lg:text-7xl">
                 {phase.id}
-                <span className="h-1.5 w-1.5 rounded-full bg-ink/15 transition-colors duration-300 group-hover:bg-brand" />
               </span>
-              <h3 className="mb-3 text-base font-medium text-ink/90 transition-colors duration-300 group-hover:text-ink">
+              <h3 className="font-instrument text-2xl leading-tight font-medium text-ink lg:text-3xl">
                 {phase.title}
               </h3>
-              <p className="text-sm leading-relaxed text-ink/50">
+              <p className="max-w-md text-sm leading-relaxed text-ink/50 lg:text-base">
                 {phase.description}
               </p>
             </div>

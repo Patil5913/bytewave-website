@@ -1,28 +1,24 @@
 "use client";
 
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { ALL_POSTS, buildHref } from "@/lib/insights";
+import { buildHref, type Post } from "@/lib/insights";
 import Reveal from "@components/Reveal";
 
-const ARTICLES = ALL_POSTS.slice(0, 4);
-const [LEAD, ...REST] = ARTICLES;
-
-export default function Insights() {
+export default function Insights({ posts }: { posts: Post[] }) {
+  const ARTICLES = posts.slice(0, 4);
+  const [LEAD, ...REST] = ARTICLES;
   return (
     <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <Reveal className="mb-14 flex items-end justify-between">
           <div className="flex flex-col gap-4">
-            <span className="flex items-center gap-2.5 text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
-              Insights
-            </span>
             <h2 className="font-instrument text-4xl font-medium text-ink md:text-5xl">
               Intelligence &amp; Insights.
             </h2>
           </div>
           <a
             href="/insights"
-            className="group hidden items-center gap-2 text-xs tracking-wider text-ink/50 uppercase transition-colors hover:text-ink sm:flex"
+            className="group hidden items-center gap-2 text-xs tracking-wider text-ink/65 uppercase transition-colors hover:text-ink sm:flex"
           >
             View All
             <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -37,7 +33,7 @@ export default function Insights() {
                 href={buildHref(LEAD)}
                 className="group flex h-full flex-col gap-6 border-t-2 border-ink pt-8"
               >
-                <div className="flex items-center gap-3 text-xs tracking-widest text-ink/40 uppercase">
+                <div className="flex items-center gap-3 text-xs tracking-widest text-ink/60 uppercase">
                   <span className="text-brand">Featured</span>
                   <span className="text-ink/20">/</span>
                   <span>{LEAD.tag}</span>
@@ -47,11 +43,11 @@ export default function Insights() {
                   {LEAD.title}
                 </h3>
 
-                <p className="max-w-xl text-base leading-relaxed text-ink/50">
+                <p className="max-w-xl text-base leading-relaxed text-ink/70">
                   {LEAD.excerpt}
                 </p>
 
-                <div className="mt-auto flex items-center gap-3 pt-4 text-xs tracking-wider text-ink/40 uppercase">
+                <div className="mt-auto flex items-center gap-3 pt-4 text-xs tracking-wider text-ink/60 uppercase">
                   <span className="text-ink/60">{LEAD.author}</span>
                   <span className="text-ink/20">·</span>
                   <span>{LEAD.date}</span>
@@ -78,7 +74,7 @@ export default function Insights() {
                   <h4 className="leading-snug font-medium text-ink/70 transition-colors group-hover:text-brand">
                     {article.title}
                   </h4>
-                  <div className="flex items-center gap-2.5 text-[11px] tracking-wider text-ink/45 uppercase">
+                  <div className="flex items-center gap-2.5 text-[11px] tracking-wider text-ink/60 uppercase">
                     <span>{article.tag}</span>
                     <span className="text-ink/20">·</span>
                     <span>{article.readTime}</span>

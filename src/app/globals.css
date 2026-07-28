@@ -105,6 +105,26 @@ body {
   animation: marquee 50s linear infinite;
 }
 
+.animate-marquee-slow-reverse {
+  animation: marquee 50s linear infinite reverse;
+}
+
+/* pause any marquee on hover so a reader can settle on one item */
+.animate-marquee:hover,
+.animate-marquee-slow:hover,
+.animate-marquee-slow-reverse:hover {
+  animation-play-state: paused;
+}
+
+/* motion-sensitive visitors: hold marquees still */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-slow,
+  .animate-marquee-slow-reverse {
+    animation: none;
+  }
+}
+
 .marquee-fade {
   mask-image: linear-gradient(
     to right,
