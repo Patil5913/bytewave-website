@@ -13,27 +13,32 @@ type Card = {
 
 const GROUPS: { title: string; cards: Card[] }[] = [
   {
-    title: "Content",
+    title: "Homepage",
     cards: [
-      { label: "Insights", href: `${ADMIN}/collections/posts`, desc: "Blog articles (markdown)", countKey: "posts" },
+      { label: "Homepage copy", href: `${ADMIN}/globals/homepage`, desc: "Hero · manifesto · story · CTA (tabbed)" },
+      { label: "Headline stats", href: `${ADMIN}/globals/site-stats`, desc: "The four big numbers" },
       { label: "Placements", href: `${ADMIN}/collections/placements`, desc: "Recent placements feed", countKey: "placements" },
+      { label: "Partners", href: `${ADMIN}/collections/partners`, desc: "Hero logo marquee", countKey: "partners" },
+    ],
+  },
+  {
+    title: "Companies & Professionals",
+    cards: [
       { label: "Testimonials", href: `${ADMIN}/collections/testimonials`, desc: "Client quotes + candidate videos", countKey: "testimonials" },
       { label: "FAQs", href: `${ADMIN}/collections/faqs`, desc: "Company + professional FAQs", countKey: "faqs" },
-      { label: "Certifications", href: `${ADMIN}/collections/certifications`, desc: "Compliance credentials", countKey: "certifications" },
-      { label: "Partners", href: `${ADMIN}/collections/partners`, desc: "Logo marquees", countKey: "partners" },
+      { label: "Certifications", href: `${ADMIN}/collections/certifications`, desc: "Compliance credentials (companies)", countKey: "certifications" },
     ],
   },
   {
-    title: "Page copy",
+    title: "Insights",
     cards: [
-      { label: "Homepage", href: `${ADMIN}/globals/homepage`, desc: "Hero, manifesto, story, CTA" },
-      { label: "Site stats", href: `${ADMIN}/globals/site-stats`, desc: "Headline numbers" },
+      { label: "Articles", href: `${ADMIN}/collections/posts`, desc: "Blog posts (rich text)", countKey: "posts" },
+    ],
+  },
+  {
+    title: "Global & system",
+    cards: [
       { label: "Site settings", href: `${ADMIN}/globals/site-settings`, desc: "Footer, socials, address" },
-    ],
-  },
-  {
-    title: "Inbound & system",
-    cards: [
       { label: "Leads", href: `${ADMIN}/collections/contacts`, desc: "Contact + CTA submissions", countKey: "contacts" },
       { label: "Media", href: `${ADMIN}/collections/media`, desc: "Uploaded images", countKey: "media" },
       { label: "Users", href: `${ADMIN}/collections/users`, desc: "Admin accounts", countKey: "users" },

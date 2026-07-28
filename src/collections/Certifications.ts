@@ -6,7 +6,7 @@ export const Certifications: CollectionConfig = {
   admin: {
     useAsTitle: "code",
     defaultColumns: ["code", "label", "year", "order"],
-    group: "Content",
+    group: "Companies Page",
   },
   access: { read: () => true },
   fields: [

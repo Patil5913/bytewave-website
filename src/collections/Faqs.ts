@@ -6,7 +6,7 @@ export const Faqs: CollectionConfig = {
   admin: {
     useAsTitle: "question",
     defaultColumns: ["question", "audience", "order"],
-    group: "Content",
+    group: "Companies & Professionals",
   },
   access: { read: () => true },
   fields: [

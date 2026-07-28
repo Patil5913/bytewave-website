@@ -3,7 +3,7 @@ import type { GlobalConfig } from "payload";
 // Shared chrome: footer, social, address, nav CTA.
 export const SiteSettings: GlobalConfig = {
   slug: "site-settings",
-  admin: { group: "Site" },
+  admin: { group: "Global" },
   access: { read: () => true },
   fields: [
     { name: "tagline", type: "textarea" },

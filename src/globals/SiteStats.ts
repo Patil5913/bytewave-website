@@ -3,7 +3,7 @@ import type { GlobalConfig } from "payload";
 // The four headline numbers on the homepage Stats section.
 export const SiteStats: GlobalConfig = {
   slug: "site-stats",
-  admin: { group: "Content" },
+  admin: { group: "Homepage" },
   access: {
     read: () => true,
   },

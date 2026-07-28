@@ -6,7 +6,7 @@ export const Testimonials: CollectionConfig = {
   admin: {
     useAsTitle: "name",
     defaultColumns: ["name", "kind", "company", "order"],
-    group: "Content",
+    group: "Companies & Professionals",
   },
   access: { read: () => true },
   fields: [

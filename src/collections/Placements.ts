@@ -6,7 +6,7 @@ export const Placements: CollectionConfig = {
   admin: {
     useAsTitle: "role",
     defaultColumns: ["role", "companyName", "pay", "status"],
-    group: "Content",
+    group: "Homepage",
   },
   access: {
     read: () => true,

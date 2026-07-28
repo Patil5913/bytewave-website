@@ -6,7 +6,7 @@ export const Partners: CollectionConfig = {
   admin: {
     useAsTitle: "name",
     defaultColumns: ["name", "group", "order"],
-    group: "Content",
+    group: "Homepage",
   },
   access: { read: () => true },
   fields: [
