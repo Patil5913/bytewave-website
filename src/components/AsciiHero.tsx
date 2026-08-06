@@ -48,10 +48,22 @@ type AsciiHeroProps = {
 
 const TRAIL_ALPHA = 1;
 const TRAIL_PATH: [number, number][] = [
-  [0.589, 0.342], [0.587, 0.359], [0.586, 0.368], [0.582, 0.375],
-  [0.58, 0.39], [0.576, 0.407], [0.572, 0.428], [0.567, 0.44],
-  [0.561, 0.453], [0.555, 0.475], [0.547, 0.502], [0.54, 0.525],
-  [0.533, 0.553], [0.527, 0.543], [0.519, 0.585], [0.543, 0.569],
+  [0.589, 0.342],
+  [0.587, 0.359],
+  [0.586, 0.368],
+  [0.582, 0.375],
+  [0.58, 0.39],
+  [0.576, 0.407],
+  [0.572, 0.428],
+  [0.567, 0.44],
+  [0.561, 0.453],
+  [0.555, 0.475],
+  [0.547, 0.502],
+  [0.54, 0.525],
+  [0.533, 0.553],
+  [0.527, 0.543],
+  [0.519, 0.585],
+  [0.543, 0.569],
 ];
 const PLANE_GLYPH = "✈";
 const PLANE_ROTATE_OFFSET = 0;
@@ -62,7 +74,12 @@ function contrastFactor(contrast: number) {
 }
 
 type Cell = {
-  r: number; g: number; b: number; char: string; trail: boolean; alpha: number;
+  r: number;
+  g: number;
+  b: number;
+  char: string;
+  trail: boolean;
+  alpha: number;
 };
 
 export default function AsciiHero({
@@ -155,7 +172,10 @@ export default function AsciiHero({
       const imgRatio = img.naturalWidth / img.naturalHeight;
       const dhForW = w / (imgRatio * ac + as);
       const dhForH = h / (imgRatio * as + ac);
-      const dh = (fit === "cover" ? Math.max(dhForW, dhForH) : Math.min(dhForW, dhForH)) * zoom;
+      const dh =
+        (fit === "cover"
+          ? Math.max(dhForW, dhForH)
+          : Math.min(dhForW, dhForH)) * zoom;
       const dw = dh * imgRatio;
       offCtx.save();
       offCtx.translate(w / 2, h / 2);
@@ -185,12 +205,20 @@ export default function AsciiHero({
           const y0 = cy * CELL_SIZE;
           const x1 = Math.min(x0 + CELL_SIZE, w);
           const y1 = Math.min(y0 + CELL_SIZE, h);
-          let sr = 0, sg = 0, sb = 0, count = 0, maxLum = 0;
+          let sr = 0,
+            sg = 0,
+            sb = 0,
+            count = 0,
+            maxLum = 0;
           for (let y = y0; y < y1; y += 1) {
             for (let x = x0; x < x1; x += 1) {
               const i = (y * w + x) * 4;
-              sr += data[i]; sg += data[i + 1]; sb += data[i + 2];
-              const pl = (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]) / 255;
+              sr += data[i];
+              sg += data[i + 1];
+              sb += data[i + 2];
+              const pl =
+                (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]) /
+                255;
               if (pl > maxLum) maxLum = pl;
               count++;
             }
@@ -199,13 +227,23 @@ export default function AsciiHero({
           let g = adjust(count ? sg / count : 0);
           let b = adjust(count ? sb / count : 0);
           const lum = 0.299 * r + 0.587 * g + 0.114 * b;
-          r = avgSat(lum, r); g = avgSat(lum, g); b = avgSat(lum, b);
+          r = avgSat(lum, r);
+          g = avgSat(lum, g);
+          b = avgSat(lum, b);
 
           const idx = cy * cols + cx;
-          const brightW = Math.max(0, Math.min(1, (maxLum - TRAIL_PEAK) / (1 - TRAIL_PEAK)));
-          const skyW = Math.max(0, Math.min(1, (TRAIL_AVG_MAX - lum / 255) / 0.15));
+          const brightW = Math.max(
+            0,
+            Math.min(1, (maxLum - TRAIL_PEAK) / (1 - TRAIL_PEAK)),
+          );
+          const skyW = Math.max(
+            0,
+            Math.min(1, (TRAIL_AVG_MAX - lum / 255) / 0.15),
+          );
 
-          rArr[idx] = r; gArr[idx] = g; bArr[idx] = b;
+          rArr[idx] = r;
+          gArr[idx] = g;
+          bArr[idx] = b;
           lumArr[idx] = lum;
           trailStr[idx] = brightW * skyW;
         }
@@ -247,13 +285,16 @@ export default function AsciiHero({
             r: rArr[idx] + (255 - rArr[idx]) * mix,
             g: gArr[idx] + (255 - gArr[idx]) * mix,
             b: bArr[idx] + (255 - bArr[idx]) * mix,
-            char: mix > 0.5 ? CHAR_RAMP[CHAR_RAMP.length - 1] : CHAR_RAMP[rampIdx],
+            char:
+              mix > 0.5 ? CHAR_RAMP[CHAR_RAMP.length - 1] : CHAR_RAMP[rampIdx],
             trail: true,
             alpha: BASE_ALPHA + (TRAIL_ALPHA - BASE_ALPHA) * mix,
           };
         } else {
           grid[idx] = {
-            r: rArr[idx], g: gArr[idx], b: bArr[idx],
+            r: rArr[idx],
+            g: gArr[idx],
+            b: bArr[idx],
             char: CHAR_RAMP[rampIdx],
             trail: false,
             alpha: BASE_ALPHA + (BRIGHT_ALPHA - BASE_ALPHA) * nrm,
@@ -270,7 +311,8 @@ export default function AsciiHero({
         const [hxN, hyN] = TRAIL_PATH[0];
         let tail = TRAIL_PATH[0];
         for (const p of TRAIL_PATH) if (p[1] > tail[1]) tail = p;
-        const ang = Math.atan2(hyN - tail[1], hxN - tail[0]) + PLANE_ROTATE_OFFSET;
+        const ang =
+          Math.atan2(hyN - tail[1], hxN - tail[0]) + PLANE_ROTATE_OFFSET;
         ctx.save();
         ctx.translate(hxN * w, hyN * h);
         ctx.rotate(ang);
@@ -300,10 +342,25 @@ export default function AsciiHero({
       resizeObserver.disconnect();
     };
   }, [
-    src, rotateDeg, fit, zoom, plane,
-    CELL_SIZE, CONTRAST, BRIGHTNESS, SATURATION, BASE_ALPHA, BRIGHT_ALPHA,
-    CHAR_RAMP, STRETCH_LO, STRETCH_HI, GAMMA, TRAIL_PEAK, TRAIL_AVG_MAX,
-    BOOST_RECT, BOOST_AMOUNT,
+    src,
+    rotateDeg,
+    fit,
+    zoom,
+    plane,
+    CELL_SIZE,
+    CONTRAST,
+    BRIGHTNESS,
+    SATURATION,
+    BASE_ALPHA,
+    BRIGHT_ALPHA,
+    CHAR_RAMP,
+    STRETCH_LO,
+    STRETCH_HI,
+    GAMMA,
+    TRAIL_PEAK,
+    TRAIL_AVG_MAX,
+    BOOST_RECT,
+    BOOST_AMOUNT,
   ]);
 
   return (
@@ -320,9 +377,12 @@ function DebugPicker({
   containerRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const start = useRef<{ x: number; y: number } | null>(null);
-  const [box, setBox] = useState<
-    { x: number; y: number; w: number; h: number } | null
-  >(null);
+  const [box, setBox] = useState<{
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  } | null>(null);
 
   const rel = (e: React.MouseEvent) => {
     const r = containerRef.current!.getBoundingClientRect();
@@ -349,9 +409,6 @@ function DebugPicker({
   const onUp = () => {
     if (!start.current || !box) return;
     start.current = null;
-    const f = (v: number) => +v.toFixed(3);
-    // eslint-disable-next-line no-console
-    console.log("boostRect:", JSON.stringify([f(box.x), f(box.y), f(box.w), f(box.h)]));
   };
 
   return (

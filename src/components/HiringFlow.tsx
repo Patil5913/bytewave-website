@@ -73,14 +73,10 @@ const STAGES: Stage[] = [
   },
 ];
 
-// Each stage shows its OWN cluster of dots above the text — not a connected
-// funnel. The cluster count drops per stage (≈400 → 200 → 100 → 50 → 1), so the
-// crowd visibly shrinks section to section, ending on a single dot: the hire.
 const DOT_COUNTS = [400, 200, 100, 50, 1];
-const DOT = 7; // fixed size
-const GRID_COLS = 25; // all counts divide evenly -> full rectangle, no gaps
+const DOT = 7;
+const GRID_COLS = 25;
 
-// wide rectangular cluster. Only the final single dot (the hire) is highlighted.
 function cluster(n: number) {
   const cols = n === 1 ? 1 : GRID_COLS;
   const highlight = n === 1;
@@ -91,7 +87,6 @@ function cluster(n: number) {
 }
 const CLUSTERS = DOT_COUNTS.map(cluster);
 
-// Static dot cluster. Only the final single dot (the hire) is highlighted.
 function Cluster({
   cols,
   count,
@@ -111,7 +106,11 @@ function Cluster({
         <span
           key={i}
           className={`rounded-full ${alwaysHighlight ? "bg-brand" : "bg-ink/35"}`}
-          style={{ width: DOT, height: DOT, opacity: alwaysHighlight ? 1 : 0.5 }}
+          style={{
+            width: DOT,
+            height: DOT,
+            opacity: alwaysHighlight ? 1 : 0.5,
+          }}
         />
       ))}
     </div>
@@ -129,22 +128,25 @@ export default function HiringFlow() {
       if (!track) return;
       const mm = gsap.matchMedia();
 
-      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
-        const distance = () => track.scrollWidth - window.innerWidth;
-        gsap.to(track, {
-          x: () => -distance(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: root,
-            start: "top top",
-            end: () => "+=" + distance(),
-            scrub: 0.6,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-      });
+      mm.add(
+        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          const distance = () => track.scrollWidth - window.innerWidth;
+          gsap.to(track, {
+            x: () => -distance(),
+            ease: "none",
+            scrollTrigger: {
+              trigger: root,
+              start: "top top",
+              end: () => "+=" + distance(),
+              scrub: 0.6,
+              pin: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          });
+        },
+      );
 
       return () => mm.revert();
     },
@@ -152,7 +154,10 @@ export default function HiringFlow() {
   );
 
   return (
-    <section ref={ref} className="relative w-full overflow-hidden bg-canvas md:h-screen">
+    <section
+      ref={ref}
+      className="relative w-full overflow-hidden bg-canvas md:h-screen"
+    >
       <div className="flow-track flex flex-col md:h-screen md:w-max md:flex-row">
         {STAGES.map((stage, si) => {
           const { cols } = CLUSTERS[si];
@@ -162,9 +167,7 @@ export default function HiringFlow() {
               key={stage.n}
               className="relative flex w-full shrink-0 flex-col px-6 py-24 md:h-screen md:w-screen md:px-16 md:py-16"
             >
-              {/* content constrained to the site's max-w-7xl boundary */}
               <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end gap-6 md:justify-between">
-                {/* dot cluster — vertically centred, aligned to the 7xl left */}
                 <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-start">
                   <Cluster
                     cols={cols}
@@ -173,13 +176,11 @@ export default function HiringFlow() {
                   />
                 </div>
 
-                {/* top — eyebrow */}
                 <div className="relative z-10 flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
                   <span className="tabular-nums text-brand">{stage.n}</span>
                   {stage.label}
                 </div>
 
-                {/* bottom — headline + detail */}
                 <div className="relative z-10 flex max-w-xl flex-col gap-5">
                   <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink sm:text-5xl lg:text-6xl">
                     {stage.title}

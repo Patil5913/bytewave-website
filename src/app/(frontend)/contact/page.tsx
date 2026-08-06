@@ -12,10 +12,10 @@ export const metadata = {
     "Start your intake — verified hiring for companies and professionals.",
 };
 
-// `/contact?as=company` opens the enterprise intake; default is talent.
 export default async function ContactPage({ searchParams }: Props) {
   const { as } = await searchParams;
-  const mode = as === "company" || as === "enterprise" ? "enterprise" : "talent";
+  const mode =
+    as === "company" || as === "enterprise" ? "enterprise" : "talent";
 
   return (
     <>

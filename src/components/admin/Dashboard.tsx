@@ -2,7 +2,7 @@ import React from "react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 
-const ADMIN = "/fhadmin";
+const ADMIN = "/ops/admin";
 
 type Card = {
   label: string;
@@ -15,40 +15,94 @@ const GROUPS: { title: string; cards: Card[] }[] = [
   {
     title: "Homepage",
     cards: [
-      { label: "Homepage copy", href: `${ADMIN}/globals/homepage`, desc: "Hero · manifesto · story · CTA (tabbed)" },
-      { label: "Headline stats", href: `${ADMIN}/globals/site-stats`, desc: "The four big numbers" },
-      { label: "Placements", href: `${ADMIN}/collections/placements`, desc: "Recent placements feed", countKey: "placements" },
-      { label: "Partners", href: `${ADMIN}/collections/partners`, desc: "Hero logo marquee", countKey: "partners" },
+      {
+        label: "Homepage copy",
+        href: `${ADMIN}/globals/homepage`,
+        desc: "Hero · manifesto · story · CTA (tabbed)",
+      },
+      {
+        label: "Headline stats",
+        href: `${ADMIN}/globals/site-stats`,
+        desc: "The four big numbers",
+      },
+      {
+        label: "Placements",
+        href: `${ADMIN}/collections/placements`,
+        desc: "Recent placements feed",
+        countKey: "placements",
+      },
     ],
   },
   {
     title: "Companies Page",
     cards: [
-      { label: "Client quotes", href: `${ADMIN}/collections/client-quotes`, desc: "Testimonial marquee", countKey: "client-quotes" },
-      { label: "Company FAQs", href: `${ADMIN}/collections/faqs-companies`, desc: "Questions on the companies page", countKey: "faqs-companies" },
-      { label: "Certifications", href: `${ADMIN}/collections/certifications`, desc: "Compliance credentials", countKey: "certifications" },
+      {
+        label: "Client quotes",
+        href: `${ADMIN}/collections/client-quotes`,
+        desc: "Testimonial marquee",
+        countKey: "client-quotes",
+      },
+      {
+        label: "Certifications",
+        href: `${ADMIN}/collections/certifications`,
+        desc: "Compliance credentials",
+        countKey: "certifications",
+      },
     ],
   },
   {
     title: "Professionals Page",
     cards: [
-      { label: "Success videos", href: `${ADMIN}/collections/success-videos`, desc: "Candidate video marquee", countKey: "success-videos" },
-      { label: "Professional FAQs", href: `${ADMIN}/collections/faqs-professionals`, desc: "Questions on the professionals page", countKey: "faqs-professionals" },
+      {
+        label: "Success videos",
+        href: `${ADMIN}/collections/success-videos`,
+        desc: "Candidate video marquee",
+        countKey: "success-videos",
+      },
+      {
+        label: "Track record",
+        href: `${ADMIN}/globals/track-record`,
+        desc: "Stats + placement-volume chart",
+      },
     ],
   },
   {
     title: "Insights",
     cards: [
-      { label: "Articles", href: `${ADMIN}/collections/posts`, desc: "Blog posts (rich text)", countKey: "posts" },
+      {
+        label: "Articles",
+        href: `${ADMIN}/collections/posts`,
+        desc: "Blog posts (rich text)",
+        countKey: "posts",
+      },
     ],
   },
   {
     title: "Global & system",
     cards: [
-      { label: "Site settings", href: `${ADMIN}/globals/site-settings`, desc: "Footer, socials, address" },
-      { label: "Leads", href: `${ADMIN}/collections/contacts`, desc: "Contact + CTA submissions", countKey: "contacts" },
-      { label: "Media", href: `${ADMIN}/collections/media`, desc: "Uploaded images", countKey: "media" },
-      { label: "Users", href: `${ADMIN}/collections/users`, desc: "Admin accounts", countKey: "users" },
+      {
+        label: "Site settings",
+        href: `${ADMIN}/globals/site-settings`,
+        desc: "Tagline, address, nav CTA, SEO",
+      },
+      {
+        label: "Leads",
+        href: `${ADMIN}/collections/contacts`,
+        desc: "Contact + CTA submissions",
+        countKey: "contacts",
+      },
+      {
+        label: "Media",
+        href: `${ADMIN}/collections/media`,
+        desc: "Uploaded images",
+        countKey: "media",
+      },
+      {
+        label: "Users",
+        href: `${ADMIN}/collections/users`,
+        desc: "Admin accounts",
+        countKey: "users",
+      },
     ],
   },
 ];
@@ -61,10 +115,7 @@ async function loadCounts(): Promise<Record<string, number>> {
       "placements",
       "client-quotes",
       "success-videos",
-      "faqs-companies",
-      "faqs-professionals",
       "certifications",
-      "partners",
       "contacts",
       "media",
       "users",

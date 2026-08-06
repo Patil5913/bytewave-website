@@ -17,7 +17,6 @@ export default function Certifications({ items }: { items: Cert[] }) {
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto w-full max-w-7xl">
-        {/* header */}
         <Reveal className="mb-14 flex max-w-2xl flex-col gap-4">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Compliance
@@ -31,7 +30,6 @@ export default function Certifications({ items }: { items: Cert[] }) {
           </p>
         </Reveal>
 
-        {/* credential plates */}
         <Reveal
           stagger={0.08}
           className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-ink/10 bg-ink/10 sm:grid-cols-2 lg:grid-cols-4"
@@ -41,7 +39,6 @@ export default function Certifications({ items }: { items: Cert[] }) {
               key={cert.code}
               className="group relative flex flex-col justify-between gap-8 overflow-hidden bg-canvas p-6 transition-colors duration-300 hover:bg-ink/[0.02] lg:p-7"
             >
-              {/* actual cert logo peeking from the top-right on hover (b/w) */}
               <img
                 src={`https://img.logo.dev/name/${cert.logoName}?token=${process.env.NEXT_PUBLIC_LOGO_DEV_KEY}&format=png&theme=light&greyscale=true&fallback=404`}
                 alt=""
@@ -49,7 +46,6 @@ export default function Certifications({ items }: { items: Cert[] }) {
                 className="pointer-events-none absolute -top-8 -right-8 z-0 h-40 w-40 translate-x-4 -translate-y-4 object-contain opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-20"
               />
 
-              {/* seal header */}
               <div className="relative z-10 flex items-start justify-between">
                 <span className="font-mono text-[10px] tracking-[0.2em] text-ink/30 uppercase">
                   {cert.ref}
@@ -59,7 +55,6 @@ export default function Certifications({ items }: { items: Cert[] }) {
                 </span>
               </div>
 
-              {/* code */}
               <div className="relative z-10 flex flex-col gap-1.5">
                 <h3 className="font-instrument text-3xl leading-none font-medium text-ink">
                   {cert.code}
@@ -73,7 +68,6 @@ export default function Certifications({ items }: { items: Cert[] }) {
                 {cert.description}
               </p>
 
-              {/* footer stamp */}
               <div className="relative z-10 flex items-center justify-between border-t border-ink/10 pt-4 text-[11px] tracking-widest text-ink/35 uppercase">
                 <span>Verified</span>
                 <span className="tabular-nums">Since {cert.year}</span>

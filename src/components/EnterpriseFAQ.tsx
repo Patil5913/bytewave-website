@@ -32,12 +32,18 @@ function FaqItem({
 
       if (!mounted.current) {
         mounted.current = true;
-        gsap.set(el, isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 });
+        gsap.set(
+          el,
+          isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 },
+        );
         return;
       }
 
       if (reduce) {
-        gsap.set(el, isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 });
+        gsap.set(
+          el,
+          isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 },
+        );
         return;
       }
 
@@ -48,7 +54,12 @@ function FaqItem({
           { height: "auto", opacity: 1, duration: 0.3, ease: "power2.out" },
         );
       } else {
-        gsap.to(el, { height: 0, opacity: 0, duration: 0.3, ease: "power2.out" });
+        gsap.to(el, {
+          height: 0,
+          opacity: 0,
+          duration: 0.3,
+          ease: "power2.out",
+        });
       }
     },
     { dependencies: [isOpen], scope: contentRef },
@@ -75,9 +86,7 @@ function FaqItem({
 
         <span
           className={`shrink-0 text-lg leading-none transition-all duration-300 ${
-            isOpen
-              ? "rotate-45 text-brand"
-              : "text-ink/40 group-hover:text-ink"
+            isOpen ? "rotate-45 text-brand" : "text-ink/40 group-hover:text-ink"
           }`}
         >
           +
@@ -117,13 +126,13 @@ export default function EnterpriseFAQ({
             </h2>
           </div>
           <p className="text-base leading-relaxed text-ink/50">
-            How verification, pricing, and routing work on our end. Still
-            have a question the log doesn&apos;t answer?
+            How verification, pricing, and routing work on our end. Still have a
+            question the log doesn&apos;t answer?
           </p>
 
           <a
             href="#"
-            className="group flex w-fit items-center gap-2 bg-ink/10 px-5 py-2.5 text-sm text-ink backdrop-blur-md transition hover:bg-ink/20"
+            className="group flex w-fit items-center gap-2 bg-ink/10 px-5 py-2.5 text-sm text-ink backdrop-blur-md transition-colors hover:bg-ink/20"
           >
             Talk to our team
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

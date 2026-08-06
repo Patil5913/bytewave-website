@@ -27,7 +27,6 @@ export default function Insights({ posts }: { posts: PostView[] }) {
         </Reveal>
 
         <div className="grid grid-cols-1 gap-x-16 gap-y-12 lg:grid-cols-12">
-          {/* lead story */}
           {LEAD && (
             <Reveal className="lg:col-span-7">
               <a
@@ -60,8 +59,10 @@ export default function Insights({ posts }: { posts: PostView[] }) {
             </Reveal>
           )}
 
-          {/* secondary list */}
-          <Reveal stagger={0.1} className="flex flex-col border-t border-ink/10 lg:col-span-5">
+          <Reveal
+            stagger={0.1}
+            className="flex flex-col border-t border-ink/10 lg:col-span-5"
+          >
             {REST.map((article, i) => (
               <a
                 key={article.id}

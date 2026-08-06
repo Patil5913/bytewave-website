@@ -17,8 +17,6 @@ const ROLES = [
 const MIN = ROLES[0].salary;
 const MAX = ROLES[ROLES.length - 1].salary;
 
-// jagged, generally-rising stock-market chart via a random walk with upward
-// drift. Seeded PRNG so SSR and client render the same path.
 function mulberry32(a: number) {
   return () => {
     a |= 0;
@@ -35,16 +33,15 @@ const BOTTOM = 98;
 const { LINE_PATH, POINTS } = (() => {
   const n = 40;
   const rng = mulberry32(7);
-  const drift = (BOTTOM - TOP) / (n - 1); // avg rise per step
-  const pts: [number, number][] = [[0, 100]]; // start in the bottom-left corner
+  const drift = (BOTTOM - TOP) / (n - 1);
+  const pts: [number, number][] = [[0, 100]];
   let y = BOTTOM;
   for (let i = 1; i < n; i++) {
     const x = (i / (n - 1)) * 100;
-    y = y - drift + (rng() - 0.5) * 7; // rise + gentler volatility
+    y = y - drift + (rng() - 0.5) * 7;
     y = Math.max(TOP, Math.min(BOTTOM, y));
     pts.push([x, y]);
   }
-  // light smoothing pass — soften the sharp spikes, keep the shape
   for (let i = 1; i < pts.length - 1; i++) {
     pts[i][1] = pts[i][1] * 0.5 + (pts[i - 1][1] + pts[i + 1][1]) * 0.25;
   }
@@ -54,8 +51,6 @@ const { LINE_PATH, POINTS } = (() => {
   return { LINE_PATH: line, POINTS: pts };
 })();
 
-// salary sampled off the curve at horizontal progress p (0..1) — the number
-// jitters up and down with the graph, not a straight line.
 function salaryAt(p: number) {
   const x = p * 100;
   let y = POINTS[POINTS.length - 1][1];
@@ -68,7 +63,7 @@ function salaryAt(p: number) {
       break;
     }
   }
-  const norm = (BOTTOM - y) / (BOTTOM - TOP); // 0 bottom .. 1 top
+  const norm = (BOTTOM - y) / (BOTTOM - TOP);
   return Math.round(MIN + (MAX - MIN) * norm);
 }
 
@@ -86,30 +81,32 @@ export default function CareerClimb() {
       const mm = gsap.matchMedia();
 
       const apply = (p: number) => {
-        if (salaryRef.current) salaryRef.current.textContent = `$${salaryAt(p)}k`;
+        if (salaryRef.current)
+          salaryRef.current.textContent = `$${salaryAt(p)}k`;
         const idx = Math.min(ROLES.length - 1, Math.floor(p * ROLES.length));
         if (roleRef.current) roleRef.current.textContent = ROLES[idx].role;
         rungs.forEach((r, i) => (r.dataset.on = i <= idx ? "true" : "false"));
-        // reveal the line + fill from left to right as you scroll
         if (graphRef.current)
           graphRef.current.style.clipPath = `inset(0 ${(1 - p) * 100}% 0 0)`;
       };
 
-      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
-        const st = ScrollTrigger.create({
-          trigger: root,
-          start: "top top",
-          end: "+=220%",
-          scrub: 0.6,
-          pin: true,
-          anticipatePin: 1,
-          onUpdate: (self) => apply(self.progress),
-        });
-        apply(0);
-        return () => st.kill();
-      });
+      mm.add(
+        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          const st = ScrollTrigger.create({
+            trigger: root,
+            start: "top top",
+            end: "+=220%",
+            scrub: 0.6,
+            pin: true,
+            anticipatePin: 1,
+            onUpdate: (self) => apply(self.progress),
+          });
+          apply(0);
+          return () => st.kill();
+        },
+      );
 
-      // reduced-motion / mobile: show the final, landed state
       mm.add("(max-width: 767px), (prefers-reduced-motion: reduce)", () => {
         apply(1);
       });
@@ -122,7 +119,6 @@ export default function CareerClimb() {
   return (
     <section ref={ref} className="relative w-full overflow-hidden bg-canvas">
       <div className="relative flex min-h-screen w-full items-center px-6 py-24 md:h-screen md:px-16 md:py-0">
-        {/* full-bleed rising stock-market chart (ignores max-w-7xl) */}
         <div
           ref={graphRef}
           aria-hidden
@@ -162,7 +158,6 @@ export default function CareerClimb() {
             Verified base salary · USD / year
           </span>
 
-          {/* growing salary */}
           <span
             ref={salaryRef}
             className="font-instrument text-7xl leading-none font-medium text-ink tabular-nums sm:text-8xl lg:text-[11rem]"
@@ -170,7 +165,6 @@ export default function CareerClimb() {
             ${MIN}k
           </span>
 
-          {/* current role */}
           <span
             ref={roleRef}
             className="font-instrument text-2xl font-medium text-ink/70 lg:text-4xl"
@@ -178,7 +172,6 @@ export default function CareerClimb() {
             {ROLES[0].role}
           </span>
 
-          {/* horizontal step track */}
           <div className="mt-4 flex w-full max-w-md items-center gap-2">
             {ROLES.map((r, i) => (
               <span

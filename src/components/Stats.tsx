@@ -17,7 +17,6 @@ type StatItem = {
   note: string;
 };
 
-// weekly placements — drives the mini bar chart
 const WEEKS = [12, 18, 15, 22, 19, 26, 31];
 const WEEK_MAX = Math.max(...WEEKS);
 
@@ -31,7 +30,6 @@ function NetworkWindow() {
   return (
     <div className="w-full rounded-2xl border border-ink/10 bg-ink/[0.04] p-1.5 backdrop-blur-sm">
       <div className="overflow-hidden rounded-xl border border-ink/10 bg-canvas/50">
-        {/* window title bar */}
         <div className="flex items-center justify-between gap-3 border-b border-ink/10 bg-ink/[0.02] px-4 py-3">
           <div className="flex items-center gap-1.5">
             <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
@@ -45,7 +43,6 @@ function NetworkWindow() {
         </div>
 
         <div className="flex flex-col gap-6 p-5">
-          {/* KPI row */}
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 rounded-lg border border-ink/10 bg-ink/[0.02] p-3">
               <span className="text-xs text-ink/40">Active roles</span>
@@ -61,7 +58,6 @@ function NetworkWindow() {
             </div>
           </div>
 
-          {/* weekly placements bar chart */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-1.5 text-xs tracking-wider text-ink/40 uppercase">
@@ -81,7 +77,6 @@ function NetworkWindow() {
             </div>
           </div>
 
-          {/* live feed */}
           <div className="flex flex-col divide-y divide-ink/5 rounded-lg border border-ink/10">
             {FEED.map((f) => (
               <div
@@ -137,11 +132,16 @@ export default function Stats({ stats }: { stats: StatItem[] }) {
           duration: 0.8,
           ease: "power3.out",
           stagger: 0.06,
-          scrollTrigger: { trigger: ".chart-bar", start: "top 90%", once: true },
+          scrollTrigger: {
+            trigger: ".chart-bar",
+            start: "top 90%",
+            once: true,
+          },
         });
 
-        gsap.utils.toArray<HTMLElement>(root.querySelectorAll(".stat-num")).forEach(
-          (el) => {
+        gsap.utils
+          .toArray<HTMLElement>(root.querySelectorAll(".stat-num"))
+          .forEach((el) => {
             const value = Number(el.dataset.value);
             const decimals = Number(el.dataset.decimals);
             const proxy = { val: 0 };
@@ -155,8 +155,7 @@ export default function Stats({ stats }: { stats: StatItem[] }) {
                 el.textContent = proxy.val.toFixed(decimals);
               },
             });
-          },
-        );
+          });
       });
 
       return () => mm.revert();
@@ -170,7 +169,6 @@ export default function Stats({ stats }: { stats: StatItem[] }) {
         ref={ref}
         className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16"
       >
-        {/* left — heading + stats */}
         <div className="flex flex-col gap-10 md:col-span-6">
           <div className="flex flex-col gap-6">
             <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
@@ -209,7 +207,6 @@ export default function Stats({ stats }: { stats: StatItem[] }) {
           </div>
         </div>
 
-        {/* right — live network window */}
         <Reveal x={24} y={0} className="md:col-span-6">
           <NetworkWindow />
         </Reveal>

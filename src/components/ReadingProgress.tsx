@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-/** Thin brand bar pinned to the top that tracks read progress of the page.
- *  Transform-driven inside a rAF so it never fights the scroll. */
 export default function ReadingProgress() {
   const barRef = useRef<HTMLDivElement>(null);
 

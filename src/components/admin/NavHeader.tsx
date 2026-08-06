@@ -1,8 +1,6 @@
 import React from "react";
 import { Mark } from "./Mark";
 
-// Injected at the top of the admin sidebar (beforeNavLinks): brand mark +
-// a shortcut back to the live marketing site.
 export const NavHeader = () => (
   <div
     style={{

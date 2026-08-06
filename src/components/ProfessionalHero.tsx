@@ -28,7 +28,10 @@ const COMPANIES = [
 
 export default function ProfessionalHero() {
   return (
-    <section data-hero className="relative flex min-h-svh w-full flex-col overflow-hidden">
+    <section
+      data-hero
+      className="relative flex min-h-svh w-full flex-col overflow-hidden"
+    >
       <Image
         src="https://images.pexels.com/photos/3182773/pexels-photo-3182773.jpeg"
         alt="Professional hero background"
@@ -60,14 +63,14 @@ export default function ProfessionalHero() {
 
         <h2 className="max-w-2xl text-center text-sm text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)] sm:text-base lg:text-lg">
           Stop submitting applications into the void. Bytewave matches your
-          verified capabilities directly with engineering and operations
-          leaders actively looking for your exact stack.
+          verified capabilities directly with engineering and operations leaders
+          actively looking for your exact stack.
         </h2>
 
         <div className="mt-2 flex w-full max-w-xs flex-col items-center gap-3 text-sm sm:w-auto sm:max-w-none sm:flex-row sm:gap-4 sm:text-base">
           <a
             href="#"
-            className="group flex w-full items-center justify-center gap-2 bg-white/10 px-4 py-2.5 text-white backdrop-blur-md transition hover:bg-white/20 sm:w-auto sm:py-1.5"
+            className="group flex w-full items-center justify-center gap-2 bg-white/10 px-4 py-2.5 text-white backdrop-blur-md transition-colors hover:bg-white/20 sm:w-auto sm:py-1.5"
           >
             Apply for Verification
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -101,7 +104,7 @@ export default function ProfessionalHero() {
                   <img
                     src={`https://img.logo.dev/${company.domain}?token=${process.env.NEXT_PUBLIC_LOGO_DEV_KEY}&size=40&format=png&theme=dark`}
                     alt={company.name}
-                    className="h-5 w-5 shrink-0 object-contain opacity-70 transition-opacity duration-200 group-hover:opacity-100"
+                    className="h-5 w-5 shrink-0 object-contain opacity-70 grayscale transition-[opacity,filter] duration-200 group-hover:opacity-100 group-hover:grayscale-0"
                   />
                   {company.name}
                 </span>

@@ -5,9 +5,6 @@ import {
 } from "@payloadcms/richtext-lexical/react";
 import { slugify } from "./insights";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-// Concatenate the text of a heading node's descendants.
 function headingText(node: any): string {
   const walk = (n: any): string => {
     if (typeof n?.text === "string") return n.text;
@@ -16,8 +13,6 @@ function headingText(node: any): string {
   return (node.children ?? []).map(walk).join("");
 }
 
-// True when the body already contains a heading matching `re` — used to avoid
-// rendering a duplicate section heading (e.g. "Frequently asked questions").
 export function hasHeading(data: any, re: RegExp): boolean {
   const children = data?.root?.children ?? [];
   return children.some(
@@ -25,23 +20,24 @@ export function hasHeading(data: any, re: RegExp): boolean {
   );
 }
 
-// Table-of-contents entries from a lexical editor state (h2 / h3 only).
 export function extractToc(
   data: any,
 ): { id: string; text: string; level: 2 | 3 }[] {
   const children = data?.root?.children ?? [];
   return children
-    .filter((n: any) => n?.type === "heading" && (n.tag === "h2" || n.tag === "h3"))
+    .filter(
+      (n: any) => n?.type === "heading" && (n.tag === "h2" || n.tag === "h3"),
+    )
     .map((n: any) => {
       const text = headingText(n);
-      return { id: slugify(text), text, level: n.tag === "h2" ? 2 : 3 } as const;
+      return {
+        id: slugify(text),
+        text,
+        level: n.tag === "h2" ? 2 : 3,
+      } as const;
     });
 }
 
-// Only override headings — to attach TOC anchor ids and scroll offset. All
-// other nodes use Payload's defaults; visual styling is applied by the
-// `.article-richtext` scope in globals.css.
-// Lexical text format bitmask
 const IS_BOLD = 1;
 const IS_ITALIC = 2;
 const IS_STRIKETHROUGH = 4;
@@ -50,8 +46,6 @@ const IS_CODE = 16;
 const IS_SUBSCRIPT = 32;
 const IS_SUPERSCRIPT = 64;
 
-// Render a text node honouring both the format bitmask and any text-state
-// (e.g. the ==highlight== brand state) that the default converter ignores.
 function renderText(node: any, key: number) {
   let el: React.ReactNode = node.text;
   const f: number = node.format ?? 0;
@@ -78,8 +72,6 @@ const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
     const kids = node.children ?? [];
     const raw = kids.map((c: any) => c?.text ?? "").join("");
 
-    // A paragraph whose text is entirely code-formatted came from a ``` fence.
-    // Strip the fence markers (kept for the editor) and render a code block.
     const allCode =
       kids.length > 0 &&
       kids.every((c: any) => c?.type === "text" && (c.format & IS_CODE) !== 0);
@@ -94,7 +86,6 @@ const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
       );
     }
 
-    // Standalone image markdown: ![alt](src "caption")
     const img = raw
       .trim()
       .match(/^!\[([^\]]*)\]\(\s*(\S+?)(?:\s+"([^"]*)")?\s*\)$/);
@@ -102,7 +93,6 @@ const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
       const [, alt, src, caption] = img;
       return (
         <figure className="rt-figure">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={src} alt={alt} loading="lazy" />
           {caption ? <figcaption>{caption}</figcaption> : null}
         </figure>

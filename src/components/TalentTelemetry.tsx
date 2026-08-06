@@ -10,7 +10,6 @@ const STATS = [
   { value: "600+", label: "Roles Filled" },
 ];
 
-// candidates surfaced for one open requisition
 const SHORTLIST = [
   { who: "M. Davis", tag: "Backend · Python", match: 96, top: true },
   { who: "A. Chen", tag: "Backend · Go", match: 92, top: false },
@@ -22,7 +21,6 @@ function ShortlistWindow() {
   return (
     <div className="w-full rounded-2xl border border-ink/10 bg-ink/[0.04] p-1.5 backdrop-blur-sm">
       <div className="overflow-hidden rounded-xl border border-ink/10 bg-canvas/50">
-        {/* window title bar */}
         <div className="flex items-center justify-between gap-3 border-b border-ink/10 bg-ink/[0.02] px-4 py-3">
           <div className="flex items-center gap-1.5">
             <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
@@ -36,7 +34,6 @@ function ShortlistWindow() {
         </div>
 
         <div className="flex flex-col gap-5 p-5">
-          {/* requisition header */}
           <div className="flex items-end justify-between gap-3">
             <div className="flex flex-col gap-1">
               <span className="text-xs tracking-wider text-ink/40 uppercase">
@@ -51,13 +48,11 @@ function ShortlistWindow() {
             </span>
           </div>
 
-          {/* search / match bar (decorative) */}
           <div className="flex items-center gap-2.5 rounded-lg border border-ink/10 bg-ink/[0.02] px-3 py-2.5 text-sm text-ink/40">
             <Search className="h-4 w-4 shrink-0" />
             Python · FastAPI · 5+ yrs · remote
           </div>
 
-          {/* candidate shortlist */}
           <div className="flex flex-col divide-y divide-ink/5 rounded-lg border border-ink/10">
             {SHORTLIST.map((c) => (
               <div
@@ -102,7 +97,6 @@ export default function TalentTelemetry() {
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
       <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16">
-        {/* left — heading + stats */}
         <div className="flex flex-col gap-10 md:col-span-6">
           <div className="flex flex-col gap-6">
             <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
@@ -132,7 +126,6 @@ export default function TalentTelemetry() {
           </div>
         </div>
 
-        {/* right — shortlist window */}
         <Reveal x={24} y={0} className="md:col-span-6">
           <ShortlistWindow />
         </Reveal>

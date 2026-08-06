@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 
-// Inbound leads from the contact terminal + homepage CTA.
+import { isAdmin } from "../access/roles";
+
 export const Contacts: CollectionConfig = {
   slug: "contacts",
   admin: {
@@ -9,15 +10,12 @@ export const Contacts: CollectionConfig = {
     group: "Inbound",
   },
   access: {
-    // anyone may submit; only authed admins may read/manage
     create: () => true,
-    read: ({ req }) => Boolean(req.user),
-    update: ({ req }) => Boolean(req.user),
-    delete: ({ req }) => Boolean(req.user),
+    read: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
   },
   hooks: {
-    // Notify the team on a new lead. Best-effort: a failed/absent mailer must
-    // never break the public submission.
     afterChange: [
       async ({ operation, doc, req }) => {
         if (operation !== "create") return;
@@ -56,6 +54,8 @@ export const Contacts: CollectionConfig = {
       options: [
         { label: "Professional (Talent)", value: "talent" },
         { label: "Company (Enterprise)", value: "enterprise" },
+        { label: "Lead (unspecified)", value: "lead" },
+        { label: "Newsletter", value: "newsletter" },
       ],
     },
     {
@@ -67,13 +67,31 @@ export const Contacts: CollectionConfig = {
       type: "email",
       required: true,
     },
-    // talent
-    { name: "role", type: "text", admin: { condition: (d) => d.type === "talent" } },
-    { name: "experience", type: "text", admin: { condition: (d) => d.type === "talent" } },
-    // enterprise
-    { name: "company", type: "text", admin: { condition: (d) => d.type === "enterprise" } },
-    { name: "headcount", type: "text", admin: { condition: (d) => d.type === "enterprise" } },
-    { name: "stack", type: "text", admin: { condition: (d) => d.type === "enterprise" } },
+    {
+      name: "role",
+      type: "text",
+      admin: { condition: (d) => d.type === "talent" },
+    },
+    {
+      name: "experience",
+      type: "text",
+      admin: { condition: (d) => d.type === "talent" },
+    },
+    {
+      name: "company",
+      type: "text",
+      admin: { condition: (d) => d.type === "enterprise" },
+    },
+    {
+      name: "headcount",
+      type: "text",
+      admin: { condition: (d) => d.type === "enterprise" },
+    },
+    {
+      name: "stack",
+      type: "text",
+      admin: { condition: (d) => d.type === "enterprise" },
+    },
     {
       name: "message",
       type: "textarea",

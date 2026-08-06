@@ -1,12 +1,6 @@
-// Tiny markdown → Block[] parser for insights posts. Supports exactly the
-// syntax documented in content/insights/GUIDE.md so authors write markdown in
-// the CMS and the existing block renderer stays the consumer. Not a general
-// CommonMark implementation — deliberately small and predictable.
 import type { Block, Span } from "./insights";
 
 type Faq = { question: string; answer: string };
-
-// --- Block[] -> markdown (used to migrate legacy posts into the rich editor) ---
 
 function spanToMd(s: Span): string {
   let t = s.text;
@@ -18,8 +12,6 @@ function spanToMd(s: Span): string {
   return t;
 }
 
-/** Serialize renderer blocks back to markdown. FAQ blocks are pulled into a
- *  separate array so they can live in a structured field. */
 export function blocksToMarkdown(blocks: Block[]): {
   md: string;
   faqs: { question: string; answer: string }[];
@@ -54,8 +46,6 @@ export function blocksToMarkdown(blocks: Block[]): {
         out.push("---");
         break;
       case "faq":
-        // FAQs live in their own structured field; the article page renders
-        // the heading, so don't emit one into the body (it would duplicate).
         faqs.push(...b.items);
         break;
     }
@@ -63,7 +53,6 @@ export function blocksToMarkdown(blocks: Block[]): {
   return { md: out.join("\n\n"), faqs };
 }
 
-/** Inline marks: `code`, **bold**, *italic*, ==highlight==, [text](href). */
 export function parseInline(input: string): Span[] {
   const spans: Span[] = [];
   let rest = input;
@@ -104,8 +93,6 @@ export function parseInline(input: string): Span[] {
   return spans.filter((s) => s.text.length > 0);
 }
 
-/** Parse a markdown body (no frontmatter) into renderer blocks. `faqs` are
- *  injected where a `## Frequently asked questions` heading appears. */
 export function parseMarkdown(md: string, faqs: Faq[] = []): Block[] {
   const blocks: Block[] = [];
   const lines = (md ?? "").replace(/\r\n/g, "\n").split("\n");
@@ -117,13 +104,11 @@ export function parseMarkdown(md: string, faqs: Faq[] = []): Block[] {
   while (i < lines.length) {
     let line = lines[i];
 
-    // blank
     if (!line.trim()) {
       i++;
       continue;
     }
 
-    // fenced code
     const fence = line.match(/^```(\w+)?\s*$/);
     if (fence) {
       const lang = fence[1] ?? "text";
@@ -133,19 +118,17 @@ export function parseMarkdown(md: string, faqs: Faq[] = []): Block[] {
         buf.push(lines[i]);
         i++;
       }
-      i++; // closing fence
+      i++;
       blocks.push({ type: "code", language: lang, code: buf.join("\n") });
       continue;
     }
 
-    // divider
     if (/^---\s*$/.test(line)) {
       blocks.push({ type: "divider" });
       i++;
       continue;
     }
 
-    // headings
     const heading = line.match(/^(#{2,4})\s+(.*)$/);
     if (heading) {
       const level = heading[1].length as 2 | 3 | 4;
@@ -160,7 +143,6 @@ export function parseMarkdown(md: string, faqs: Faq[] = []): Block[] {
       continue;
     }
 
-    // standalone image  ![alt](src "caption")
     const img = line
       .trim()
       .match(/^!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)$/);
@@ -175,7 +157,6 @@ export function parseMarkdown(md: string, faqs: Faq[] = []): Block[] {
       continue;
     }
 
-    // blockquote (collapse consecutive `>` lines)
     if (/^>\s?/.test(line)) {
       const buf: string[] = [];
       while (i < lines.length && /^>\s?/.test(lines[i])) {
@@ -186,7 +167,6 @@ export function parseMarkdown(md: string, faqs: Faq[] = []): Block[] {
       continue;
     }
 
-    // unordered list
     if (/^[-*]\s+/.test(line)) {
       const items: string[] = [];
       while (i < lines.length && /^[-*]\s+/.test(lines[i])) {
@@ -197,7 +177,6 @@ export function parseMarkdown(md: string, faqs: Faq[] = []): Block[] {
       continue;
     }
 
-    // ordered list
     if (/^\d+\.\s+/.test(line)) {
       const items: string[] = [];
       while (i < lines.length && /^\d+\.\s+/.test(lines[i])) {
@@ -208,7 +187,6 @@ export function parseMarkdown(md: string, faqs: Faq[] = []): Block[] {
       continue;
     }
 
-    // paragraph (gather until blank / block starter)
     const buf: string[] = [];
     while (
       i < lines.length &&

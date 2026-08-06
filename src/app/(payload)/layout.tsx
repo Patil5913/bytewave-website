@@ -6,10 +6,8 @@ import { handleServerFunctions, RootLayout } from "@payloadcms/next/layouts";
 import { Geist, Instrument_Serif } from "next/font/google";
 import React from "react";
 
-import { importMap } from "./fhadmin/importMap.js";
+import { importMap } from "./ops/admin/importMap.js";
 
-// Same brand faces as the marketing site, exposed to the admin so the custom
-// theme (Geist body, Instrument display) renders in real find & hire type.
 const instrument = Instrument_Serif({
   variable: "--font-instrument-sans",
   subsets: ["latin"],
@@ -31,7 +29,11 @@ const serverFunction: ServerFunctionClient = async function (args) {
 };
 
 const Layout = ({ children }: Args) => (
-  <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
+  <RootLayout
+    config={config}
+    importMap={importMap}
+    serverFunction={serverFunction}
+  >
     <div
       className={`${instrument.variable} ${geist.variable} ${geist.className}`}
       style={{ display: "contents" }}

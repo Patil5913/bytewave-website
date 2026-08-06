@@ -1,10 +1,11 @@
 import type { GlobalConfig } from "payload";
 
-// Shared chrome: footer, social, address, nav CTA.
+import { isAdmin } from "../access/roles";
+
 export const SiteSettings: GlobalConfig = {
   slug: "site-settings",
   admin: { group: "Global" },
-  access: { read: () => true },
+  access: { read: () => true, update: isAdmin },
   fields: [
     { name: "tagline", type: "textarea" },
     { name: "legalLine", type: "text" },
@@ -12,27 +13,35 @@ export const SiteSettings: GlobalConfig = {
     { name: "navCtaLabel", type: "text", defaultValue: "Get Started" },
     { name: "region", type: "text", defaultValue: "English (US)" },
     {
-      name: "footerGroups",
-      type: "array",
-      labels: { singular: "Footer column", plural: "Footer columns" },
+      name: "seo",
+      type: "group",
+      label: "SEO",
+      admin: {
+        description:
+          "Default metadata for pages that don't set their own. Per-page titles/descriptions still override these.",
+      },
       fields: [
-        { name: "title", type: "text", required: true },
         {
-          name: "links",
-          type: "array",
-          fields: [
-            { name: "label", type: "text", required: true },
-            { name: "href", type: "text", required: true },
-          ],
+          name: "metaTitle",
+          type: "text",
+          admin: { description: "Default <title> / og:title." },
         },
-      ],
-    },
-    {
-      name: "socials",
-      type: "array",
-      fields: [
-        { name: "label", type: "text", required: true },
-        { name: "href", type: "text", required: true },
+        {
+          name: "metaDescription",
+          type: "textarea",
+          admin: { description: "Default meta description / og:description." },
+        },
+        {
+          name: "keywords",
+          type: "text",
+          admin: { description: "Comma-separated meta keywords." },
+        },
+        {
+          name: "ogImage",
+          type: "upload",
+          relationTo: "media",
+          admin: { description: "Default social-share (Open Graph) image." },
+        },
       ],
     },
   ],

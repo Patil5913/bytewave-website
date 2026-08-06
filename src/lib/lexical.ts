@@ -5,9 +5,6 @@ import {
 } from "@payloadcms/richtext-lexical";
 import config from "@payload-config";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-// Cached editor config so repeated conversions don't rebuild it.
 let editorConfigPromise: ReturnType<typeof editorConfigFactory.default> | null =
   null;
 
@@ -24,11 +21,7 @@ const CODE_TOKEN = (i: number) => `@@FHCODEBLOCK${i}@@`;
 
 const IS_CODE = 16;
 
-function textNode(
-  text: string,
-  state?: Record<string, string>,
-  format = 0,
-) {
+function textNode(text: string, state?: Record<string, string>, format = 0) {
   return {
     type: "text",
     text,
@@ -41,11 +34,6 @@ function textNode(
   };
 }
 
-// Fenced code stays a plain paragraph whose text carries lexical's code format
-// flag — no custom block, no extra editor feature, no new node types. The
-// fence markers (```py … ```) are kept in the text so authors still see the
-// language in the editor; the frontend converter strips them and renders
-// <pre><code>.
 function codeParagraphNode(code: string) {
   return {
     type: "paragraph",
@@ -58,8 +46,6 @@ function codeParagraphNode(code: string) {
   };
 }
 
-/** Split any text node containing ==highlight== into highlighted segments.
- *  `==` is not standard markdown, so no transformer produces this. */
 function applyHighlights(node: any): void {
   if (!node || typeof node !== "object") return;
   const children = node.children;
@@ -73,7 +59,6 @@ function applyHighlights(node: any): void {
       child.text.includes("==")
     ) {
       const parts = child.text.split(/==([^=]+)==/g);
-      // even indices = plain, odd indices = highlighted
       parts.forEach((part: string, i: number) => {
         if (!part) return;
         out.push(
@@ -90,7 +75,6 @@ function applyHighlights(node: any): void {
   node.children = out;
 }
 
-/** Swap placeholder paragraphs back into code paragraphs. */
 function restoreCodeBlocks(root: any, fences: { code: string }[]): void {
   const children = root?.root?.children;
   if (!Array.isArray(children)) return;
@@ -108,14 +92,9 @@ function restoreCodeBlocks(root: any, fences: { code: string }[]): void {
   });
 }
 
-/** Convert a markdown string to a Lexical editor state (server-only).
- *  Handles fenced code blocks and ==highlight== explicitly, since neither is
- *  covered by the built-in markdown transformers. */
 export async function mdToLexical(markdown: string) {
   const editorConfig = await getEditorConfig();
 
-  // pull fenced code out before conversion so it survives verbatim, fence
-  // markers included (the editor shows ```py, the frontend strips them)
   const fences: { code: string }[] = [];
   const prepared = (markdown || "").replace(
     /```[\w-]*\r?\n[\s\S]*?```/g,

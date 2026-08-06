@@ -1,6 +1,5 @@
 import type { GlobalConfig } from "payload";
 
-// Editable copy for the homepage — one tab per section for easy updates.
 export const Homepage: GlobalConfig = {
   slug: "homepage",
   admin: { group: "Homepage" },

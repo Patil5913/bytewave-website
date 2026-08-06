@@ -32,24 +32,25 @@ export default function ScrollStory({
       if (!track) return;
       const mm = gsap.matchMedia();
 
-      // Desktop: pin + horizontal scrub. User scrolls through every panel
-      // before the page continues to Recent Placements.
-      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
-        const distance = () => track.scrollWidth - window.innerWidth;
-        gsap.to(track, {
-          x: () => -distance(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: root,
-            start: "top top",
-            end: () => "+=" + distance(),
-            scrub: 0.6,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-      });
+      mm.add(
+        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          const distance = () => track.scrollWidth - window.innerWidth;
+          gsap.to(track, {
+            x: () => -distance(),
+            ease: "none",
+            scrollTrigger: {
+              trigger: root,
+              start: "top top",
+              end: () => "+=" + distance(),
+              scrub: 0.6,
+              pin: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          });
+        },
+      );
 
       return () => mm.revert();
     },
@@ -67,7 +68,7 @@ export default function ScrollStory({
             key={pi}
             className="flex w-full shrink-0 flex-col justify-center gap-6 px-6 py-24 md:h-screen md:w-screen md:px-16 md:py-0"
           >
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
               <div className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
                 <span className="tabular-nums text-brand">0{pi + 1}</span>
                 {panel.eyebrow && <span>{panel.eyebrow}</span>}

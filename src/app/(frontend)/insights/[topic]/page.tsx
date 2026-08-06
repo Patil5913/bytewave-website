@@ -37,10 +37,7 @@ export default async function InsightsTopic({
               Home
             </Link>
             <span>/</span>
-            <Link
-              href="/insights"
-              className="transition-colors hover:text-ink"
-            >
+            <Link href="/insights" className="transition-colors hover:text-ink">
               Insights
             </Link>
             <span>/</span>

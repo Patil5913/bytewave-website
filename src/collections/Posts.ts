@@ -1,13 +1,11 @@
 import type { CollectionConfig } from "payload";
 
-// Random 7-char hexadecimal id (0-9a-f) used in article URLs.
 export function randomArticleId(): string {
   let id = "";
   while (id.length < 7) id += Math.floor(Math.random() * 16).toString(16);
   return id.slice(0, 7);
 }
 
-// Insights articles — rich text body.
 export const Posts: CollectionConfig = {
   slug: "posts",
   admin: {
@@ -19,7 +17,6 @@ export const Posts: CollectionConfig = {
     read: () => true,
   },
   hooks: {
-    // Auto-assign a stable random hex id on create if one wasn't provided.
     beforeValidate: [
       ({ data }) => {
         if (data && !data.articleId) data.articleId = randomArticleId();

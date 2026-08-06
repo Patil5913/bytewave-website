@@ -1,6 +1,5 @@
 import type { CollectionConfig } from "payload";
 
-// Companies page — client testimonial quotes (the two marquee rows).
 export const ClientQuotes: CollectionConfig = {
   slug: "client-quotes",
   labels: { singular: "Client Quote", plural: "Client Quotes" },
@@ -12,7 +11,11 @@ export const ClientQuotes: CollectionConfig = {
   access: { read: () => true },
   fields: [
     { name: "name", type: "text", required: true },
-    { name: "title", type: "text", admin: { description: "e.g. VP Engineering" } },
+    {
+      name: "title",
+      type: "text",
+      admin: { description: "e.g. VP Engineering" },
+    },
     { name: "company", type: "text", required: true },
     {
       name: "domain",

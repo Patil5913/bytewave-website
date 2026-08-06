@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,90 +8,129 @@ import Reveal from "@components/Reveal";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const STATS = [
-  { value: "15+", label: "Years Experience" },
-  { value: "1.7k+", label: "Total Placements" },
-  { value: "97.8%", label: "Success Rate" },
-  { value: "600+", label: "Partner Orgs" },
-];
-
-const GROWTH_LOG = [
-  { year: "2021", value: 130 },
-  { year: "2022", value: 188 },
-  { year: "2023", value: 234 },
-  { year: "2024", value: 376 },
-  { year: "2025", value: 385 },
-  { year: "2026", value: 437, label: "YTD" },
-];
+type Stat = { value: string; label: string };
+type GrowthPoint = { year: string; value: number; label?: string | null };
 
 const CHART_W = 600;
 const CHART_H = 200;
 const PADDING = 12;
 
-const FLOOR = 100;
-const CEILING = 450;
-const Y_TICKS = [100, 200, 300, 400, 450];
+const TENSION = 0.07;
 
-function valueToY(value: number) {
-  return (
-    CHART_H -
-    PADDING -
-    ((value - FLOOR) / (CEILING - FLOOR)) * (CHART_H - PADDING * 2)
-  );
+function smoothPath(pts: { x: number; y: number }[]) {
+  if (pts.length < 2) return pts.length ? `M ${pts[0].x} ${pts[0].y}` : "";
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] ?? pts[i];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[i + 2] ?? p2;
+    const cp1x = p1.x + (p2.x - p0.x) * TENSION;
+    const cp1y = p1.y + (p2.y - p0.y) * TENSION;
+    const cp2x = p2.x - (p3.x - p1.x) * TENSION;
+    const cp2y = p2.y - (p3.y - p1.y) * TENSION;
+    d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+  }
+  return d;
 }
 
-const points = GROWTH_LOG.map((log, i) => {
-  const x = (i / (GROWTH_LOG.length - 1)) * (CHART_W - PADDING * 2) + PADDING;
-  const y = valueToY(log.value);
-  return { x, y, ...log };
-});
-
-const linePath = points
-  .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`)
-  .join(" ");
-
-const areaPath = `${linePath} L ${points[points.length - 1].x} ${CHART_H} L ${points[0].x} ${CHART_H} Z`;
-
-export default function HistoricalTelemetry() {
+export default function HistoricalTelemetry({
+  stats,
+  growth,
+}: {
+  stats: Stat[];
+  growth: GrowthPoint[];
+}) {
   const chartRef = useRef<HTMLDivElement>(null);
+
+  const { points, linePath, yTicks, valueToY } = useMemo(() => {
+    const values = growth.map((g) => g.value);
+    const rawMin = values.length ? Math.min(...values) : 0;
+    const rawMax = values.length ? Math.max(...values) : 1;
+    const span = rawMax - rawMin || rawMax || 1;
+    const floor = Math.max(0, Math.floor((rawMin - span * 0.15) / 50) * 50);
+    const ceiling = Math.ceil((rawMax + span * 0.1) / 50) * 50 || 50;
+
+    const toY = (value: number) =>
+      CHART_H -
+      PADDING -
+      ((value - floor) / (ceiling - floor || 1)) * (CHART_H - PADDING * 2);
+
+    const pts = growth.map((g, i) => {
+      const x =
+        (i / Math.max(1, growth.length - 1)) * (CHART_W - PADDING * 2) +
+        PADDING;
+      return { x, y: toY(g.value), ...g };
+    });
+
+    const ticks = Array.from({ length: 5 }, (_, i) =>
+      Math.round(floor + ((ceiling - floor) * i) / 4),
+    );
+
+    return {
+      points: pts,
+      linePath: smoothPath(pts),
+      yTicks: ticks,
+      valueToY: toY,
+    };
+  }, [growth]);
 
   useGSAP(
     () => {
       const el = chartRef.current;
       if (!el) return;
+      const line = el.querySelector<SVGPathElement>("[data-line]");
+      const counts = gsap.utils.toArray<HTMLElement>(
+        el.querySelectorAll("[data-count]"),
+      );
+
       const mm = gsap.matchMedia();
+
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const area = el.querySelector<SVGPathElement>("[data-area]");
-        const line = el.querySelector<SVGPathElement>("[data-line]");
-        const dots = gsap.utils.toArray<HTMLElement>(
-          el.querySelectorAll("[data-dot]"),
-        );
-        const st = { trigger: el, start: "top 85%", once: true } as const;
-        gsap.from(el, {
-          opacity: 0,
-          y: 24,
-          duration: 0.7,
-          delay: 0.1,
-          ease: "power3.out",
-          scrollTrigger: st,
+        const tl = gsap.timeline({
+          defaults: { ease: "power3.out" },
+          scrollTrigger: { trigger: el, start: "top 80%", once: true },
         });
-        if (line)
-          gsap.from(line, { opacity: 0, duration: 0.8, delay: 0.4, scrollTrigger: st });
-        if (area)
-          gsap.from(area, { opacity: 0, duration: 0.8, delay: 0.6, scrollTrigger: st });
-        if (dots.length)
-          gsap.from(dots, {
-            opacity: 0,
-            scale: 0,
-            duration: 0.3,
-            delay: 0.3,
-            stagger: 0.15,
-            scrollTrigger: st,
-          });
+
+        if (line) {
+          const reveal = (p: number) => {
+            line.style.clipPath = `inset(0 ${(1 - p) * 100}% 0 0)`;
+          };
+          reveal(0);
+          const obj = { p: 0 };
+          tl.to(obj, { p: 1, duration: 1.3, onUpdate: () => reveal(obj.p) }, 0);
+        }
+
+        counts.forEach((node) => {
+          const end = Number(node.dataset.count ?? "0");
+          const obj = { v: 0 };
+          tl.to(
+            obj,
+            {
+              v: end,
+              duration: 1.3,
+              ease: "power1.out",
+              onUpdate: () => {
+                node.textContent = `${Math.round(obj.v)}+`;
+              },
+            },
+            0,
+          );
+        });
+
+        return () => tl.kill();
       });
+
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        if (line) line.style.clipPath = "inset(0 0% 0 0)";
+        counts.forEach((node) => {
+          node.textContent = `${node.dataset.count ?? "0"}+`;
+        });
+      });
+
       return () => mm.revert();
     },
-    { scope: chartRef },
+    { scope: chartRef, dependencies: [linePath] },
   );
 
   return (
@@ -107,7 +146,7 @@ export default function HistoricalTelemetry() {
         </Reveal>
 
         <Reveal className="mb-14 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-6">
-          {STATS.map((stat) => (
+          {stats.map((stat) => (
             <div key={stat.label} className="flex items-baseline gap-2">
               <span className="font-instrument text-2xl font-medium text-ink">
                 {stat.value}
@@ -131,32 +170,29 @@ export default function HistoricalTelemetry() {
               preserveAspectRatio="none"
             >
               <defs>
-                <linearGradient id="telemetry-fade" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--color-brand)" stopOpacity="0.14" />
-                  <stop offset="100%" stopColor="var(--color-brand)" stopOpacity="0" />
+                <linearGradient id="telemetryLine" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="var(--color-brand)" />
+                  <stop offset="55%" stopColor="#fcd34d" />
+                  <stop offset="100%" stopColor="#fda4af" />
                 </linearGradient>
               </defs>
 
-              {/* Blueprint: horizontal gridlines per tick */}
-              {Y_TICKS.map((tick) => {
-                const edge = tick === FLOOR || tick === CEILING;
+              {yTicks.map((tick, i) => {
+                const edge = i === 0 || i === yTicks.length - 1;
                 return (
                   <line
-                    key={`h-${tick}`}
+                    key={`h-${tick}-${i}`}
                     x1={0}
                     x2={CHART_W}
                     y1={valueToY(tick)}
                     y2={valueToY(tick)}
-                    stroke={
-                      edge ? "rgba(10,10,10,0.2)" : "rgba(10,10,10,0.06)"
-                    }
+                    stroke={edge ? "rgba(10,10,10,0.2)" : "rgba(10,10,10,0.06)"}
                     strokeDasharray={edge ? "4 4" : undefined}
                     vectorEffect="non-scaling-stroke"
                   />
                 );
               })}
 
-              {/* Blueprint: vertical gridline per year, edges dashed */}
               {points.map((p, i) => {
                 const edge = i === 0 || i === points.length - 1;
                 return (
@@ -166,44 +202,26 @@ export default function HistoricalTelemetry() {
                     x2={p.x}
                     y1={0}
                     y2={CHART_H}
-                    stroke={
-                      edge ? "rgba(10,10,10,0.2)" : "rgba(10,10,10,0.06)"
-                    }
+                    stroke={edge ? "rgba(10,10,10,0.2)" : "rgba(10,10,10,0.06)"}
                     strokeDasharray={edge ? "4 4" : undefined}
                     vectorEffect="non-scaling-stroke"
                   />
                 );
               })}
 
-              <path data-area d={areaPath} fill="url(#telemetry-fade)" />
-
               <path
                 data-line
                 d={linePath}
                 fill="none"
-                stroke="var(--color-brand)"
-                strokeWidth="1.5"
+                stroke="url(#telemetryLine)"
+                strokeWidth="2.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 vectorEffect="non-scaling-stroke"
               />
             </svg>
-
-            {/* Data dots (HTML overlay — stay round) */}
-            {points.map((p) => (
-              <span
-                key={p.year}
-                data-dot
-                style={{
-                  left: `${(p.x / CHART_W) * 100}%`,
-                  top: `${(p.y / CHART_H) * 100}%`,
-                }}
-                className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand"
-              />
-            ))}
           </div>
 
-          {/* X-axis labels */}
           <div className="relative mt-4 h-12">
             {points.map((p) => (
               <div
@@ -211,7 +229,10 @@ export default function HistoricalTelemetry() {
                 style={{ left: `${(p.x / CHART_W) * 100}%` }}
                 className="absolute flex -translate-x-1/2 flex-col items-center gap-1"
               >
-                <span className="text-xs font-medium text-ink sm:text-sm">
+                <span
+                  data-count={p.value}
+                  className="text-xs font-medium text-ink tabular-nums sm:text-sm"
+                >
                   {p.value}+
                 </span>
                 <span className="text-[10px] text-ink/40 sm:text-xs">

@@ -1,7 +1,6 @@
 import React from "react";
 import { Mark } from "./Mark";
 
-// Login-screen brand: minimal mark + small wordmark.
 export const Logo = () => (
   <span
     style={{

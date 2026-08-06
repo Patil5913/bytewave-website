@@ -1,6 +1,5 @@
 import React from "react";
 
-// Brand mark: a white rounded square with a brand-blue forward slash centered.
 export function Mark({ size = 24 }: { size?: number }) {
   return (
     <svg

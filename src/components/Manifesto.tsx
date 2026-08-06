@@ -22,9 +22,24 @@ const SKILLS = [
 const OVERALL = 93;
 
 const ROLES = [
-  { role: "Senior Backend", verified: 18, status: "Shortlist", tone: "text-brand" },
-  { role: "Product Designer", verified: 12, status: "Interviewing", tone: "text-amber-400" },
-  { role: "DevOps Lead", verified: 9, status: "Screening", tone: "text-sky-400" },
+  {
+    role: "Senior Backend",
+    verified: 18,
+    status: "Shortlist",
+    tone: "text-brand",
+  },
+  {
+    role: "Product Designer",
+    verified: 12,
+    status: "Interviewing",
+    tone: "text-amber-400",
+  },
+  {
+    role: "DevOps Lead",
+    verified: 9,
+    status: "Screening",
+    tone: "text-sky-400",
+  },
 ];
 const FILLED = 92;
 
@@ -116,11 +131,11 @@ function CandidateBody() {
       </div>
 
       <div className="rise flex items-center gap-3">
-        <button className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition hover:bg-ink/90">
+        <button className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-ink/90">
           Request intro
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </button>
-        <button className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition hover:bg-ink/5">
+        <button className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-ink/5">
           View profile
         </button>
       </div>
@@ -168,7 +183,9 @@ function EnterpriseBody() {
                   {r.verified} verified candidates
                 </span>
               </div>
-              <span className={`text-xs font-medium ${r.tone}`}>{r.status}</span>
+              <span className={`text-xs font-medium ${r.tone}`}>
+                {r.status}
+              </span>
             </div>
           ))}
         </div>
@@ -204,11 +221,11 @@ function EnterpriseBody() {
       </div>
 
       <div className="rise flex items-center gap-3">
-        <button className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition hover:bg-ink/90">
+        <button className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-ink/90">
           Review shortlist
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </button>
-        <button className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition hover:bg-ink/5">
+        <button className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-ink/5">
           Post a role
         </button>
       </div>
@@ -216,12 +233,10 @@ function EnterpriseBody() {
   );
 }
 
-// One window; its content switches between the two sides of the marketplace.
 function MatchWindow() {
   const rootRef = useRef<HTMLDivElement>(null);
   const [view, setView] = useState<View>("candidate");
 
-  // auto-cycle the view (unless reduced motion)
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = setInterval(() => {
@@ -230,7 +245,6 @@ function MatchWindow() {
     return () => clearInterval(id);
   }, []);
 
-  // animate the swapped-in content + count-up (re-runs on view change)
   useGSAP(
     () => {
       const root = rootRef.current;
@@ -286,7 +300,6 @@ function MatchWindow() {
       className="w-full rounded-2xl border border-ink/10 bg-ink/[0.04] p-1.5 backdrop-blur-sm"
     >
       <div className="overflow-hidden rounded-xl border border-ink/10 bg-canvas/50">
-        {/* window title bar */}
         <div className="flex items-center justify-between gap-3 border-b border-ink/10 bg-ink/[0.02] px-4 py-3">
           <div className="flex items-center gap-1.5">
             <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />

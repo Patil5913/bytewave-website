@@ -1,6 +1,5 @@
 import type { CollectionConfig } from "payload";
 
-// Professionals page — candidate success video testimonials.
 export const SuccessVideos: CollectionConfig = {
   slug: "success-videos",
   labels: { singular: "Success Video", plural: "Success Videos" },
@@ -12,7 +11,11 @@ export const SuccessVideos: CollectionConfig = {
   access: { read: () => true },
   fields: [
     { name: "name", type: "text", required: true },
-    { name: "role", type: "text", admin: { description: "e.g. Backend Developer" } },
+    {
+      name: "role",
+      type: "text",
+      admin: { description: "e.g. Backend Developer" },
+    },
     { name: "company", type: "text", required: true },
     {
       name: "domain",
@@ -21,7 +24,12 @@ export const SuccessVideos: CollectionConfig = {
       admin: { description: "Company domain for logo.dev, e.g. stripe.com." },
     },
     { name: "duration", type: "text", admin: { description: "e.g. 02:45" } },
-    { name: "thumbnail", type: "text", required: true, admin: { description: "Thumbnail image URL." } },
+    {
+      name: "thumbnail",
+      type: "text",
+      required: true,
+      admin: { description: "Thumbnail image URL." },
+    },
     {
       name: "row",
       type: "select",

@@ -30,12 +30,12 @@ const TERMS = [
   },
 ];
 
-// zig-zag torn paper edges (radial-gradient mask, repeated horizontally)
 const TORN_TOP: React.CSSProperties = {
   maskImage: "radial-gradient(7px at 12px 3px, transparent 96%, black 100%)",
   maskSize: "24px 100%",
   maskRepeat: "repeat-x",
-  WebkitMaskImage: "radial-gradient(7px at 12px 3px, transparent 96%, black 100%)",
+  WebkitMaskImage:
+    "radial-gradient(7px at 12px 3px, transparent 96%, black 100%)",
   WebkitMaskSize: "24px 100%",
   WebkitMaskRepeat: "repeat-x",
 };
@@ -43,7 +43,8 @@ const TORN_BOTTOM: React.CSSProperties = {
   maskImage: "radial-gradient(7px at 12px 9px, transparent 96%, black 100%)",
   maskSize: "24px 100%",
   maskRepeat: "repeat-x",
-  WebkitMaskImage: "radial-gradient(7px at 12px 9px, transparent 96%, black 100%)",
+  WebkitMaskImage:
+    "radial-gradient(7px at 12px 9px, transparent 96%, black 100%)",
   WebkitMaskSize: "24px 100%",
   WebkitMaskRepeat: "repeat-x",
 };
@@ -52,7 +53,6 @@ export default function EnterpriseEconomics() {
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-20">
-        {/* left — intro */}
         <Reveal className="flex flex-col gap-6">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Pricing
@@ -66,21 +66,18 @@ export default function EnterpriseEconomics() {
           </p>
           <a
             href="#"
-            className="group mt-2 flex w-fit items-center gap-2 bg-ink px-6 py-3 text-sm font-medium text-canvas transition hover:bg-ink/90"
+            className="group mt-2 flex w-fit items-center gap-2 bg-ink px-6 py-3 text-sm font-medium text-canvas transition-colors hover:bg-ink/90"
           >
             Book a free consultation
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
         </Reveal>
 
-        {/* right — itemized statement / receipt */}
         <Reveal x={24} y={0}>
           <div className="ml-auto w-full max-w-md font-mono text-sm">
-            {/* torn top edge */}
             <div aria-hidden className="h-3 bg-ink/[0.04]" style={TORN_TOP} />
 
             <div className="bg-ink/[0.04] px-7 py-6">
-              {/* statement header */}
               <div className="flex items-center justify-between border-b border-dashed border-ink/20 pb-5">
                 <div className="flex flex-col gap-0.5">
                   <span className="text-base tracking-tight text-ink/70 lowercase">
@@ -95,7 +92,6 @@ export default function EnterpriseEconomics() {
                 </span>
               </div>
 
-              {/* line items */}
               <div className="flex flex-col gap-4 py-6">
                 {TERMS.map((term) => (
                   <div key={term.id} className="flex flex-col gap-1">
@@ -113,7 +109,6 @@ export default function EnterpriseEconomics() {
                 ))}
               </div>
 
-              {/* due today */}
               <div className="flex items-center justify-between border-t border-dashed border-ink/20 pt-5">
                 <span className="tracking-widest text-ink/50 uppercase">
                   Due today
@@ -128,8 +123,11 @@ export default function EnterpriseEconomics() {
               </p>
             </div>
 
-            {/* torn bottom edge */}
-            <div aria-hidden className="h-3 bg-ink/[0.04]" style={TORN_BOTTOM} />
+            <div
+              aria-hidden
+              className="h-3 bg-ink/[0.04]"
+              style={TORN_BOTTOM}
+            />
           </div>
         </Reveal>
       </div>

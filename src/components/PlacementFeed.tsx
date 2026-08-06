@@ -1,6 +1,5 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
 import Reveal from "@components/Reveal";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -37,20 +36,17 @@ export default function PlacementFeed({ items }: { items: PlacementItem[] }) {
 
         <Reveal stagger={0.08} y={20} className="border-t border-ink/10">
           {PLACEMENTS.map((item) => (
-            <a
+            <div
               key={item.candidate}
-              href="#"
-              className="group grid grid-cols-1 gap-x-6 gap-y-4 border-b border-ink/10 py-8 lg:grid-cols-12 lg:items-baseline"
+              className="grid grid-cols-1 gap-x-6 gap-y-4 border-b border-ink/10 py-8 lg:grid-cols-12 lg:items-baseline"
             >
-              {/* role */}
               <div className="flex flex-col gap-2 lg:col-span-5">
-                <h3 className="font-instrument text-2xl leading-none font-medium text-ink transition-colors group-hover:text-brand lg:text-3xl">
+                <h3 className="font-instrument text-2xl leading-none font-medium text-ink lg:text-3xl">
                   {item.role}
                 </h3>
                 <p className="text-xs text-ink/60">{item.stack}</p>
               </div>
 
-              {/* placement */}
               <div className="flex flex-col gap-1 lg:col-span-4">
                 <div className="flex items-center gap-2.5 text-sm text-ink/70">
                   <span className="shrink-0">{item.candidate}</span>
@@ -61,14 +57,13 @@ export default function PlacementFeed({ items }: { items: PlacementItem[] }) {
                     onError={(e) => {
                       e.currentTarget.style.display = "none";
                     }}
-                    className="h-4 w-4 shrink-0 object-contain opacity-70 transition-opacity duration-300 group-hover:opacity-100"
+                    className="h-4 w-4 shrink-0 object-contain opacity-80"
                   />
                   <span className="truncate text-ink">{item.companyName}</span>
                 </div>
                 <span className="text-xs text-ink/60">{item.location}</span>
               </div>
 
-              {/* comp */}
               <div className="flex items-center gap-4 lg:col-span-3 lg:justify-end">
                 <div className="flex flex-col gap-1.5 lg:items-end">
                   <span className="font-instrument text-xl tabular-nums text-ink lg:text-2xl">
@@ -81,9 +76,8 @@ export default function PlacementFeed({ items }: { items: PlacementItem[] }) {
                     {item.status}
                   </span>
                 </div>
-                <ArrowUpRight className="h-4 w-4 shrink-0 -translate-x-1 text-ink/45 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:text-brand group-hover:opacity-100" />
               </div>
-            </a>
+            </div>
           ))}
         </Reveal>
       </div>

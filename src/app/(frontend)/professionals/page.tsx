@@ -13,15 +13,17 @@ import {
   getTestimonialVideos,
   getFaqsContent,
   getSiteSettingsContent,
+  getTrackRecordContent,
 } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
 export default async function Professionals() {
-  const [videos, faqs, settings] = await Promise.all([
+  const [videos, faqs, settings, trackRecord] = await Promise.all([
     getTestimonialVideos(),
     getFaqsContent("professionals"),
     getSiteSettingsContent(),
+    getTrackRecordContent(),
   ]);
 
   return (
@@ -31,7 +33,10 @@ export default async function Professionals() {
       <MarketTelemetry />
       <CareerClimb />
       <AdvocacyProtocol />
-      <HistoricalTelemetry />
+      <HistoricalTelemetry
+        stats={trackRecord.stats}
+        growth={trackRecord.growth}
+      />
       <VideoTelemetry items={videos} />
       <PricingReferral />
       <SystemDocumentation items={faqs} />

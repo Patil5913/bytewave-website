@@ -5,7 +5,12 @@ import ArticleToc from "@components/ArticleToc";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ChevronRight, ExternalLink } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChevronRight,
+  ExternalLink,
+} from "lucide-react";
 import { buildHref, topicSlug } from "@/lib/insights";
 import { getPosts } from "@/lib/content";
 import { ArticleRichText, extractToc, hasHeading } from "@/lib/richtext";
@@ -38,14 +43,11 @@ export default async function InsightArticle({
 
   const toc = extractToc(post.content);
   const faqs = post.faqs ?? [];
-  // The body may already carry its own "Frequently asked questions" heading —
-  // don't render a second one above the accordion.
   const faqHeadingInBody = hasHeading(
     post.content,
     /^\s*frequently asked questions\s*$/i,
   );
 
-  // related: same topic first, then fill from the rest — up to 3
   const related = [
     ...allPosts.filter(
       (p) => p.id !== post.id && topicSlug(p) === topicSlug(post),
@@ -116,7 +118,11 @@ export default async function InsightArticle({
               <ArticleRichText data={post.content} />
 
               {faqs.length > 0 && (
-                <div className={faqHeadingInBody ? "flex flex-col" : "mt-12 flex flex-col"}>
+                <div
+                  className={
+                    faqHeadingInBody ? "flex flex-col" : "mt-12 flex flex-col"
+                  }
+                >
                   {!faqHeadingInBody && (
                     <h2
                       id="frequently-asked-questions"
@@ -190,7 +196,6 @@ export default async function InsightArticle({
                 )}
               </div>
 
-              {/* keep reading */}
               {related.length > 0 && (
                 <div className="mt-20 flex flex-col gap-8 border-t border-ink/10 pt-10">
                   <div className="flex items-end justify-between">

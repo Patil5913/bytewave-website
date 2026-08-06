@@ -1,6 +1,5 @@
 import type { CollectionConfig } from "payload";
 
-// Uploaded assets (post covers, author avatars, etc.).
 export const Media: CollectionConfig = {
   slug: "media",
   access: {

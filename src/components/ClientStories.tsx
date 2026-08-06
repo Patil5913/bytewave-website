@@ -82,7 +82,6 @@ export default function ClientStories({ items }: { items: Client[] }) {
         </div>
       </div>
 
-      {/* testimonial marquees — opposite directions */}
       <div className="flex flex-col gap-6">
         <MarqueeRow items={one} anim="animate-marquee-slow" />
         <MarqueeRow items={two} anim="animate-marquee-slow-reverse" />

@@ -1,6 +1,5 @@
 import type { CollectionConfig } from "payload";
 
-// Compliance credentials shown on the companies page.
 export const Certifications: CollectionConfig = {
   slug: "certifications",
   admin: {

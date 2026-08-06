@@ -49,7 +49,6 @@ export default function PlatformCapabilities() {
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
-        {/* left — sticky intro */}
         <Reveal className="flex flex-col gap-6 lg:col-span-4 lg:sticky lg:top-32">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Platform Capabilities
@@ -68,14 +67,12 @@ export default function PlatformCapabilities() {
           </span>
         </Reveal>
 
-        {/* right — capability rows */}
         <Reveal stagger={0.08} className="border-t border-ink/10 lg:col-span-8">
           {CAPABILITIES.map((cap) => (
             <div
               key={cap.id}
               className="group grid grid-cols-1 gap-x-6 gap-y-4 border-b border-ink/10 py-8 md:grid-cols-12 md:items-start"
             >
-              {/* index + title */}
               <div className="flex items-baseline gap-4 md:col-span-5">
                 <span className="font-instrument text-lg tabular-nums text-ink/25 transition-colors duration-500 group-hover:text-ink/50">
                   {cap.id}
@@ -85,12 +82,10 @@ export default function PlatformCapabilities() {
                 </h3>
               </div>
 
-              {/* description */}
               <p className="text-sm leading-relaxed text-ink/50 md:col-span-4">
                 {cap.description}
               </p>
 
-              {/* metric */}
               <div className="flex items-baseline justify-between gap-2 md:col-span-3 md:flex-col md:items-end md:justify-start md:text-right">
                 <span className="font-instrument text-2xl font-medium text-ink tabular-nums">
                   {cap.metric}

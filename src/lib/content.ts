@@ -1,5 +1,5 @@
 import "server-only";
-import { getPayload } from "payload";
+import { getPayload, type CollectionSlug, type GlobalSlug } from "payload";
 import config from "@payload-config";
 import { ALL_POSTS, type Post } from "./insights";
 import { blocksToMarkdown } from "./markdown";
@@ -7,6 +7,7 @@ import { mdToLexical } from "./lexical";
 import {
   HOMEPAGE,
   SITE_SETTINGS,
+  TRACK_RECORD,
   CERTIFICATIONS as CERT_DEFAULT,
   FAQS_COMPANIES,
   FAQS_PROFESSIONALS,
@@ -41,15 +42,11 @@ export type VideoItem = {
   row?: string;
 };
 
-// A post as consumed by the article page: identical to Post but `content` is a
-// Lexical editor state (rich text) instead of the legacy block array.
 export type PostView = Omit<Post, "content"> & {
   content: unknown;
   faqs?: { question: string; answer: string }[];
 };
 
-// Static fallbacks — used verbatim if Payload/DB is unreachable so the site
-// (and the production build) never hard-fails on a data source.
 export type Placement = {
   role: string;
   stack: string;
@@ -62,11 +59,56 @@ export type Placement = {
 };
 
 const FALLBACK_PLACEMENTS: Placement[] = [
-  { role: "Backend Developer", stack: "Python, FastAPI, SQLAlchemy", candidate: "M. Davis", company: "stripe.com", companyName: "Stripe", location: "New York, NY", pay: "$165k Base", status: "Placed" },
-  { role: "Product Designer", stack: "Figma, Design Systems", candidate: "A. Chen", company: "notion.so", companyName: "Notion", location: "Remote", pay: "$140k Base", status: "Offer" },
-  { role: "Frontend Engineer", stack: "React, TypeScript, Next.js", candidate: "J. Okafor", company: "linear.app", companyName: "Linear", location: "San Francisco, CA", pay: "$155k Base", status: "Interviewing" },
-  { role: "Data Analyst", stack: "SQL, Python, Looker", candidate: "R. Foster", company: "figma.com", companyName: "Figma", location: "Austin, TX", pay: "$120k Base", status: "Placed" },
-  { role: "DevOps Engineer", stack: "Kubernetes, Terraform, AWS", candidate: "S. Kim", company: "vercel.com", companyName: "Vercel", location: "Seattle, WA", pay: "$175k Base", status: "Negotiating" },
+  {
+    role: "Backend Developer",
+    stack: "Python, FastAPI, SQLAlchemy",
+    candidate: "M. Davis",
+    company: "stripe.com",
+    companyName: "Stripe",
+    location: "New York, NY",
+    pay: "$165k Base",
+    status: "Placed",
+  },
+  {
+    role: "Product Designer",
+    stack: "Figma, Design Systems",
+    candidate: "A. Chen",
+    company: "notion.so",
+    companyName: "Notion",
+    location: "Remote",
+    pay: "$140k Base",
+    status: "Offer",
+  },
+  {
+    role: "Frontend Engineer",
+    stack: "React, TypeScript, Next.js",
+    candidate: "J. Okafor",
+    company: "linear.app",
+    companyName: "Linear",
+    location: "San Francisco, CA",
+    pay: "$155k Base",
+    status: "Interviewing",
+  },
+  {
+    role: "Data Analyst",
+    stack: "SQL, Python, Looker",
+    candidate: "R. Foster",
+    company: "figma.com",
+    companyName: "Figma",
+    location: "Austin, TX",
+    pay: "$120k Base",
+    status: "Placed",
+  },
+  {
+    role: "DevOps Engineer",
+    stack: "Kubernetes, Terraform, AWS",
+    candidate: "S. Kim",
+    company: "vercel.com",
+    companyName: "Vercel",
+    location: "Seattle, WA",
+    pay: "$175k Base",
+    status: "Negotiating",
+  },
 ];
 
 export type SiteStat = {
@@ -78,10 +120,34 @@ export type SiteStat = {
 };
 
 const FALLBACK_STATS: SiteStat[] = [
-  { value: 94, decimals: 0, suffix: "%", label: "Placement Success Rate", note: "of matched roles close on the first shortlist." },
-  { value: 14, decimals: 0, suffix: "d", label: "Avg. Time-to-Placement", note: "from first intro to signed offer." },
-  { value: 1.2, decimals: 1, suffix: "k", label: "Verified Professionals", note: "skills confirmed, not keyword-matched." },
-  { value: 150, decimals: 0, suffix: "+", label: "Partner Organizations", note: "hiring directly through the network." },
+  {
+    value: 94,
+    decimals: 0,
+    suffix: "%",
+    label: "Placement Success Rate",
+    note: "of matched roles close on the first shortlist.",
+  },
+  {
+    value: 14,
+    decimals: 0,
+    suffix: "d",
+    label: "Avg. Time-to-Placement",
+    note: "from first intro to signed offer.",
+  },
+  {
+    value: 1.2,
+    decimals: 1,
+    suffix: "k",
+    label: "Verified Professionals",
+    note: "skills confirmed, not keyword-matched.",
+  },
+  {
+    value: 150,
+    decimals: 0,
+    suffix: "+",
+    label: "Partner Organizations",
+    note: "hiring directly through the network.",
+  },
 ];
 
 async function client() {
@@ -125,8 +191,6 @@ export async function getSiteStats(): Promise<SiteStat[]> {
   }
 }
 
-// Maps a Payload post doc to the article-page view. `content` is Lexical rich
-// text stored as-is; `faqs` is a structured side array.
 function toPostView(d: Record<string, unknown>): PostView {
   return {
     id: d.articleId as string,
@@ -147,14 +211,11 @@ function toPostView(d: Record<string, unknown>): PostView {
   };
 }
 
-// --- generic helpers for CMS-or-default content -------------------------
-
 async function findAll(collection: string, sort = "order") {
   try {
     const payload = await client();
     const { docs } = await payload.find({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      collection: collection as any,
+      collection: collection as CollectionSlug,
       limit: 200,
       sort,
     });
@@ -167,8 +228,7 @@ async function findAll(collection: string, sort = "order") {
 async function findGlobalSafe(slug: string) {
   try {
     const payload = await client();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (await payload.findGlobal({ slug: slug as any })) as Record<
+    return (await payload.findGlobal({ slug: slug as GlobalSlug })) as Record<
       string,
       unknown
     > | null;
@@ -177,13 +237,6 @@ async function findGlobalSafe(slug: string) {
   }
 }
 
-export const getTestimonials = () => findAll("testimonials");
-export const getFaqs = () => findAll("faqs");
-export const getCertifications = () => findAll("certifications");
-export const getPartners = () => findAll("partners");
-
-// Merge a CMS global over the static default: scalar CMS values win when
-// present; arrays win when non-empty; otherwise the default is used.
 function merge<T extends Record<string, unknown>>(
   base: T,
   cms: Record<string, unknown> | null,
@@ -209,6 +262,10 @@ export async function getSiteSettingsContent(): Promise<typeof SITE_SETTINGS> {
   return merge(SITE_SETTINGS, await findGlobalSafe("site-settings"));
 }
 
+export async function getTrackRecordContent(): Promise<typeof TRACK_RECORD> {
+  return merge(TRACK_RECORD, await findGlobalSafe("track-record"));
+}
+
 export async function getCertificationsContent(): Promise<CertItem[]> {
   const docs = await findAll("certifications");
   if (!docs.length) return CERT_DEFAULT;
@@ -225,15 +282,7 @@ export async function getCertificationsContent(): Promise<CertItem[]> {
 export async function getFaqsContent(
   audience: "companies" | "professionals",
 ): Promise<FaqItem[]> {
-  const docs = await findAll(
-    audience === "companies" ? "faqs-companies" : "faqs-professionals",
-  );
-  if (!docs.length)
-    return audience === "companies" ? FAQS_COMPANIES : FAQS_PROFESSIONALS;
-  return docs.map((d) => ({
-    question: d.question as string,
-    answer: d.answer as string,
-  }));
+  return audience === "companies" ? FAQS_COMPANIES : FAQS_PROFESSIONALS;
 }
 
 export async function getTestimonialQuotes(): Promise<QuoteItem[]> {
@@ -263,8 +312,6 @@ export async function getTestimonialVideos(): Promise<VideoItem[]> {
   }));
 }
 
-// Fallback: convert legacy block-array posts to Lexical so the article page
-// still renders when the DB is empty/unreachable.
 async function fallbackPosts(): Promise<PostView[]> {
   return Promise.all(
     ALL_POSTS.map(async (p) => {

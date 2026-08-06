@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "bun run db:up && next dev",
+    "db:up": "docker start bwave-postgres >/dev/null 2>&1 || { echo 'bwave-postgres container missing — run: docker compose up -d'; exit 1; }; for i in $(seq 1 40); do docker exec bwave-postgres pg_isready -U bwave >/dev/null 2>&1 && { echo 'postgres ready'; exit 0; }; sleep 0.5; done; echo 'postgres did not become ready in 20s'; exit 1",
+    "db:down": "docker stop bwave-postgres",
     "build": "next build",
     "start": "next start",
     "seed": "curl -fsS -X POST \"http://localhost:3000/seed-content?secret=${SEED_SECRET:-dev-seed}\" && echo"

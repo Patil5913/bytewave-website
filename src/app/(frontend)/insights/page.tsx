@@ -26,7 +26,6 @@ export default async function InsightsIndex({
   );
 
   const slice = ALL_POSTS.slice((page - 1) * PER_PAGE, page * PER_PAGE);
-  // featured big card only on the first page
   const LEAD = page === 1 ? slice[0] : null;
   const REST = page === 1 ? slice.slice(1) : slice;
 
@@ -35,7 +34,6 @@ export default async function InsightsIndex({
       <Navbar />
       <section className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
         <div className="mx-auto max-w-7xl">
-          {/* header */}
           <div className="mb-16 flex flex-col gap-4 md:max-w-2xl">
             <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
               Insights
@@ -49,45 +47,43 @@ export default async function InsightsIndex({
             </p>
           </div>
 
-          {/* featured lead (page 1 only) */}
           {LEAD && (
-          <Link
-            href={buildHref(LEAD)}
-            className="group grid grid-cols-1 gap-8 border-t-2 border-ink pt-8 lg:grid-cols-2 lg:gap-14"
-          >
-            <div className="relative aspect-[16/10] w-full overflow-hidden">
-              <Image
-                src={LEAD.cover}
-                alt={LEAD.title}
-                fill
-                priority
-                sizes="(min-width: 1024px) 600px, 100vw"
-                className="object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
-              />
-            </div>
-            <div className="flex flex-col justify-center gap-4">
-              <span className="flex items-center gap-2.5 text-xs tracking-widest uppercase">
-                <span className="text-brand">Latest</span>
-                <span className="text-ink/40">{LEAD.tag}</span>
-              </span>
-              <h2 className="font-instrument text-3xl leading-tight font-medium text-balance text-ink transition-colors group-hover:text-brand lg:text-5xl">
-                {LEAD.title}
-              </h2>
-              <p className="max-w-xl text-base leading-relaxed text-ink/50">
-                {LEAD.excerpt}
-              </p>
-              <div className="mt-2 flex items-center gap-3 text-xs tracking-wider text-ink/40 uppercase">
-                <span>{LEAD.author}</span>
-                <span className="text-ink/20">·</span>
-                <span>{LEAD.date}</span>
-                <span className="text-ink/20">·</span>
-                <span>{LEAD.readTime}</span>
+            <Link
+              href={buildHref(LEAD)}
+              className="group grid grid-cols-1 gap-8 border-t-2 border-ink pt-8 lg:grid-cols-2 lg:gap-14"
+            >
+              <div className="relative aspect-[16/10] w-full overflow-hidden">
+                <Image
+                  src={LEAD.cover}
+                  alt={LEAD.title}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 600px, 100vw"
+                  className="object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                />
               </div>
-            </div>
-          </Link>
+              <div className="flex flex-col justify-center gap-4">
+                <span className="flex items-center gap-2.5 text-xs tracking-widest uppercase">
+                  <span className="text-brand">Latest</span>
+                  <span className="text-ink/40">{LEAD.tag}</span>
+                </span>
+                <h2 className="font-instrument text-3xl leading-tight font-medium text-balance text-ink transition-colors group-hover:text-brand lg:text-5xl">
+                  {LEAD.title}
+                </h2>
+                <p className="max-w-xl text-base leading-relaxed text-ink/50">
+                  {LEAD.excerpt}
+                </p>
+                <div className="mt-2 flex items-center gap-3 text-xs tracking-wider text-ink/40 uppercase">
+                  <span>{LEAD.author}</span>
+                  <span className="text-ink/20">·</span>
+                  <span>{LEAD.date}</span>
+                  <span className="text-ink/20">·</span>
+                  <span>{LEAD.readTime}</span>
+                </div>
+              </div>
+            </Link>
           )}
 
-          {/* rest — compact archive list with small thumbnails */}
           <div className={LEAD ? "mt-20" : ""}>
             <span className="mb-6 block text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
               {LEAD ? "More Insights" : `Insights · Page ${page}`}
@@ -99,7 +95,6 @@ export default async function InsightsIndex({
                   href={buildHref(post)}
                   className="group grid grid-cols-1 gap-x-6 gap-y-4 border-b border-ink/10 py-6 sm:grid-cols-12 sm:items-center"
                 >
-                  {/* thumbnail */}
                   <div className="relative aspect-[16/10] w-40 overflow-hidden sm:col-span-3 sm:w-full">
                     <Image
                       src={post.cover}
@@ -110,7 +105,6 @@ export default async function InsightsIndex({
                     />
                   </div>
 
-                  {/* text */}
                   <div className="flex flex-col gap-2 sm:col-span-8">
                     <div className="flex items-center gap-2.5 text-[11px] tracking-widest text-ink/40 uppercase">
                       <span>{post.tag}</span>
@@ -135,7 +129,6 @@ export default async function InsightsIndex({
               ))}
             </div>
 
-            {/* pagination — plain text, no circular buttons */}
             {TOTAL_PAGES > 1 && (
               <nav className="mt-12 flex items-center justify-between text-xs tracking-widest uppercase">
                 {page > 1 ? (

@@ -26,7 +26,7 @@ export default function CallToAction({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "enterprise",
+          type: "lead",
           email,
           source: "homepage-cta",
         }),
@@ -76,7 +76,7 @@ export default function CallToAction({
           <>
             <form
               onSubmit={handleSubmit}
-              className="flex w-full max-w-md flex-col items-stretch gap-3 sm:flex-row"
+              className="flex w-full max-w-md flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center"
             >
               <label htmlFor="cta-email" className="sr-only">
                 Work email
@@ -86,13 +86,14 @@ export default function CallToAction({
                 name="email"
                 type="email"
                 required
+                size={16}
                 placeholder="you@company.com"
-                className="flex-1 border-b border-ink/20 bg-transparent py-3 text-center text-base text-ink placeholder:text-ink/40 focus:border-ink/50 focus:outline-none sm:text-left"
+                className="w-full border-b border-ink/20 bg-transparent py-3 text-center text-base text-ink placeholder:text-ink/40 focus:border-ink/50 focus:outline-none sm:w-auto sm:text-left"
               />
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="group flex items-center justify-center gap-2 bg-ink px-6 py-3 font-medium text-canvas transition-colors hover:bg-ink/90 disabled:cursor-not-allowed disabled:opacity-60"
+                className="group flex shrink-0 items-center justify-center gap-2 whitespace-nowrap bg-ink px-6 py-3 font-medium text-canvas transition-colors hover:bg-ink/90 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {status === "sending" ? "Sending…" : "Book a Strategy Call"}
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

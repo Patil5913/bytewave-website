@@ -4,11 +4,6 @@ import { useEffect, useRef, useState } from "react";
 
 type Box = { x: number; y: number; w: number; h: number; r: number };
 
-/**
- * Modern cursor: a small square that trails the pointer with a blinking brand
- * underscore/caret that leads while moving and settles beside the square when
- * idle. Colours come from theme tokens. Disabled on touch / reduced-motion.
- */
 export default function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
@@ -16,7 +11,9 @@ export default function CustomCursor() {
 
   useEffect(() => {
     const fine = window.matchMedia("(pointer: fine)").matches;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     setEnabled(fine && !reduced);
   }, []);
 
@@ -26,30 +23,25 @@ export default function CustomCursor() {
     const caret = caretRef.current;
     if (!box || !caret) return;
 
-    const DOT = 12; // idle square size
+    const DOT = 12;
     let px = window.innerWidth / 2;
     let py = window.innerHeight / 2;
     let visible = false;
     let raf = 0;
 
-    // current (rendered) + target box
     const cur: Box = { x: px, y: py, w: DOT, h: DOT, r: 0 };
     const tgt: Box = { ...cur };
 
-    // caret leads at the pointer while moving; on idle it settles beside the
-    // square. `idleF` (0 moving → 1 idle) blends the two behaviours.
     let caretX = px;
     let caretY = py;
     let caretAng = 0;
     let lastPx = px;
     let lastPy = py;
     let idleF = 1;
-    // smoothed velocity so the caret angle doesn't twitch on raw jitter
     let svx = 0;
     let svy = 0;
 
     const computeTarget = () => {
-      // square trails the pointer while moving, catches up when idle
       tgt.x = px - DOT / 2;
       tgt.y = py - DOT / 2;
       tgt.w = DOT;
@@ -57,13 +49,12 @@ export default function CustomCursor() {
       tgt.r = 0;
     };
 
-    const GAP_X = DOT / 2 + 7; // idle caret offset beside the square
+    const GAP_X = DOT / 2 + 7;
     const GAP_Y = DOT / 2 - 1;
 
     const loop = () => {
       raf = requestAnimationFrame(loop);
 
-      // pointer velocity -> idle blend (1 = still, 0 = moving)
       const vx = px - lastPx;
       const vy = py - lastPy;
       const speed = Math.hypot(vx, vy);
@@ -71,13 +62,10 @@ export default function CustomCursor() {
       lastPy = py;
       idleF += ((speed < 0.4 ? 1 : 0) - idleF) * 0.12;
 
-      // low-pass the velocity vector -> stable heading
       svx += (vx - svx) * 0.2;
       svy += (vy - svy) * 0.2;
       const sSpeed = Math.hypot(svx, svy);
 
-      // square: slow lerp so it lags behind the caret while moving, and lands
-      // on the pointer when idle (becomes the main mark).
       const be = 0.09;
       cur.x += (tgt.x - cur.x) * be;
       cur.y += (tgt.y - cur.y) * be;
@@ -89,21 +77,16 @@ export default function CustomCursor() {
       box.style.height = `${cur.h}px`;
       box.style.borderRadius = `${cur.r}px`;
 
-      // caret: leads at the pointer while moving, eases beside the square idle.
       const targetX = px + idleF * GAP_X;
       const targetY = py + idleF * GAP_Y;
       caretX += (targetX - caretX) * 0.65;
       caretY += (targetY - caretY) * 0.65;
       if (sSpeed > 1.5) {
-        // ease toward the smoothed heading along the shortest arc (no ±180 flip).
-        // rotation authority scales with speed: slow drags keep the last angle
-        // (their heading is mostly noise), fast flicks snap to direction.
         const target = (Math.atan2(svy, svx) * 180) / Math.PI;
         const delta = ((target - caretAng + 540) % 360) - 180;
         const k = Math.min(0.25, (sSpeed - 1.5) * 0.05);
         caretAng += delta * k;
       } else {
-        // ease back to horizontal when settling
         caretAng += (0 - caretAng) * 0.1;
       }
       caret.style.transform = `translate3d(${caretX}px, ${caretY}px, 0) translate(-50%, -50%) rotate(${caretAng}deg)`;
@@ -157,9 +140,6 @@ export default function CustomCursor() {
         className="cursor-box pointer-events-none fixed top-0 left-0 z-[9999]"
         style={{ willChange: "transform, width, height" }}
       />
-      {/* blinking brand underscore beside the idle square. Outer wrapper owns
-          position + the fade (so it dissolves into the overlay on hover);
-          inner owns the blink so the two animations don't fight. */}
       <div
         ref={caretRef}
         aria-hidden

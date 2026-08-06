@@ -8,29 +8,19 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type RevealProps = {
-  /** Rendered element/tag. Default "div". */
   as?: ElementType;
   children: ReactNode;
   className?: string;
-  /** Vertical offset to animate in from. Default 24. */
   y?: number;
   x?: number;
   delay?: number;
   duration?: number;
-  /** When set, stagger the direct children instead of the wrapper. */
   stagger?: number;
-  /** Reveal on scroll (default) or immediately on mount (false). */
   scroll?: boolean;
   start?: string;
   once?: boolean;
 } & Record<string, unknown>;
 
-/**
- * GSAP-powered reveal. Replaces the framer-motion `whileInView` fade-up
- * pattern used across the site. Honours prefers-reduced-motion (content is
- * simply left visible). Use `stagger` to sequence direct children,
- * `scroll={false}` for on-load entrances (hero, navbar).
- */
 export default function Reveal({
   as = "div",
   children,

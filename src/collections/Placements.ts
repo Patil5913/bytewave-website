@@ -1,6 +1,5 @@
 import type { CollectionConfig } from "payload";
 
-// Recent placements shown on the homepage feed.
 export const Placements: CollectionConfig = {
   slug: "placements",
   admin: {

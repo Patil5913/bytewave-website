@@ -14,30 +14,22 @@ import {
   getSiteStats,
   getPosts,
   getHomepageContent,
-  getPartners,
 } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [placements, stats, posts, home, partners] = await Promise.all([
+  const [placements, stats, posts, home] = await Promise.all([
     getPlacements(),
     getSiteStats(),
     getPosts(),
     getHomepageContent(),
-    getPartners(),
   ]);
 
   return (
     <>
       <Navbar />
-      <Hero
-        content={home}
-        partners={partners.map((p) => ({
-          name: String(p.name),
-          slug: String(p.slug),
-        }))}
-      />
+      <Hero content={home} />
       <Manifesto content={home} />
       <AgentIntro content={home} />
       <Stats stats={stats} />

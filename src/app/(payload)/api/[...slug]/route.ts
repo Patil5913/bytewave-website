@@ -1,4 +1,3 @@
-/* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
 import config from "@payload-config";
 import {
   REST_DELETE,

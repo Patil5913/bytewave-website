@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 type Item = { id: string; text: string; level: number };
 
-/** Table of contents with active-section highlight driven by scroll position. */
 export default function ArticleToc({ items }: { items: Item[] }) {
   const [active, setActive] = useState<string>(items[0]?.id ?? "");
 

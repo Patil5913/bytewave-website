@@ -32,17 +32,14 @@ function VideoRow({ items, anim }: { items: Video[]; anim: string }) {
                   className="h-full w-full object-cover opacity-75 grayscale transition-all duration-500 group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0"
                 />
 
-                {/* Gradient scrim for legibility */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
-                {/* Play button */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-black/50 backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
                     <Play className="ml-0.5 h-4 w-4 fill-white text-white transition-colors group-hover:fill-brand group-hover:text-brand" />
                   </div>
                 </div>
 
-                {/* Verified badge */}
                 <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 backdrop-blur-md">
                   <BadgeCheck className="h-3.5 w-3.5 fill-brand/20 text-brand" />
                   <span className="text-[10px] tracking-widest text-white uppercase">
@@ -50,7 +47,6 @@ function VideoRow({ items, anim }: { items: Video[]; anim: string }) {
                   </span>
                 </div>
 
-                {/* Metadata overlay */}
                 <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-3">
                   <div className="flex flex-col gap-0.5">
                     <span className="text-sm font-medium text-white">
@@ -108,7 +104,6 @@ export default function VideoTelemetry({ items }: { items: Video[] }) {
         </div>
       </div>
 
-      {/* video marquees — opposite directions */}
       <div className="flex flex-col gap-6">
         <VideoRow items={one} anim="animate-marquee-slow" />
         <VideoRow items={two} anim="animate-marquee-slow-reverse" />

@@ -23,7 +23,8 @@ const archivo = Archivo({
 
 export const metadata: Metadata = {
   title: "Bytewave - The Frictionless Way to Hire & Get Hired",
-  description: "Skip the endless resume reviews. Bytewave connects verified candidates directly with companies actively looking for their exact skills.",
+  description:
+    "Skip the endless resume reviews. Bytewave connects verified candidates directly with companies actively looking for their exact skills.",
 };
 
 export default function RootLayout({
