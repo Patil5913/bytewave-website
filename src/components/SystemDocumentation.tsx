@@ -8,45 +8,14 @@ import { ArrowRight } from "lucide-react";
 
 gsap.registerPlugin(useGSAP);
 
-const FAQS = [
-  {
-    id: "01",
-    question: "How does verification work?",
-    answer:
-      "We replace keyword screening with peer-level validation. You complete a domain-specific assessment and a strategy call, so your capabilities are proven before any company ever sees your profile.",
-  },
-  {
-    id: "02",
-    question: "Does it cost anything for professionals?",
-    answer:
-      "No. Bytewave is free for verified professionals. Our partner organizations cover the cost of placement — you keep 100% of your negotiated compensation.",
-  },
-  {
-    id: "03",
-    question: "What kind of roles do you place?",
-    answer:
-      "Permanent, full-time roles only. We don't dilute your options with short-term contract work — every match is a stable position with a verified organization actively hiring for your exact stack.",
-  },
-  {
-    id: "04",
-    question: "How are my details routed to companies?",
-    answer:
-      "We bypass public job boards entirely. Your optimized profile is routed directly to the decision-makers who need your skills — never scraped, listed, or shared without your explicit approval.",
-  },
-  {
-    id: "05",
-    question: "How fast is placement?",
-    answer:
-      "Because you're matched against roles that are already open and waiting, most verified professionals receive their first direct introduction within 48 to 72 hours of completing verification.",
-  },
-];
+type Faq = { id: string; question: string; answer: string };
 
 function FaqItem({
   faq,
   isOpen,
   onToggle,
 }: {
-  faq: (typeof FAQS)[number];
+  faq: Faq;
   isOpen: boolean;
   onToggle: () => void;
 }) {
@@ -102,9 +71,7 @@ function FaqItem({
 
         <span
           className={`shrink-0 text-lg leading-none transition-all duration-300 ${
-            isOpen
-              ? "rotate-45 text-brand"
-              : "text-ink/40 group-hover:text-ink"
+            isOpen ? "rotate-45 text-brand" : "text-ink/40 group-hover:text-ink"
           }`}
         >
           +
@@ -120,7 +87,15 @@ function FaqItem({
   );
 }
 
-export default function SystemDocumentation() {
+export default function SystemDocumentation({
+  items,
+}: {
+  items: { question: string; answer: string }[];
+}) {
+  const FAQS: Faq[] = items.map((f, i) => ({
+    id: String(i + 1).padStart(2, "0"),
+    ...f,
+  }));
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -136,13 +111,13 @@ export default function SystemDocumentation() {
             </h2>
           </div>
           <p className="text-base leading-relaxed text-ink/50">
-            How verification, routing, and placement actually work. Still have
-            a question the log doesn&apos;t answer?
+            How verification, routing, and placement actually work. Still have a
+            question the log doesn&apos;t answer?
           </p>
 
           <a
             href="#"
-            className="group flex w-fit items-center gap-2 bg-ink/10 px-5 py-2.5 text-sm text-ink backdrop-blur-md transition hover:bg-ink/20"
+            className="group flex w-fit items-center gap-2 bg-ink/10 px-5 py-2.5 text-sm text-ink backdrop-blur-md transition-colors hover:bg-ink/20"
           >
             Talk to our team
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -155,9 +130,7 @@ export default function SystemDocumentation() {
               key={faq.id}
               faq={faq}
               isOpen={openIndex === index}
-              onToggle={() =>
-                setOpenIndex(openIndex === index ? null : index)
-              }
+              onToggle={() => setOpenIndex(openIndex === index ? null : index)}
             />
           ))}
         </Reveal>

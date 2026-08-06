@@ -5,34 +5,23 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import { HOMEPAGE, splitBrand } from "@/lib/siteContent";
+
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type Segment = { text: string; brand?: boolean };
 type Panel = { eyebrow?: string; lines: Segment[][]; detail: string };
 
-const PANELS: Panel[] = [
-  {
-    eyebrow: "The Shift",
-    lines: [[{ text: "The résumé pile is where" }], [{ text: "good people disappear." }]],
-    detail:
-      "The average role draws 400+ applicants. Great candidates get buried under keywords, and teams settle for whoever surfaces first.",
-  },
-  {
-    lines: [
-      [{ text: "We replaced it with" }],
-      [{ text: "proof", brand: true }, { text: " you can trust." }],
-    ],
-    detail:
-      "Every professional is skill-verified before they enter the network — so what you see is demonstrated ability, not a self-reported list.",
-  },
-  {
-    lines: [[{ text: "Real talent, matched" }], [{ text: "directly to real needs." }]],
-    detail:
-      "We connect verified people to the teams actively hiring for their exact strengths. Intros happen direct, and offers close in days.",
-  },
-];
-
-export default function ScrollStory() {
+export default function ScrollStory({
+  content = HOMEPAGE,
+}: {
+  content?: typeof HOMEPAGE;
+}) {
+  const PANELS: Panel[] = content.storyPanels.map((p) => ({
+    eyebrow: p.eyebrow || undefined,
+    lines: [[{ text: p.line1 }], splitBrand(p.line2 ?? "")],
+    detail: p.detail,
+  }));
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -43,24 +32,25 @@ export default function ScrollStory() {
       if (!track) return;
       const mm = gsap.matchMedia();
 
-      // Desktop: pin + horizontal scrub. User scrolls through every panel
-      // before the page continues to Recent Placements.
-      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
-        const distance = () => track.scrollWidth - window.innerWidth;
-        gsap.to(track, {
-          x: () => -distance(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: root,
-            start: "top top",
-            end: () => "+=" + distance(),
-            scrub: 0.6,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-      });
+      mm.add(
+        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          const distance = () => track.scrollWidth - window.innerWidth;
+          gsap.to(track, {
+            x: () => -distance(),
+            ease: "none",
+            scrollTrigger: {
+              trigger: root,
+              start: "top top",
+              end: () => "+=" + distance(),
+              scrub: 0.6,
+              pin: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          });
+        },
+      );
 
       return () => mm.revert();
     },
@@ -78,7 +68,7 @@ export default function ScrollStory() {
             key={pi}
             className="flex w-full shrink-0 flex-col justify-center gap-6 px-6 py-24 md:h-screen md:w-screen md:px-16 md:py-0"
           >
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
               <div className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
                 <span className="tabular-nums text-brand">0{pi + 1}</span>
                 {panel.eyebrow && <span>{panel.eyebrow}</span>}
@@ -98,7 +88,7 @@ export default function ScrollStory() {
                   </span>
                 ))}
               </h2>
-              <p className="max-w-md text-base leading-relaxed text-ink/50 md:text-lg">
+              <p className="max-w-md text-base leading-relaxed text-ink/70 md:text-lg">
                 {panel.detail}
               </p>
             </div>

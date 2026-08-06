@@ -1,8 +1,3 @@
-// Placeholder content shape mirrors what a markdown frontmatter + body
-// pipeline will produce later (title/meta fields + an array of blocks).
-// Inline spans cover the common markdown inline marks (bold, italic, code,
-// highlight, link) so the renderer is a drop-in target once real markdown
-// parsing is wired up.
 export type Span = {
   text: string;
   bold?: boolean;
@@ -47,20 +42,19 @@ export function slugify(text: string) {
     .replace(/\s+/g, "-");
 }
 
-// Trims a title slug down to a handful of words for a shorter, readable URL.
 function trimTitleSlug(title: string, maxWords = 6) {
   return slugify(title).split("-").slice(0, maxWords).join("-");
 }
 
-export function topicSlug(post: Post) {
+export function topicSlug(post: { tag: string }) {
   return slugify(post.tag);
 }
 
-export function articleSlug(post: Post) {
+export function articleSlug(post: { id: string; title: string }) {
   return `${post.id}-${trimTitleSlug(post.title)}`;
 }
 
-export function buildHref(post: Post) {
+export function buildHref(post: { id: string; title: string; tag: string }) {
   return `/insights/${topicSlug(post)}/${articleSlug(post)}`;
 }
 
@@ -303,7 +297,7 @@ export const ALL_POSTS: Post[] = [
       {
         type: "heading",
         level: 2,
-        text: "What \"filed in 1 business day\" actually covers",
+        text: 'What "filed in 1 business day" actually covers',
       },
       {
         type: "paragraph",
@@ -456,7 +450,7 @@ export const ALL_POSTS: Post[] = [
       },
       {
         type: "quote",
-        text: "If your DS-160 says \"Software Engineer\" and your LCA says \"Senior Software Developer,\" a consular officer pulls up both documents at the interview and sees a discrepancy. That can trigger a 221(g) administrative processing request, which adds weeks to your timeline and forces a second consulate visit.",
+        text: 'If your DS-160 says "Software Engineer" and your LCA says "Senior Software Developer," a consular officer pulls up both documents at the interview and sees a discrepancy. That can trigger a 221(g) administrative processing request, which adds weeks to your timeline and forces a second consulate visit.',
       },
       {
         type: "heading",

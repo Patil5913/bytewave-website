@@ -11,7 +11,6 @@ export default function SmoothScroll() {
   useEffect(() => {
     const lenis = new Lenis();
 
-    // Keep ScrollTrigger in sync with Lenis (pinned/scrubbed triggers need this).
     lenis.on("scroll", ScrollTrigger.update);
 
     const raf = (time: number) => {

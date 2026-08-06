@@ -8,45 +8,14 @@ import Reveal from "@components/Reveal";
 
 gsap.registerPlugin(useGSAP);
 
-const FAQS = [
-  {
-    id: "01",
-    question: "How is a candidate verified before we see them?",
-    answer:
-      "Every specialist completes a domain-specific assessment and a strategy call before we ever route them. You only see profiles that have already cleared our bar.",
-  },
-  {
-    id: "02",
-    question: "What does it cost to hire through Bytewave?",
-    answer:
-      "A single success fee on the hire's first-year base salary, billed only once they start. High-volume teams can move to a flat monthly retainer instead. No job board fees, no per-post charges.",
-  },
-  {
-    id: "03",
-    question: "Do you place contractors or only full-time roles?",
-    answer:
-      "Permanent, full-time roles only. We're built for teams making long-term hires, not staffing short-term gaps.",
-  },
-  {
-    id: "04",
-    question: "What happens if a hire doesn't work out?",
-    answer:
-      "Every placement includes a 90-day replacement window. If it's not the right fit, we source a replacement at no additional cost.",
-  },
-  {
-    id: "05",
-    question: "How fast can you fill a role?",
-    answer:
-      "Because candidates are pre-verified, most roles receive a first qualified introduction within a few business days, with an average time-to-hire of 12 days.",
-  },
-];
+type Faq = { id: string; question: string; answer: string };
 
 function FaqItem({
   faq,
   isOpen,
   onToggle,
 }: {
-  faq: (typeof FAQS)[number];
+  faq: Faq;
   isOpen: boolean;
   onToggle: () => void;
 }) {
@@ -63,12 +32,18 @@ function FaqItem({
 
       if (!mounted.current) {
         mounted.current = true;
-        gsap.set(el, isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 });
+        gsap.set(
+          el,
+          isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 },
+        );
         return;
       }
 
       if (reduce) {
-        gsap.set(el, isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 });
+        gsap.set(
+          el,
+          isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 },
+        );
         return;
       }
 
@@ -79,7 +54,12 @@ function FaqItem({
           { height: "auto", opacity: 1, duration: 0.3, ease: "power2.out" },
         );
       } else {
-        gsap.to(el, { height: 0, opacity: 0, duration: 0.3, ease: "power2.out" });
+        gsap.to(el, {
+          height: 0,
+          opacity: 0,
+          duration: 0.3,
+          ease: "power2.out",
+        });
       }
     },
     { dependencies: [isOpen], scope: contentRef },
@@ -106,9 +86,7 @@ function FaqItem({
 
         <span
           className={`shrink-0 text-lg leading-none transition-all duration-300 ${
-            isOpen
-              ? "rotate-45 text-brand"
-              : "text-ink/40 group-hover:text-ink"
+            isOpen ? "rotate-45 text-brand" : "text-ink/40 group-hover:text-ink"
           }`}
         >
           +
@@ -124,7 +102,15 @@ function FaqItem({
   );
 }
 
-export default function EnterpriseFAQ() {
+export default function EnterpriseFAQ({
+  items,
+}: {
+  items: { question: string; answer: string }[];
+}) {
+  const FAQS: Faq[] = items.map((f, i) => ({
+    id: String(i + 1).padStart(2, "0"),
+    ...f,
+  }));
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -140,13 +126,13 @@ export default function EnterpriseFAQ() {
             </h2>
           </div>
           <p className="text-base leading-relaxed text-ink/50">
-            How verification, pricing, and routing work on our end. Still
-            have a question the log doesn&apos;t answer?
+            How verification, pricing, and routing work on our end. Still have a
+            question the log doesn&apos;t answer?
           </p>
 
           <a
             href="#"
-            className="group flex w-fit items-center gap-2 bg-ink/10 px-5 py-2.5 text-sm text-ink backdrop-blur-md transition hover:bg-ink/20"
+            className="group flex w-fit items-center gap-2 bg-ink/10 px-5 py-2.5 text-sm text-ink backdrop-blur-md transition-colors hover:bg-ink/20"
           >
             Talk to our team
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

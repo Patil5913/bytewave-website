@@ -1,6 +1,5 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
 import Reveal from "@components/Reveal";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -10,103 +9,61 @@ const STATUS_COLORS: Record<string, string> = {
   Negotiating: "bg-violet-400",
 };
 
-const PLACEMENTS = [
-  {
-    role: "Backend Developer",
-    stack: "Python, FastAPI, SQLAlchemy",
-    candidate: "M. Davis",
-    company: "stripe.com",
-    companyName: "Stripe",
-    location: "New York, NY",
-    pay: "$165k Base",
-    status: "Placed",
-  },
-  {
-    role: "Product Designer",
-    stack: "Figma, Design Systems",
-    candidate: "A. Chen",
-    company: "notion.so",
-    companyName: "Notion",
-    location: "Remote",
-    pay: "$140k Base",
-    status: "Offer",
-  },
-  {
-    role: "Frontend Engineer",
-    stack: "React, TypeScript, Next.js",
-    candidate: "J. Okafor",
-    company: "linear.app",
-    companyName: "Linear",
-    location: "San Francisco, CA",
-    pay: "$155k Base",
-    status: "Interviewing",
-  },
-  {
-    role: "Data Analyst",
-    stack: "SQL, Python, Looker",
-    candidate: "R. Foster",
-    company: "figma.com",
-    companyName: "Figma",
-    location: "Austin, TX",
-    pay: "$120k Base",
-    status: "Placed",
-  },
-  {
-    role: "DevOps Engineer",
-    stack: "Kubernetes, Terraform, AWS",
-    candidate: "S. Kim",
-    company: "vercel.com",
-    companyName: "Vercel",
-    location: "Seattle, WA",
-    pay: "$175k Base",
-    status: "Negotiating",
-  },
-];
+type PlacementItem = {
+  role: string;
+  stack: string;
+  candidate: string;
+  company: string;
+  companyName: string;
+  location: string;
+  pay: string;
+  status: string;
+};
 
-export default function PlacementFeed() {
+export default function PlacementFeed({ items }: { items: PlacementItem[] }) {
+  const PLACEMENTS = items;
   return (
     <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="mb-12 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
-            Recent Placements
-          </span>
-          <span className="text-xs tracking-wider text-ink/60 uppercase">
+          <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl">
+            Recent placements.
+          </h2>
+          <span className="text-xs tracking-wider text-ink/65 uppercase">
             {PLACEMENTS.length} of 1,240+ this year
           </span>
         </div>
 
         <Reveal stagger={0.08} y={20} className="border-t border-ink/10">
           {PLACEMENTS.map((item) => (
-            <a
+            <div
               key={item.candidate}
-              href="#"
-              className="group grid grid-cols-1 gap-x-6 gap-y-4 border-b border-ink/10 py-8 lg:grid-cols-12 lg:items-baseline"
+              className="grid grid-cols-1 gap-x-6 gap-y-4 border-b border-ink/10 py-8 lg:grid-cols-12 lg:items-baseline"
             >
-              {/* role */}
               <div className="flex flex-col gap-2 lg:col-span-5">
-                <h3 className="font-instrument text-2xl leading-none font-medium text-ink transition-colors group-hover:text-brand lg:text-3xl">
+                <h3 className="font-instrument text-2xl leading-none font-medium text-ink lg:text-3xl">
                   {item.role}
                 </h3>
                 <p className="text-xs text-ink/60">{item.stack}</p>
               </div>
 
-              {/* placement */}
               <div className="flex flex-col gap-1 lg:col-span-4">
                 <div className="flex items-center gap-2.5 text-sm text-ink/70">
                   <span className="shrink-0">{item.candidate}</span>
-                  <span className="shrink-0 text-ink/45">→</span>
+                  <span className="shrink-0 text-ink/55">→</span>
                   <img
                     src={`https://img.logo.dev/${item.company}?token=${process.env.NEXT_PUBLIC_LOGO_DEV_KEY}&size=40&format=png&theme=dark`}
                     alt={item.companyName}
-                    className="h-4 w-4 shrink-0 object-contain opacity-70 transition-opacity duration-300 group-hover:opacity-100"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                    className="h-4 w-4 shrink-0 object-contain opacity-80"
                   />
                   <span className="truncate text-ink">{item.companyName}</span>
                 </div>
                 <span className="text-xs text-ink/60">{item.location}</span>
               </div>
 
-              {/* comp */}
               <div className="flex items-center gap-4 lg:col-span-3 lg:justify-end">
                 <div className="flex flex-col gap-1.5 lg:items-end">
                   <span className="font-instrument text-xl tabular-nums text-ink lg:text-2xl">
@@ -119,9 +76,8 @@ export default function PlacementFeed() {
                     {item.status}
                   </span>
                 </div>
-                <ArrowUpRight className="h-4 w-4 shrink-0 -translate-x-1 text-ink/45 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:text-brand group-hover:opacity-100" />
               </div>
-            </a>
+            </div>
           ))}
         </Reveal>
       </div>

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Instrument_Serif, Archivo } from "next/font/google";
 import SmoothScroll from "@components/SmoothScroll";
 import CustomCursor from "@components/CustomCursor";
-import "./globals.css";
+import RefreshOnSave from "@components/RefreshOnSave";
+import "../globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,7 +23,8 @@ const archivo = Archivo({
 
 export const metadata: Metadata = {
   title: "Bytewave - The Frictionless Way to Hire & Get Hired",
-  description: "Skip the endless resume reviews. Bytewave connects verified candidates directly with companies actively looking for their exact skills.",
+  description:
+    "Skip the endless resume reviews. Bytewave connects verified candidates directly with companies actively looking for their exact skills.",
 };
 
 export default function RootLayout({
@@ -36,6 +38,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${instrumentSerif.variable} ${archivo.variable} antialiased`}
     >
       <body className="overflow-x-hidden">
+        <RefreshOnSave />
         <SmoothScroll />
         <CustomCursor />
         {children}

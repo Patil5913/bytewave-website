@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withPayload } from "@payloadcms/next/withPayload";
 
 const nextConfig: NextConfig = {
   images: {
@@ -13,9 +14,12 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
       },
     ],
-    qualities: [75, 85],
+    qualities: [75, 90],
   },
-  allowedDevOrigins: ['10.0.0.176']
+  allowedDevOrigins: ['10.0.0.176'],
+  // Load sharp from node_modules instead of bundling it, so its native
+  // .node binary keeps the rpath to libvips-cpp.so and can dlopen it.
+  serverExternalPackages: ["sharp"],
 };
 
-export default nextConfig;
+export default withPayload(nextConfig);

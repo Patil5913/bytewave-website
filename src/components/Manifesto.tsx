@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, BadgeCheck, Building2, Check, MapPin } from "lucide-react";
 import Reveal from "@components/Reveal";
+import { HOMEPAGE } from "@/lib/siteContent";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -21,9 +22,24 @@ const SKILLS = [
 const OVERALL = 93;
 
 const ROLES = [
-  { role: "Senior Backend", verified: 18, status: "Shortlist", tone: "text-brand" },
-  { role: "Product Designer", verified: 12, status: "Interviewing", tone: "text-amber-400" },
-  { role: "DevOps Lead", verified: 9, status: "Screening", tone: "text-sky-400" },
+  {
+    role: "Senior Backend",
+    verified: 18,
+    status: "Shortlist",
+    tone: "text-brand",
+  },
+  {
+    role: "Product Designer",
+    verified: 12,
+    status: "Interviewing",
+    tone: "text-amber-400",
+  },
+  {
+    role: "DevOps Lead",
+    verified: 9,
+    status: "Screening",
+    tone: "text-sky-400",
+  },
 ];
 const FILLED = 92;
 
@@ -115,11 +131,11 @@ function CandidateBody() {
       </div>
 
       <div className="rise flex items-center gap-3">
-        <button className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition hover:bg-ink/90">
+        <button className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-ink/90">
           Request intro
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </button>
-        <button className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition hover:bg-ink/5">
+        <button className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-ink/5">
           View profile
         </button>
       </div>
@@ -167,7 +183,9 @@ function EnterpriseBody() {
                   {r.verified} verified candidates
                 </span>
               </div>
-              <span className={`text-xs font-medium ${r.tone}`}>{r.status}</span>
+              <span className={`text-xs font-medium ${r.tone}`}>
+                {r.status}
+              </span>
             </div>
           ))}
         </div>
@@ -203,11 +221,11 @@ function EnterpriseBody() {
       </div>
 
       <div className="rise flex items-center gap-3">
-        <button className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition hover:bg-ink/90">
+        <button className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-ink/90">
           Review shortlist
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </button>
-        <button className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition hover:bg-ink/5">
+        <button className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-ink/5">
           Post a role
         </button>
       </div>
@@ -215,12 +233,10 @@ function EnterpriseBody() {
   );
 }
 
-// One window; its content switches between the two sides of the marketplace.
 function MatchWindow() {
   const rootRef = useRef<HTMLDivElement>(null);
   const [view, setView] = useState<View>("candidate");
 
-  // auto-cycle the view (unless reduced motion)
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = setInterval(() => {
@@ -229,7 +245,6 @@ function MatchWindow() {
     return () => clearInterval(id);
   }, []);
 
-  // animate the swapped-in content + count-up (re-runs on view change)
   useGSAP(
     () => {
       const root = rootRef.current;
@@ -285,7 +300,6 @@ function MatchWindow() {
       className="w-full rounded-2xl border border-ink/10 bg-ink/[0.04] p-1.5 backdrop-blur-sm"
     >
       <div className="overflow-hidden rounded-xl border border-ink/10 bg-canvas/50">
-        {/* window title bar */}
         <div className="flex items-center justify-between gap-3 border-b border-ink/10 bg-ink/[0.02] px-4 py-3">
           <div className="flex items-center gap-1.5">
             <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
@@ -306,24 +320,21 @@ function MatchWindow() {
   );
 }
 
-export default function Manifesto() {
+export default function Manifesto({
+  content = HOMEPAGE,
+}: {
+  content?: typeof HOMEPAGE;
+}) {
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16">
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16">
           <Reveal className="flex flex-col gap-6 md:col-span-6">
-            <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
-              Why We Exist
-            </span>
             <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
-              The traditional hiring loop is broken. We built a better
-              mechanism.
+              {content.manifestoHeadline}
             </h2>
-            <p className="max-w-prose text-base leading-relaxed text-ink/60 md:text-lg">
-              Most staffing agencies rely on keyword matching and endless
-              resume piles, frustrating companies and candidates alike. We see
-              hiring as a matching problem — connecting real needs directly
-              with a network of verified professionals, cutting out the noise.
+            <p className="max-w-prose text-base leading-relaxed text-ink/70 md:text-lg">
+              {content.manifestoBody}
             </p>
           </Reveal>
 
@@ -333,24 +344,14 @@ export default function Manifesto() {
         </div>
 
         <Reveal className="grid grid-cols-1 gap-8 border-t border-ink/10 pt-8 sm:grid-cols-2 md:gap-16">
-          <div>
-            <h4 className="mb-2 text-sm font-medium tracking-wider text-ink uppercase">
-              01. No Guesswork
-            </h4>
-            <p className="text-sm leading-snug text-ink/50">
-              Every match is backed by verified skills, not a keyword-stuffed
-              resume.
-            </p>
-          </div>
-          <div>
-            <h4 className="mb-2 text-sm font-medium tracking-wider text-ink uppercase">
-              02. Straight to the Point
-            </h4>
-            <p className="text-sm leading-snug text-ink/50">
-              Skip the application black hole and talk directly to the people
-              making the hire.
-            </p>
-          </div>
+          {content.manifestoPoints.map((point, i) => (
+            <div key={i}>
+              <h4 className="mb-2 text-sm font-medium tracking-wider text-ink uppercase">
+                {String(i + 1).padStart(2, "0")}. {point.title}
+              </h4>
+              <p className="text-sm leading-snug text-ink/70">{point.body}</p>
+            </div>
+          ))}
         </Reveal>
       </div>
     </section>

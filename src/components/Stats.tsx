@@ -9,38 +9,14 @@ import Reveal from "@components/Reveal";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const STATS = [
-  {
-    value: 94,
-    decimals: 0,
-    suffix: "%",
-    label: "Placement Success Rate",
-    note: "of matched roles close on the first shortlist.",
-  },
-  {
-    value: 14,
-    decimals: 0,
-    suffix: "d",
-    label: "Avg. Time-to-Placement",
-    note: "from first intro to signed offer.",
-  },
-  {
-    value: 1.2,
-    decimals: 1,
-    suffix: "k",
-    label: "Verified Professionals",
-    note: "skills confirmed, not keyword-matched.",
-  },
-  {
-    value: 150,
-    decimals: 0,
-    suffix: "+",
-    label: "Partner Organizations",
-    note: "hiring directly through the network.",
-  },
-];
+type StatItem = {
+  value: number;
+  decimals: number;
+  suffix: string;
+  label: string;
+  note: string;
+};
 
-// weekly placements — drives the mini bar chart
 const WEEKS = [12, 18, 15, 22, 19, 26, 31];
 const WEEK_MAX = Math.max(...WEEKS);
 
@@ -54,7 +30,6 @@ function NetworkWindow() {
   return (
     <div className="w-full rounded-2xl border border-ink/10 bg-ink/[0.04] p-1.5 backdrop-blur-sm">
       <div className="overflow-hidden rounded-xl border border-ink/10 bg-canvas/50">
-        {/* window title bar */}
         <div className="flex items-center justify-between gap-3 border-b border-ink/10 bg-ink/[0.02] px-4 py-3">
           <div className="flex items-center gap-1.5">
             <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
@@ -68,7 +43,6 @@ function NetworkWindow() {
         </div>
 
         <div className="flex flex-col gap-6 p-5">
-          {/* KPI row */}
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 rounded-lg border border-ink/10 bg-ink/[0.02] p-3">
               <span className="text-xs text-ink/40">Active roles</span>
@@ -84,7 +58,6 @@ function NetworkWindow() {
             </div>
           </div>
 
-          {/* weekly placements bar chart */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-1.5 text-xs tracking-wider text-ink/40 uppercase">
@@ -104,7 +77,6 @@ function NetworkWindow() {
             </div>
           </div>
 
-          {/* live feed */}
           <div className="flex flex-col divide-y divide-ink/5 rounded-lg border border-ink/10">
             {FEED.map((f) => (
               <div
@@ -133,7 +105,8 @@ function NetworkWindow() {
   );
 }
 
-export default function Stats() {
+export default function Stats({ stats }: { stats: StatItem[] }) {
+  const STATS = stats;
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -159,11 +132,16 @@ export default function Stats() {
           duration: 0.8,
           ease: "power3.out",
           stagger: 0.06,
-          scrollTrigger: { trigger: ".chart-bar", start: "top 90%", once: true },
+          scrollTrigger: {
+            trigger: ".chart-bar",
+            start: "top 90%",
+            once: true,
+          },
         });
 
-        gsap.utils.toArray<HTMLElement>(root.querySelectorAll(".stat-num")).forEach(
-          (el) => {
+        gsap.utils
+          .toArray<HTMLElement>(root.querySelectorAll(".stat-num"))
+          .forEach((el) => {
             const value = Number(el.dataset.value);
             const decimals = Number(el.dataset.decimals);
             const proxy = { val: 0 };
@@ -177,8 +155,7 @@ export default function Stats() {
                 el.textContent = proxy.val.toFixed(decimals);
               },
             });
-          },
-        );
+          });
       });
 
       return () => mm.revert();
@@ -192,16 +169,12 @@ export default function Stats() {
         ref={ref}
         className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16"
       >
-        {/* left — heading + stats */}
         <div className="flex flex-col gap-10 md:col-span-6">
           <div className="flex flex-col gap-6">
-            <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
-              By the Numbers
-            </span>
             <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
               Proof, not promises.
             </h2>
-            <p className="max-w-prose text-base leading-relaxed text-ink/60 md:text-lg">
+            <p className="max-w-prose text-base leading-relaxed text-ink/70 md:text-lg">
               Every match runs through the same verified pipeline. The result is
               a hiring loop measured in days — and outcomes we can put a number
               on.
@@ -222,10 +195,10 @@ export default function Stats() {
                   <span className="text-3xl text-ink/30">{stat.suffix}</span>
                 </h3>
                 <div className="flex flex-col gap-1.5">
-                  <p className="text-xs font-medium tracking-wider text-ink/50 uppercase">
+                  <p className="text-xs font-medium tracking-wider text-ink/65 uppercase">
                     {stat.label}
                   </p>
-                  <p className="max-w-[26ch] text-sm leading-snug text-ink/40">
+                  <p className="max-w-[26ch] text-sm leading-snug text-ink/60">
                     {stat.note}
                   </p>
                 </div>
@@ -234,7 +207,6 @@ export default function Stats() {
           </div>
         </div>
 
-        {/* right — live network window */}
         <Reveal x={24} y={0} className="md:col-span-6">
           <NetworkWindow />
         </Reveal>

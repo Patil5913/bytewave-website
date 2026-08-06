@@ -5,26 +5,16 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import { HOMEPAGE, splitBrand } from "@/lib/siteContent";
+
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-type Segment = { text: string; brand?: boolean };
-
-// Paragraphs as segments so the brand name can carry the brand color.
-const PARAGRAPHS: Segment[][] = [
-  [
-    {
-      text: "Hiring still runs on noise. Job boards bury you under 400 applicants, recruiters push roles that never fit, and by the time the right opening surfaces, it’s already gone.",
-    },
-  ],
-  [
-    { text: "find & hire", brand: true },
-    {
-      text: "works differently. We verify every professional, learn what teams actually need, and connect the two directly — so the right match happens in days, not months.",
-    },
-  ],
-];
-
-export default function AgentIntro() {
+export default function AgentIntro({
+  content = HOMEPAGE,
+}: {
+  content?: typeof HOMEPAGE;
+}) {
+  const PARAGRAPHS = content.agentParagraphs.map((p) => splitBrand(p.text));
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(

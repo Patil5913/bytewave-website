@@ -1,5 +1,6 @@
 "use client";
 
+import { BadgeCheck, Search } from "lucide-react";
 import Reveal from "@components/Reveal";
 
 const STATS = [
@@ -9,94 +10,124 @@ const STATS = [
   { value: "600+", label: "Roles Filled" },
 ];
 
-const ROLES = [
-  {
-    id: "01",
-    label: "Backend / Python",
-    days: "11d",
-    note: "Screened against production-grade system design rounds.",
-  },
-  {
-    id: "02",
-    label: "Frontend / React",
-    days: "9d",
-    note: "Fastest-moving category — deep bench of pre-verified candidates.",
-  },
-  {
-    id: "03",
-    label: "Platform / K8s",
-    days: "14d",
-    note: "Longer cycle reflects the seniority bar for infra roles.",
-  },
-  {
-    id: "04",
-    label: "Data / Analytics",
-    days: "12d",
-    note: "Matched on both tooling and domain context.",
-  },
-  {
-    id: "05",
-    label: "Product Design",
-    days: "10d",
-    note: "Portfolio-reviewed before any introduction is made.",
-  },
-  {
-    id: "06",
-    label: "Product Management",
-    days: "16d",
-    note: "Slower close, higher scrutiny on stakeholder track record.",
-  },
+const SHORTLIST = [
+  { who: "M. Davis", tag: "Backend · Python", match: 96, top: true },
+  { who: "A. Chen", tag: "Backend · Go", match: 92, top: false },
+  { who: "J. Okafor", tag: "Platform · K8s", match: 90, top: false },
+  { who: "R. Foster", tag: "Backend · Node", match: 87, top: false },
 ];
+
+function ShortlistWindow() {
+  return (
+    <div className="w-full rounded-2xl border border-ink/10 bg-ink/[0.04] p-1.5 backdrop-blur-sm">
+      <div className="overflow-hidden rounded-xl border border-ink/10 bg-canvas/50">
+        <div className="flex items-center justify-between gap-3 border-b border-ink/10 bg-ink/[0.02] px-4 py-3">
+          <div className="flex items-center gap-1.5">
+            <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+            <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
+            <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-ink/40">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+            shortlist · ready
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-5 p-5">
+          <div className="flex items-end justify-between gap-3">
+            <div className="flex flex-col gap-1">
+              <span className="text-xs tracking-wider text-ink/40 uppercase">
+                Open Requisition
+              </span>
+              <span className="font-instrument text-xl font-medium text-ink">
+                Senior Backend Engineer
+              </span>
+            </div>
+            <span className="shrink-0 rounded-full border border-ink/10 bg-ink/[0.03] px-2.5 py-1 text-[11px] tracking-wider text-ink/50 uppercase">
+              4 verified
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2.5 rounded-lg border border-ink/10 bg-ink/[0.02] px-3 py-2.5 text-sm text-ink/40">
+            <Search className="h-4 w-4 shrink-0" />
+            Python · FastAPI · 5+ yrs · remote
+          </div>
+
+          <div className="flex flex-col divide-y divide-ink/5 rounded-lg border border-ink/10">
+            {SHORTLIST.map((c) => (
+              <div
+                key={c.who}
+                className="flex items-center justify-between gap-3 px-3 py-3"
+              >
+                <div className="flex items-center gap-2.5">
+                  <BadgeCheck className="h-4 w-4 shrink-0 text-brand" />
+                  <div className="flex flex-col">
+                    <span className="flex items-center gap-2 text-sm text-ink/90">
+                      {c.who}
+                      {c.top && (
+                        <span className="rounded-full bg-brand/15 px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-brand uppercase">
+                          Top match
+                        </span>
+                      )}
+                    </span>
+                    <span className="text-xs text-ink/40">{c.tag}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <div className="hidden h-1 w-16 overflow-hidden rounded-full bg-ink/10 sm:block">
+                    <div
+                      className="h-full rounded-full bg-brand/70"
+                      style={{ width: `${c.match}%` }}
+                    />
+                  </div>
+                  <span className="text-xs font-medium text-brand tabular-nums">
+                    {c.match}%
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function TalentTelemetry() {
   return (
-    <section className="w-full bg-canvas px-6 py-24 md:px-16">
-      <div className="mx-auto max-w-7xl">
-        <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
-          <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
-            Talent Telemetry
-          </span>
-          <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
-            Fill roles fast, without the guesswork.
-          </h2>
-        </Reveal>
+    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16">
+        <div className="flex flex-col gap-10 md:col-span-6">
+          <div className="flex flex-col gap-6">
+            <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
+              Talent Telemetry
+            </span>
+            <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
+              A shortlist, not a search.
+            </h2>
+            <p className="max-w-prose text-base leading-relaxed text-ink/60 md:text-lg">
+              Post a role and get back a handful of pre-verified people matched
+              to your exact stack and seniority — not a thousand résumés to sift
+              through.
+            </p>
+          </div>
 
-        <Reveal className="mb-16 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-6">
-          {STATS.map((stat) => (
-            <div key={stat.label} className="flex items-baseline gap-3">
-              <span className="font-instrument text-4xl font-medium text-ink sm:text-5xl">
-                {stat.value}
-              </span>
-              <span className="text-xs tracking-widest text-ink/40 uppercase">
-                {stat.label}
-              </span>
-            </div>
-          ))}
-        </Reveal>
-
-        <span className="mb-8 block text-sm font-medium tracking-widest text-ink/60 uppercase">
-          Avg. Time-to-Hire by Role
-        </span>
-
-        <Reveal
-          stagger={0.06}
-          className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {ROLES.map((role) => (
-            <div key={role.id} className="group flex flex-col gap-3">
-              <div className="flex items-baseline justify-between gap-2">
-                <span className="text-sm font-medium text-ink/70 transition-colors duration-300 group-hover:text-ink">
-                  {role.label}
+          <div className="grid grid-cols-2 gap-x-8 gap-y-10 border-t border-ink/10 pt-10">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="flex flex-col gap-2">
+                <span className="font-instrument text-4xl font-medium text-ink tabular-nums lg:text-5xl">
+                  {stat.value}
                 </span>
-                <span className="text-2xl font-semibold text-brand transition-colors duration-300 group-hover:text-brand">
-                  {role.days}
+                <span className="text-xs font-medium tracking-wider text-ink/50 uppercase">
+                  {stat.label}
                 </span>
               </div>
-              <p className="text-xs leading-relaxed text-ink/40">
-                {role.note}
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+
+        <Reveal x={24} y={0} className="md:col-span-6">
+          <ShortlistWindow />
         </Reveal>
       </div>
     </section>

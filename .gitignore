@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Payload uploads
+/public/media/
+
+# Impeccable critique snapshots
+.impeccable/
