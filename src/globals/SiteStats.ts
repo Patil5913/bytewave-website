@@ -1,11 +1,11 @@
 import type { GlobalConfig } from "payload";
 
+import { isStaff } from "../access/roles";
+
 export const SiteStats: GlobalConfig = {
   slug: "site-stats",
   admin: { group: "Homepage" },
-  access: {
-    read: () => true,
-  },
+  access: { read: () => true, update: isStaff },
   fields: [
     {
       name: "stats",

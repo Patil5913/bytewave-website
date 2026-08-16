@@ -1,5 +1,7 @@
 import type { CollectionConfig } from "payload";
 
+import { isStaff } from "../access/roles";
+
 export const SuccessVideos: CollectionConfig = {
   slug: "success-videos",
   labels: { singular: "Success Video", plural: "Success Videos" },
@@ -8,7 +10,12 @@ export const SuccessVideos: CollectionConfig = {
     defaultColumns: ["name", "role", "company", "order"],
     group: "Professionals Page",
   },
-  access: { read: () => true },
+  access: {
+    read: () => true,
+    create: isStaff,
+    update: isStaff,
+    delete: isStaff,
+  },
   fields: [
     { name: "name", type: "text", required: true },
     {
@@ -26,9 +33,10 @@ export const SuccessVideos: CollectionConfig = {
     { name: "duration", type: "text", admin: { description: "e.g. 02:45" } },
     {
       name: "thumbnail",
-      type: "text",
+      type: "upload",
+      relationTo: "media",
       required: true,
-      admin: { description: "Thumbnail image URL." },
+      admin: { description: "Video thumbnail. 16:9 works best." },
     },
     {
       name: "row",

@@ -65,7 +65,7 @@ export default function EnterpriseEconomics() {
             specialist joins your team — and we stand behind every placement.
           </p>
           <a
-            href="#"
+            href="#intake"
             className="group mt-2 flex w-fit items-center gap-2 bg-ink px-6 py-3 text-sm font-medium text-canvas transition-colors hover:bg-ink/90"
           >
             Book a free consultation

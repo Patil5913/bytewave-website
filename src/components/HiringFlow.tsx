@@ -155,8 +155,9 @@ export default function HiringFlow() {
 
   return (
     <section
+      id="how-it-works"
       ref={ref}
-      className="relative w-full overflow-hidden bg-canvas md:h-screen"
+      className="relative w-full scroll-mt-24 overflow-hidden bg-canvas md:h-screen"
     >
       <div className="flow-track flex flex-col md:h-screen md:w-max md:flex-row">
         {STAGES.map((stage, si) => {

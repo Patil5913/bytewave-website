@@ -21,10 +21,9 @@ function VideoRow({ items, anim }: { items: Video[]; anim: string }) {
         {[0, 1].map((dup) => (
           <Fragment key={dup}>
             {items.map((video, i) => (
-              <a
+              <div
                 key={`${dup}-${i}`}
-                href="#"
-                className="group relative aspect-video w-[300px] shrink-0 cursor-pointer overflow-hidden rounded-xl bg-black sm:w-[360px]"
+                className="group relative aspect-video w-[300px] shrink-0 overflow-hidden rounded-xl bg-black sm:w-[360px]"
               >
                 <img
                   src={video.thumbnail}
@@ -39,6 +38,12 @@ function VideoRow({ items, anim }: { items: Video[]; anim: string }) {
                     <Play className="ml-0.5 h-4 w-4 fill-white text-white transition-colors group-hover:fill-brand group-hover:text-brand" />
                   </div>
                 </div>
+
+                {video.duration && (
+                  <span className="absolute top-3 left-3 rounded-full bg-black/60 px-2 py-1 font-mono text-[10px] text-white/80 tabular-nums backdrop-blur-md">
+                    {video.duration}
+                  </span>
+                )}
 
                 <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 backdrop-blur-md">
                   <BadgeCheck className="h-3.5 w-3.5 fill-brand/20 text-brand" />
@@ -65,7 +70,7 @@ function VideoRow({ items, anim }: { items: Video[]; anim: string }) {
                     </span>
                   </div>
                 </div>
-              </a>
+              </div>
             ))}
           </Fragment>
         ))}
@@ -95,7 +100,7 @@ export default function VideoTelemetry({ items }: { items: Video[] }) {
 
           <Reveal
             as="a"
-            href="#"
+            href="/insights"
             className="group flex w-fit items-center gap-2 text-xs tracking-wider text-ink/50 uppercase transition-colors hover:text-ink"
           >
             View Full Archive

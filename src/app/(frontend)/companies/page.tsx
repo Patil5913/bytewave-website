@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Navbar from "@components/Navbar";
 import EnterpriseHero from "@components/EnterpriseHero";
 import TalentTelemetry from "@components/TalentTelemetry";
@@ -15,8 +16,19 @@ import {
   getTestimonialQuotes,
   getSiteSettingsContent,
 } from "@/lib/content";
+import { metadataFromSettings } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettingsContent();
+  return metadataFromSettings(settings.seo, {
+    title: "For Companies · find & hire",
+    description:
+      "Hire pre-verified specialists. Every candidate clears a domain assessment and a strategy call before you see the profile.",
+    path: "/companies",
+  });
+}
 
 export default async function Companies() {
   const [certs, faqs, quotes, settings] = await Promise.all([
@@ -28,7 +40,7 @@ export default async function Companies() {
 
   return (
     <>
-      <Navbar />
+      <Navbar ctaLabel={settings.navCtaLabel} />
       <EnterpriseHero />
       <TalentTelemetry />
       <PlatformCapabilities />

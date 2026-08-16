@@ -21,6 +21,7 @@ import sharp from "sharp";
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Contacts } from "./collections/Contacts";
+import { CompanyFaqs, ProfessionalFaqs } from "./collections/Faqs";
 import { Posts } from "./collections/Posts";
 import { Placements } from "./collections/Placements";
 import { ClientQuotes } from "./collections/ClientQuotes";
@@ -29,6 +30,7 @@ import { Certifications } from "./collections/Certifications";
 import { SiteStats } from "./globals/SiteStats";
 import { Homepage } from "./globals/Homepage";
 import { SiteSettings } from "./globals/SiteSettings";
+import { LegalPage } from "./globals/LegalPage";
 import { TrackRecord } from "./globals/TrackRecord";
 import { slugify } from "./lib/insights";
 
@@ -114,13 +116,15 @@ export default buildConfig({
     Users,
     Media,
     Contacts,
+    CompanyFaqs,
+    ProfessionalFaqs,
     Posts,
     Placements,
     ClientQuotes,
     SuccessVideos,
     Certifications,
   ],
-  globals: [SiteStats, Homepage, SiteSettings, TrackRecord],
+  globals: [SiteStats, Homepage, SiteSettings, TrackRecord, LegalPage],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,

@@ -6,6 +6,7 @@ import { blocksToMarkdown } from "./markdown";
 import { mdToLexical } from "./lexical";
 import {
   HOMEPAGE,
+  LEGAL_PAGE,
   SITE_SETTINGS,
   TRACK_RECORD,
   CERTIFICATIONS as CERT_DEFAULT,
@@ -44,6 +45,8 @@ export type VideoItem = {
 
 export type PostView = Omit<Post, "content"> & {
   content: unknown;
+  /** Alt text from the uploaded cover, falling back to the title. */
+  coverAlt?: string;
   faqs?: { question: string; answer: string }[];
 };
 
@@ -58,55 +61,60 @@ export type Placement = {
   status: string;
 };
 
-const FALLBACK_PLACEMENTS: Placement[] = [
+/**
+ * Illustrative rows shown when the placements collection is empty or the DB is
+ * unreachable. Deliberately generic — never put a real client or candidate
+ * name in here, it renders in production.
+ */
+const EXAMPLE_PLACEMENTS: Placement[] = [
   {
     role: "Backend Developer",
-    stack: "Python, FastAPI, SQLAlchemy",
-    candidate: "M. Davis",
-    company: "stripe.com",
-    companyName: "Stripe",
+    stack: "Python, FastAPI, PostgreSQL",
+    candidate: "Candidate A",
+    company: "example.com",
+    companyName: "Fintech Platform",
     location: "New York, NY",
-    pay: "$165k Base",
+    pay: "Example listing",
     status: "Placed",
   },
   {
     role: "Product Designer",
     stack: "Figma, Design Systems",
-    candidate: "A. Chen",
-    company: "notion.so",
-    companyName: "Notion",
+    candidate: "Candidate B",
+    company: "example.com",
+    companyName: "Productivity Startup",
     location: "Remote",
-    pay: "$140k Base",
+    pay: "Example listing",
     status: "Offer",
   },
   {
     role: "Frontend Engineer",
     stack: "React, TypeScript, Next.js",
-    candidate: "J. Okafor",
-    company: "linear.app",
-    companyName: "Linear",
+    candidate: "Candidate C",
+    company: "example.com",
+    companyName: "Developer Tools Co.",
     location: "San Francisco, CA",
-    pay: "$155k Base",
+    pay: "Example listing",
     status: "Interviewing",
   },
   {
     role: "Data Analyst",
     stack: "SQL, Python, Looker",
-    candidate: "R. Foster",
-    company: "figma.com",
-    companyName: "Figma",
+    candidate: "Candidate D",
+    company: "example.com",
+    companyName: "Marketplace Co.",
     location: "Austin, TX",
-    pay: "$120k Base",
+    pay: "Example listing",
     status: "Placed",
   },
   {
     role: "DevOps Engineer",
     stack: "Kubernetes, Terraform, AWS",
-    candidate: "S. Kim",
-    company: "vercel.com",
-    companyName: "Vercel",
+    candidate: "Candidate E",
+    company: "example.com",
+    companyName: "Infrastructure Co.",
     location: "Seattle, WA",
-    pay: "$175k Base",
+    pay: "Example listing",
     status: "Negotiating",
   },
 ];
@@ -119,7 +127,8 @@ export type SiteStat = {
   note: string;
 };
 
-const FALLBACK_STATS: SiteStat[] = [
+/** Illustrative figures for an empty database — see EXAMPLE_PLACEMENTS. */
+const EXAMPLE_STATS: SiteStat[] = [
   {
     value: 94,
     decimals: 0,
@@ -150,6 +159,29 @@ const FALLBACK_STATS: SiteStat[] = [
   },
 ];
 
+/**
+ * Resolve a Payload upload field to a URL. Depending on query depth the value
+ * is either a populated media doc or a bare id; legacy rows may still hold a
+ * plain URL string, so all three are handled.
+ */
+function mediaUrl(value: unknown): string {
+  if (typeof value === "string") return value;
+  if (value && typeof value === "object") {
+    const url = (value as { url?: unknown }).url;
+    if (typeof url === "string") return url;
+  }
+  return "";
+}
+
+/** Alt text stored alongside an uploaded image, when the doc is populated. */
+function mediaAlt(value: unknown, fallback: string): string {
+  if (value && typeof value === "object") {
+    const alt = (value as { alt?: unknown }).alt;
+    if (typeof alt === "string" && alt) return alt;
+  }
+  return fallback;
+}
+
 async function client() {
   return getPayload({ config });
 }
@@ -162,7 +194,7 @@ export async function getPlacements(): Promise<Placement[]> {
       limit: 20,
       sort: "order",
     });
-    if (!docs.length) return FALLBACK_PLACEMENTS;
+    if (!docs.length) return EXAMPLE_PLACEMENTS;
     return (docs as Record<string, unknown>[]).map((d) => ({
       role: d.role as string,
       stack: d.stack as string,
@@ -173,8 +205,9 @@ export async function getPlacements(): Promise<Placement[]> {
       pay: d.pay as string,
       status: d.status as string,
     }));
-  } catch {
-    return FALLBACK_PLACEMENTS;
+  } catch (err) {
+    console.error("[content] placements query failed, using examples:", err);
+    return EXAMPLE_PLACEMENTS;
   }
 }
 
@@ -185,9 +218,10 @@ export async function getSiteStats(): Promise<SiteStat[]> {
       slug: "site-stats",
     })) as Record<string, unknown>;
     const stats = (global?.stats ?? []) as SiteStat[];
-    return stats.length ? stats : FALLBACK_STATS;
-  } catch {
-    return FALLBACK_STATS;
+    return stats.length ? stats : EXAMPLE_STATS;
+  } catch (err) {
+    console.error("[content] site-stats query failed, using examples:", err);
+    return EXAMPLE_STATS;
   }
 }
 
@@ -202,9 +236,10 @@ function toPostView(d: Record<string, unknown>): PostView {
     authorTitle: (d.authorTitle as string) ?? "",
     authorBio: (d.authorBio as string) ?? "",
     authorLinkedIn: (d.authorLinkedIn as string) || undefined,
-    authorAvatar: (d.authorAvatar as string) || undefined,
+    authorAvatar: mediaUrl(d.authorAvatar) || undefined,
     readTime: d.readTime as string,
-    cover: d.cover as string,
+    cover: mediaUrl(d.cover),
+    coverAlt: mediaAlt(d.cover, (d.title as string) ?? ""),
     excerpt: d.excerpt as string,
     content: d.content,
     faqs: (d.faqs as { question: string; answer: string }[]) ?? [],
@@ -220,7 +255,8 @@ async function findAll(collection: string, sort = "order") {
       sort,
     });
     return docs as Record<string, unknown>[];
-  } catch {
+  } catch (err) {
+    console.error(`[content] ${collection} query failed:`, err);
     return [];
   }
 }
@@ -232,7 +268,8 @@ async function findGlobalSafe(slug: string) {
       string,
       unknown
     > | null;
-  } catch {
+  } catch (err) {
+    console.error(`[content] global ${slug} query failed:`, err);
     return null;
   }
 }
@@ -262,6 +299,10 @@ export async function getSiteSettingsContent(): Promise<typeof SITE_SETTINGS> {
   return merge(SITE_SETTINGS, await findGlobalSafe("site-settings"));
 }
 
+export async function getLegalPageContent(): Promise<typeof LEGAL_PAGE> {
+  return merge(LEGAL_PAGE, await findGlobalSafe("legal-page"));
+}
+
 export async function getTrackRecordContent(): Promise<typeof TRACK_RECORD> {
   return merge(TRACK_RECORD, await findGlobalSafe("track-record"));
 }
@@ -282,7 +323,25 @@ export async function getCertificationsContent(): Promise<CertItem[]> {
 export async function getFaqsContent(
   audience: "companies" | "professionals",
 ): Promise<FaqItem[]> {
-  return audience === "companies" ? FAQS_COMPANIES : FAQS_PROFESSIONALS;
+  const fallback =
+    audience === "companies" ? FAQS_COMPANIES : FAQS_PROFESSIONALS;
+  try {
+    const payload = await client();
+    const { docs } = await payload.find({
+      collection:
+        audience === "companies" ? "company-faqs" : "professional-faqs",
+      limit: 50,
+      sort: "order",
+    });
+    if (!docs.length) return fallback;
+    return (docs as Record<string, unknown>[]).map((d) => ({
+      question: d.question as string,
+      answer: d.answer as string,
+    }));
+  } catch (err) {
+    console.error(`[content] faqs (${audience}) query failed:`, err);
+    return fallback;
+  }
 }
 
 export async function getTestimonialQuotes(): Promise<QuoteItem[]> {
@@ -307,7 +366,7 @@ export async function getTestimonialVideos(): Promise<VideoItem[]> {
     company: d.company as string,
     domain: d.domain as string,
     duration: (d.duration as string) ?? "",
-    thumbnail: (d.thumbnail as string) ?? "",
+    thumbnail: mediaUrl(d.thumbnail),
     row: (d.row as string) ?? "one",
   }));
 }
@@ -334,7 +393,8 @@ export async function getPosts(): Promise<PostView[]> {
     });
     if (!docs.length) return fallbackPosts();
     return docs.map((d) => toPostView(d as Record<string, unknown>));
-  } catch {
+  } catch (err) {
+    console.error("[content] posts query failed, using bundled posts:", err);
     return fallbackPosts();
   }
 }

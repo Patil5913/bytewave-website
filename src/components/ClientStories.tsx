@@ -73,7 +73,7 @@ export default function ClientStories({ items }: { items: Client[] }) {
 
           <Reveal
             as="a"
-            href="#"
+            href="/insights"
             className="group flex w-fit items-center gap-2 text-xs tracking-wider text-ink/50 uppercase transition-colors hover:text-ink"
           >
             Read All Case Studies

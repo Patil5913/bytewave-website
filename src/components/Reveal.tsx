@@ -65,5 +65,8 @@ export default function Reveal({
     { scope: ref },
   );
 
+  // The ref is only forwarded here, never read during render — createElement
+  // is too dynamic for the lint rule to see that.
+  // eslint-disable-next-line react-hooks/refs
   return createElement(as, { ref, className, ...rest }, children);
 }

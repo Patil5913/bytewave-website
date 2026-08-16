@@ -57,17 +57,21 @@ export default function Footer({
                 </span>
               ))}
             </address>
-            <div className="mt-2 flex items-center gap-6 text-xs text-ink/60">
-              {settings.socials.map((s) => (
-                <Link
-                  key={s.label}
-                  href={s.href}
-                  className="transition-colors hover:text-ink"
-                >
-                  {s.label}
-                </Link>
-              ))}
-            </div>
+            {settings.socials.length > 0 && (
+              <div className="mt-2 flex items-center gap-6 text-xs text-ink/60">
+                {settings.socials.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer me"
+                    className="transition-colors hover:text-ink"
+                  >
+                    {s.label}
+                  </a>
+                ))}
+              </div>
+            )}
 
             <div className="mt-4 flex max-w-xs flex-col gap-3">
               <span

@@ -1,5 +1,7 @@
 import type { CollectionConfig } from "payload";
 
+import { isStaff } from "../access/roles";
+
 export function randomArticleId(): string {
   let id = "";
   while (id.length < 7) id += Math.floor(Math.random() * 16).toString(16);
@@ -15,6 +17,9 @@ export const Posts: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: isStaff,
+    update: isStaff,
+    delete: isStaff,
   },
   hooks: {
     beforeValidate: [
@@ -49,7 +54,16 @@ export const Posts: CollectionConfig = {
         },
         { name: "updated", type: "checkbox", defaultValue: false },
         { name: "readTime", type: "text", required: true },
-        { name: "cover", type: "text", required: true },
+        {
+          name: "cover",
+          type: "upload",
+          relationTo: "media",
+          required: true,
+          admin: {
+            description:
+              "Header image, also used as the social preview. Upload a file — 16:9 works best.",
+          },
+        },
         { name: "excerpt", type: "textarea", required: true },
       ],
     },
@@ -62,7 +76,12 @@ export const Posts: CollectionConfig = {
         { name: "authorTitle", type: "text" },
         { name: "authorBio", type: "textarea" },
         { name: "authorLinkedIn", type: "text" },
-        { name: "authorAvatar", type: "text" },
+        {
+          name: "authorAvatar",
+          type: "upload",
+          relationTo: "media",
+          admin: { description: "Square headshot. Optional." },
+        },
       ],
     },
     {

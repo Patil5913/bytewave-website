@@ -1,5 +1,7 @@
 import type { CollectionConfig } from "payload";
 
+import { isStaff } from "../access/roles";
+
 export const Placements: CollectionConfig = {
   slug: "placements",
   admin: {
@@ -9,6 +11,9 @@ export const Placements: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: isStaff,
+    update: isStaff,
+    delete: isStaff,
   },
   fields: [
     { name: "role", type: "text", required: true },

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Navbar from "@components/Navbar";
 import Footer from "@components/Footer";
 import ReadingProgress from "@components/ReadingProgress";
@@ -12,10 +13,39 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { buildHref, topicSlug } from "@/lib/insights";
-import { getPosts } from "@/lib/content";
+import { getPosts, getSiteSettingsContent } from "@/lib/content";
 import { ArticleRichText, extractToc, hasHeading } from "@/lib/richtext";
+import { metadataFromSettings } from "@/lib/seo";
 
 export const revalidate = 30;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ topic: string; slug: string }>;
+}): Promise<Metadata> {
+  const { topic, slug } = await params;
+  const [allPosts, settings] = await Promise.all([
+    getPosts(),
+    getSiteSettingsContent(),
+  ]);
+  const post = allPosts.find(
+    (p) =>
+      topicSlug(p) === topic && (slug === p.id || slug.startsWith(`${p.id}-`)),
+  );
+  if (!post) return metadataFromSettings(settings.seo);
+
+  return metadataFromSettings(settings.seo, {
+    title: `${post.title} · find & hire`,
+    description: post.excerpt,
+    path: buildHref(post),
+    image: post.cover,
+    article: {
+      publishedTime: post.date,
+      authors: post.author ? [post.author] : undefined,
+    },
+  });
+}
 
 export async function generateStaticParams() {
   const all = await getPosts();
@@ -31,7 +61,10 @@ export default async function InsightArticle({
   params: Promise<{ topic: string; slug: string }>;
 }) {
   const { topic, slug } = await params;
-  const allPosts = await getPosts();
+  const [allPosts, settings] = await Promise.all([
+    getPosts(),
+    getSiteSettingsContent(),
+  ]);
   const post = allPosts.find(
     (p) =>
       topicSlug(p) === topic && (slug === p.id || slug.startsWith(`${p.id}-`)),
@@ -60,7 +93,7 @@ export default async function InsightArticle({
   return (
     <>
       <ReadingProgress />
-      <Navbar />
+      <Navbar ctaLabel={settings.navCtaLabel} />
       <article className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
         <div className="mx-auto max-w-7xl">
           <nav className="mb-6 flex items-center gap-2 text-xs tracking-wide text-ink/40">
@@ -258,7 +291,7 @@ export default async function InsightArticle({
           </div>
         </div>
       </article>
-      <Footer />
+      <Footer settings={settings} />
     </>
   );
 }

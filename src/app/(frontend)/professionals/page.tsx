@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Navbar from "@components/Navbar";
 import ProfessionalHero from "@components/ProfessionalHero";
 import MarketTelemetry from "@components/MarketTelemetry";
@@ -15,8 +16,19 @@ import {
   getSiteSettingsContent,
   getTrackRecordContent,
 } from "@/lib/content";
+import { metadataFromSettings } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettingsContent();
+  return metadataFromSettings(settings.seo, {
+    title: "For Professionals · find & hire",
+    description:
+      "Get verified once, then get routed to roles that match your actual skills — no job-board spray, no recruiter noise.",
+    path: "/professionals",
+  });
+}
 
 export default async function Professionals() {
   const [videos, faqs, settings, trackRecord] = await Promise.all([
@@ -28,7 +40,7 @@ export default async function Professionals() {
 
   return (
     <>
-      <Navbar />
+      <Navbar ctaLabel={settings.navCtaLabel} />
       <ProfessionalHero />
       <MarketTelemetry />
       <CareerClimb />

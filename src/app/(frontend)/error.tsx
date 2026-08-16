@@ -1,9 +1,22 @@
+"use client";
+
+import { useEffect } from "react";
 import Link from "next/link";
 
-export default function NotFound() {
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   return (
     <main className="relative flex min-h-dvh w-full flex-col items-center justify-center overflow-hidden bg-canvas px-6 text-center">
-      {/* blueprint grid — same language as the on-site charts */}
+      {/* blueprint grid — same language as the 404 page */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -18,50 +31,46 @@ export default function NotFound() {
         }}
       />
 
-      {/* ghost numeral — echoes the section numerals across the site */}
       <span
         aria-hidden
         className="pointer-events-none absolute font-instrument text-[42vw] leading-none font-medium text-ink/[0.035] select-none sm:text-[34vw]"
       >
-        404
+        500
       </span>
 
       <div className="relative z-10 flex flex-col items-center gap-6">
         <span className="text-xs tracking-widest text-ink/50 uppercase">
-          Error <span className="text-brand">{"//"}</span> 404
+          Error <span className="text-brand">{"//"}</span> 500
         </span>
 
         <h1 className="font-instrument text-6xl leading-none font-medium text-ink sm:text-7xl">
-          No match found.
+          Something broke.
         </h1>
 
         <p className="max-w-md text-base leading-relaxed text-ink/55">
-          We couldn&apos;t source this page. Let&apos;s get you back to the
-          search.
+          This one is on us. Try again — if it keeps happening, tell us and
+          we&apos;ll dig in.
         </p>
 
-        {/* terminal path line with the site's blinking brand caret */}
-        <p className="flex items-center gap-2 text-sm text-ink/40">
-          <span className="text-ink/30">~/</span>
-          0 results
-          <span
-            aria-hidden
-            className="inline-block h-[2px] w-2.5 bg-brand animate-[blink_1.1s_steps(1,end)_infinite]"
-          />
-        </p>
+        {error.digest && (
+          <p className="text-sm text-ink/35">
+            Reference <span className="text-ink/55">{error.digest}</span>
+          </p>
+        )}
 
         <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-sm">
-          <Link
-            href="/"
+          <button
+            type="button"
+            onClick={reset}
             className="bg-ink px-6 py-2.5 font-medium text-canvas transition-colors hover:bg-ink/90"
           >
-            Back to Home
-          </Link>
+            Try Again
+          </button>
           <Link
-            href="/services#intake"
+            href="/"
             className="bg-ink/10 px-6 py-2.5 text-ink backdrop-blur-md transition-colors hover:bg-ink/20"
           >
-            Talk to Us
+            Back to Home
           </Link>
         </div>
       </div>

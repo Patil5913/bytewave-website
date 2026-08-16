@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import Reveal from "@components/Reveal";
+import { SITE_SETTINGS } from "@/lib/siteContent";
 
 const LINKS = [
   { href: "/companies", label: "For Companies" },
@@ -11,17 +12,46 @@ const LINKS = [
   { href: "/insights", label: "Insights" },
 ];
 
-export default function Navbar() {
+/**
+ * Where the bar's CTA points when the current page has no intake form of its
+ * own — /services carries one, so it is a real destination rather than a
+ * bounce back to the homepage.
+ */
+const CTA_FALLBACK = "/services#intake";
+
+export default function Navbar({
+  ctaLabel = SITE_SETTINGS.navCtaLabel,
+  ctaHref,
+}: {
+  ctaLabel?: string;
+  /** Overrides the auto-resolved target. */
+  ctaHref?: string;
+} = {}) {
   const [scrolled, setScrolled] = useState(true);
   const [open, setOpen] = useState(false);
 
+  const ctaTarget = ctaHref ?? CTA_FALLBACK;
+
+  // Most pages already end in an intake form, so prefer scrolling to it over
+  // navigating to the homepage one. Resolved on click rather than on mount so
+  // the link keeps a real href for crawlers and middle-click.
+  function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    setOpen(false);
+    if (ctaHref) return;
+    const intake = document.getElementById("intake");
+    if (!intake) return;
+    e.preventDefault();
+    intake.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   useEffect(() => {
-    const hero = document.querySelector<HTMLElement>("[data-hero]");
-    if (!hero) {
-      setScrolled(true);
-      return;
-    }
     const onScroll = () => {
+      // Pages without a hero keep the bar in its solid state.
+      const hero = document.querySelector<HTMLElement>("[data-hero]");
+      if (!hero) {
+        setScrolled(true);
+        return;
+      }
       const threshold = hero.offsetHeight * 0.6;
       setScrolled(window.scrollY > threshold);
     };
@@ -83,15 +113,17 @@ export default function Navbar() {
               {l.label}
             </Link>
           ))}
-          <button
+          <Link
+            href={ctaTarget}
+            onClick={handleCtaClick}
             className={`px-4 py-1.5 text-sm backdrop-blur-md transition-colors ${
               scrolled
                 ? "bg-ink text-canvas hover:bg-ink/90"
                 : "bg-white/10 text-white hover:bg-white/20"
             }`}
           >
-            Let&apos;s Talk
-          </button>
+            {ctaLabel}
+          </Link>
         </div>
 
         {/* mobile toggle */}
@@ -119,13 +151,13 @@ export default function Navbar() {
               {l.label}
             </Link>
           ))}
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="mt-6 bg-ink px-4 py-3 text-sm font-medium text-canvas transition-colors hover:bg-ink/90"
+          <Link
+            href={ctaTarget}
+            onClick={handleCtaClick}
+            className="mt-6 bg-ink px-4 py-3 text-center text-sm font-medium text-canvas transition-colors hover:bg-ink/90"
           >
-            Let&apos;s Talk
-          </button>
+            {ctaLabel}
+          </Link>
         </div>
       )}
     </Reveal>

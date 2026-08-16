@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      // Company logos (logo.dev), used by the certification and feed rows.
+      {
+        protocol: "https",
+        hostname: "img.logo.dev",
+      },
     ],
     qualities: [75, 90],
   },

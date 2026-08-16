@@ -63,7 +63,10 @@ export default function MarketTelemetry() {
   );
 
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
+    <section
+      id="markets"
+      className="relative flex min-h-screen w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16"
+    >
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-12">
         <Reveal className="flex flex-col gap-4 md:max-w-3xl">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">

@@ -1,26 +1,18 @@
 import type { GlobalConfig } from "payload";
 
+import { isStaff } from "../access/roles";
+
+// The hero is intentionally not editable: its copy is the brand's positioning
+// statement and its two CTAs are the site's primary routing, so both live in
+// code (HOMEPAGE in src/lib/siteContent.ts).
 export const Homepage: GlobalConfig = {
   slug: "homepage",
   admin: { group: "Homepage" },
-  access: { read: () => true },
+  access: { read: () => true, update: isStaff },
   fields: [
     {
       type: "tabs",
       tabs: [
-        {
-          label: "Hero",
-          fields: [
-            { name: "heroBadge", type: "text" },
-            { name: "heroHeadline", type: "text" },
-            { name: "heroSub", type: "textarea" },
-            { name: "heroPrimaryLabel", type: "text" },
-            { name: "heroPrimaryHref", type: "text" },
-            { name: "heroSecondaryLabel", type: "text" },
-            { name: "heroSecondaryHref", type: "text" },
-            { name: "heroMarqueeNote", type: "text" },
-          ],
-        },
         {
           label: "Manifesto",
           fields: [

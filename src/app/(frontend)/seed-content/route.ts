@@ -10,6 +10,9 @@ import {
   SITE_SETTINGS,
   TRACK_RECORD,
   CERTIFICATIONS,
+  FAQS_COMPANIES,
+  LEGAL_PAGE,
+  FAQS_PROFESSIONALS,
   TESTIMONIAL_QUOTES,
   TESTIMONIAL_VIDEOS,
 } from "@/lib/siteContent";
@@ -23,6 +26,62 @@ export async function POST(req: Request) {
   const payload = await getPayload({ config });
   type GlobalData = Parameters<typeof payload.updateGlobal>[0]["data"];
   const log: string[] = [];
+
+  /**
+   * Pull a bundled remote image into the Media collection and return its id,
+   * so seeded posts and videos satisfy the upload fields. Results are cached
+   * per URL because the same cover is reused across fixtures.
+   */
+  const mediaCache = new Map<string, string | number>();
+  const ensureMedia = async (url: string | undefined, alt: string) => {
+    if (!url) return undefined;
+    const cached = mediaCache.get(url);
+    if (cached !== undefined) return cached;
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = Buffer.from(await res.arrayBuffer());
+      const mimetype = res.headers.get("content-type") ?? "image/jpeg";
+      const name = `${alt
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "")
+        .slice(0, 60)}.${mimetype.split("/")[1]?.split(";")[0] ?? "jpg"}`;
+      const doc = await payload.create({
+        collection: "media",
+        overrideAccess: true,
+        data: { alt },
+        file: { data, mimetype, name, size: data.byteLength },
+      });
+      mediaCache.set(url, doc.id);
+      return doc.id;
+    } catch (err) {
+      log.push(`media: failed to import ${url} — ${(err as Error).message}`);
+      return undefined;
+    }
+  };
+
+  /**
+   * Globals are seeded once. Re-running the seed must never clobber content
+   * the client has since edited in the admin, so a global that already holds
+   * data is left alone.
+   */
+  const seedGlobal = async (
+    slug: Parameters<typeof payload.updateGlobal>[0]["slug"],
+    data: GlobalData,
+    isEmpty: (current: Record<string, unknown>) => boolean,
+  ) => {
+    const current = (await payload.findGlobal({
+      slug,
+      overrideAccess: true,
+    })) as Record<string, unknown>;
+    if (!isEmpty(current)) {
+      log.push(`${slug}: already set — skip`);
+      return;
+    }
+    await payload.updateGlobal({ slug, overrideAccess: true, data });
+    log.push(`${slug}: seeded`);
+  };
 
   const seedMany = async (
     collection: CollectionSlug,
@@ -105,13 +164,39 @@ export async function POST(req: Request) {
     "client-quotes",
     TESTIMONIAL_QUOTES.map((t, i) => ({ ...t, order: i })),
   );
-  await seedMany(
-    "success-videos",
-    TESTIMONIAL_VIDEOS.map((t, i) => ({ ...t, order: i })),
-  );
+  const { totalDocs: videoCount } = await payload.count({
+    collection: "success-videos",
+  });
+  if (videoCount === 0) {
+    for (const [i, video] of TESTIMONIAL_VIDEOS.entries()) {
+      const thumbnail = await ensureMedia(
+        video.thumbnail,
+        `${video.name} — ${video.company}`,
+      );
+      if (!thumbnail) continue;
+      await payload.create({
+        collection: "success-videos",
+        overrideAccess: true,
+        data: { ...video, thumbnail, order: i } as Parameters<
+          typeof payload.create
+        >[0]["data"],
+      });
+    }
+    log.push(`success-videos: seeded ${TESTIMONIAL_VIDEOS.length}`);
+  } else {
+    log.push(`success-videos: ${videoCount} present — skip`);
+  }
   await seedMany(
     "certifications",
     CERTIFICATIONS.map((c, i) => ({ ...c, order: i })),
+  );
+  await seedMany(
+    "company-faqs",
+    FAQS_COMPANIES.map((f, i) => ({ ...f, order: i })),
+  );
+  await seedMany(
+    "professional-faqs",
+    FAQS_PROFESSIONALS.map((f, i) => ({ ...f, order: i })),
   );
 
   const { totalDocs: postCount } = await payload.count({ collection: "posts" });
@@ -129,13 +214,13 @@ export async function POST(req: Request) {
           date: post.date,
           updated: post.updated ?? false,
           readTime: post.readTime,
-          cover: post.cover,
+          cover: await ensureMedia(post.cover, post.title),
           excerpt: post.excerpt,
           author: post.author,
           authorTitle: post.authorTitle,
           authorBio: post.authorBio,
           authorLinkedIn: post.authorLinkedIn,
-          authorAvatar: post.authorAvatar,
+          authorAvatar: await ensureMedia(post.authorAvatar, post.author),
           content,
           faqs,
         } as Parameters<typeof payload.create>[0]["data"],
@@ -146,10 +231,9 @@ export async function POST(req: Request) {
     log.push(`posts: ${postCount} present — skip`);
   }
 
-  await payload.updateGlobal({
-    slug: "site-stats",
-    overrideAccess: true,
-    data: {
+  await seedGlobal(
+    "site-stats",
+    {
       stats: [
         {
           value: 94,
@@ -181,24 +265,40 @@ export async function POST(req: Request) {
         },
       ],
     } as GlobalData,
-  });
-  await payload.updateGlobal({
-    slug: "homepage",
-    overrideAccess: true,
-    data: HOMEPAGE as GlobalData,
-  });
-  await payload.updateGlobal({
-    slug: "site-settings",
-    overrideAccess: true,
-    data: SITE_SETTINGS as GlobalData,
-  });
-  await payload.updateGlobal({
-    slug: "track-record",
-    overrideAccess: true,
-    data: TRACK_RECORD as GlobalData,
-  });
-  log.push(
-    "globals: site-stats, homepage, site-settings, track-record updated",
+    (c) => !(c.stats as unknown[] | undefined)?.length,
+  );
+
+  // The hero is code-only, so only the editable sections are seeded.
+  const homepageCms = {
+    manifestoHeadline: HOMEPAGE.manifestoHeadline,
+    manifestoBody: HOMEPAGE.manifestoBody,
+    manifestoPoints: HOMEPAGE.manifestoPoints,
+    agentParagraphs: HOMEPAGE.agentParagraphs,
+    storyPanels: HOMEPAGE.storyPanels,
+    ctaHeadline: HOMEPAGE.ctaHeadline,
+    ctaBody: HOMEPAGE.ctaBody,
+    ctaResponseNote: HOMEPAGE.ctaResponseNote,
+  };
+
+  await seedGlobal(
+    "homepage",
+    homepageCms as GlobalData,
+    (c) => !c.manifestoHeadline,
+  );
+  await seedGlobal(
+    "site-settings",
+    SITE_SETTINGS as GlobalData,
+    (c) => !c.tagline,
+  );
+  await seedGlobal(
+    "legal-page",
+    LEGAL_PAGE as GlobalData,
+    (c) => !(c.documents as unknown[] | undefined)?.length,
+  );
+  await seedGlobal(
+    "track-record",
+    TRACK_RECORD as GlobalData,
+    (c) => !(c.stats as unknown[] | undefined)?.length,
   );
 
   return NextResponse.json({ ok: true, log });

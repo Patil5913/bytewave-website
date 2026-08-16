@@ -14,21 +14,24 @@ import {
   getSiteStats,
   getPosts,
   getHomepageContent,
+  getSiteSettingsContent,
 } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [placements, stats, posts, home] = await Promise.all([
+  const [placements, stats, posts, home, settings] = await Promise.all([
     getPlacements(),
     getSiteStats(),
     getPosts(),
     getHomepageContent(),
+    getSiteSettingsContent(),
   ]);
 
   return (
     <>
-      <Navbar />
+      {/* The homepage has no intake form; its CTA is the closing section. */}
+      <Navbar ctaLabel={settings.navCtaLabel} ctaHref="#cta" />
       <Hero content={home} />
       <Manifesto content={home} />
       <AgentIntro content={home} />
@@ -38,7 +41,7 @@ export default async function Home() {
       <PlacementFeed items={placements} />
       <Insights posts={posts} />
       <CallToAction content={home} />
-      <Footer />
+      <Footer settings={settings} />
     </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import Reveal from "@components/Reveal";
 import { HOMEPAGE, splitBrand } from "@/lib/siteContent";
@@ -28,7 +29,12 @@ export default function CallToAction({
         body: JSON.stringify({
           type: "lead",
           email,
-          source: "homepage-cta",
+          // Real path, so the same component stays attributable if it is ever
+          // reused outside the homepage.
+          source:
+            typeof window !== "undefined"
+              ? `${window.location.pathname}${window.location.search}`
+              : "cta",
         }),
       });
       if (!res.ok) {
@@ -45,7 +51,10 @@ export default function CallToAction({
   }
 
   return (
-    <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-32 md:px-16">
+    <section
+      id="cta"
+      className="relative flex min-h-svh w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-32 md:px-16"
+    >
       <Reveal className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center">
         <h2 className="mb-6 font-instrument text-5xl leading-[1.05] font-medium text-balance text-ink md:text-7xl">
           {splitBrand(content.ctaHeadline).map((seg, i) =>
@@ -102,12 +111,12 @@ export default function CallToAction({
 
             <p className="mt-4 text-sm text-ink/60">
               Looking for a role instead?{" "}
-              <a
+              <Link
                 href="/professionals"
                 className="text-ink underline underline-offset-4 transition-colors hover:text-ink/70"
               >
                 Join as a professional
-              </a>
+              </Link>
             </p>
 
             {status === "error" && (

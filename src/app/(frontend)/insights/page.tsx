@@ -1,12 +1,24 @@
+import type { Metadata } from "next";
 import Navbar from "@components/Navbar";
 import Footer from "@components/Footer";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { buildHref } from "@/lib/insights";
-import { getPosts } from "@/lib/content";
+import { getPosts, getSiteSettingsContent } from "@/lib/content";
+import { metadataFromSettings } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettingsContent();
+  return metadataFromSettings(settings.seo, {
+    title: "Insights · find & hire",
+    description:
+      "Market data, hiring analysis, and field notes from inside the network.",
+    path: "/insights",
+  });
+}
 
 const PER_PAGE = 5;
 const pageHref = (n: number) => (n <= 1 ? "/insights" : `/insights?page=${n}`);
@@ -16,7 +28,10 @@ export default async function InsightsIndex({
 }: {
   searchParams: Promise<{ page?: string }>;
 }) {
-  const ALL_POSTS = await getPosts();
+  const [ALL_POSTS, settings] = await Promise.all([
+    getPosts(),
+    getSiteSettingsContent(),
+  ]);
   const TOTAL_PAGES = Math.max(1, Math.ceil(ALL_POSTS.length / PER_PAGE));
 
   const { page: pageParam } = await searchParams;
@@ -31,7 +46,7 @@ export default async function InsightsIndex({
 
   return (
     <>
-      <Navbar />
+      <Navbar ctaLabel={settings.navCtaLabel} />
       <section className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
         <div className="mx-auto max-w-7xl">
           <div className="mb-16 flex flex-col gap-4 md:max-w-2xl">
@@ -184,7 +199,7 @@ export default async function InsightsIndex({
           </div>
         </div>
       </section>
-      <Footer />
+      <Footer settings={settings} />
     </>
   );
 }

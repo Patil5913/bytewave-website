@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { buildHref } from "@/lib/insights";
 import type { PostView } from "@/lib/content";
@@ -17,19 +18,19 @@ export default function Insights({ posts }: { posts: PostView[] }) {
               Intelligence &amp; Insights.
             </h2>
           </div>
-          <a
+          <Link
             href="/insights"
             className="group hidden items-center gap-2 text-xs tracking-wider text-ink/65 uppercase transition-colors hover:text-ink sm:flex"
           >
             View All
             <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-          </a>
+          </Link>
         </Reveal>
 
         <div className="grid grid-cols-1 gap-x-16 gap-y-12 lg:grid-cols-12">
           {LEAD && (
             <Reveal className="lg:col-span-7">
-              <a
+              <Link
                 href={buildHref(LEAD)}
                 className="group flex h-full flex-col gap-6 border-t-2 border-ink pt-8"
               >
@@ -55,7 +56,7 @@ export default function Insights({ posts }: { posts: PostView[] }) {
                   <span>{LEAD.readTime}</span>
                   <ArrowUpRight className="ml-1 h-4 w-4 text-ink/30 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand" />
                 </div>
-              </a>
+              </Link>
             </Reveal>
           )}
 
@@ -64,7 +65,7 @@ export default function Insights({ posts }: { posts: PostView[] }) {
             className="flex flex-col border-t border-ink/10 lg:col-span-5"
           >
             {REST.map((article, i) => (
-              <a
+              <Link
                 key={article.id}
                 href={buildHref(article)}
                 className="group flex items-start gap-5 border-b border-ink/10 py-6"
@@ -83,7 +84,7 @@ export default function Insights({ posts }: { posts: PostView[] }) {
                   </div>
                 </div>
                 <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 -translate-x-1 text-ink/30 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:text-brand group-hover:opacity-100" />
-              </a>
+              </Link>
             ))}
           </Reveal>
         </div>

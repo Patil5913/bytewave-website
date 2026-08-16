@@ -1,5 +1,7 @@
 import type { CollectionConfig } from "payload";
 
+import { isStaff } from "../access/roles";
+
 export const ClientQuotes: CollectionConfig = {
   slug: "client-quotes",
   labels: { singular: "Client Quote", plural: "Client Quotes" },
@@ -8,7 +10,12 @@ export const ClientQuotes: CollectionConfig = {
     defaultColumns: ["name", "company", "row", "order"],
     group: "Companies Page",
   },
-  access: { read: () => true },
+  access: {
+    read: () => true,
+    create: isStaff,
+    update: isStaff,
+    delete: isStaff,
+  },
   fields: [
     { name: "name", type: "text", required: true },
     {

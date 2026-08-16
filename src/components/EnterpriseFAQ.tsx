@@ -131,7 +131,7 @@ export default function EnterpriseFAQ({
           </p>
 
           <a
-            href="#"
+            href="#intake"
             className="group flex w-fit items-center gap-2 bg-ink/10 px-5 py-2.5 text-sm text-ink backdrop-blur-md transition-colors hover:bg-ink/20"
           >
             Talk to our team

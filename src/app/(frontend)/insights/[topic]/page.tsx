@@ -1,12 +1,36 @@
+import type { Metadata } from "next";
 import Navbar from "@components/Navbar";
 import Footer from "@components/Footer";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { buildHref, topicSlug } from "@/lib/insights";
-import { getPosts } from "@/lib/content";
+import { getPosts, getSiteSettingsContent } from "@/lib/content";
+import { metadataFromSettings } from "@/lib/seo";
 
 export const revalidate = 30;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ topic: string }>;
+}): Promise<Metadata> {
+  const { topic } = await params;
+  const [all, settings] = await Promise.all([
+    getPosts(),
+    getSiteSettingsContent(),
+  ]);
+  const posts = all.filter((post) => topicSlug(post) === topic);
+  if (!posts.length) return metadataFromSettings(settings.seo);
+
+  const label = posts[0].tag;
+  const count = `${posts.length} ${posts.length === 1 ? "article" : "articles"}`;
+  return metadataFromSettings(settings.seo, {
+    title: `${label} · Insights · find & hire`,
+    description: `${count} on ${label} — hiring analysis and field notes from inside the network.`,
+    path: `/insights/${topic}`,
+  });
+}
 
 export async function generateStaticParams() {
   const all = await getPosts();
@@ -20,7 +44,10 @@ export default async function InsightsTopic({
   params: Promise<{ topic: string }>;
 }) {
   const { topic } = await params;
-  const all = await getPosts();
+  const [all, settings] = await Promise.all([
+    getPosts(),
+    getSiteSettingsContent(),
+  ]);
   const posts = all.filter((post) => topicSlug(post) === topic);
 
   if (posts.length === 0) {
@@ -29,7 +56,7 @@ export default async function InsightsTopic({
 
   return (
     <>
-      <Navbar />
+      <Navbar ctaLabel={settings.navCtaLabel} />
       <section className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex items-center gap-2 text-xs tracking-wide text-ink/40">
@@ -86,7 +113,7 @@ export default async function InsightsTopic({
           </div>
         </div>
       </section>
-      <Footer />
+      <Footer settings={settings} />
     </>
   );
 }

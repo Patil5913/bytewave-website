@@ -1,11 +1,11 @@
 import type { GlobalConfig } from "payload";
 
-import { isAdmin } from "../access/roles";
+import { isStaff } from "../access/roles";
 
 export const TrackRecord: GlobalConfig = {
   slug: "track-record",
   admin: { group: "Professionals Page" },
-  access: { read: () => true, update: isAdmin },
+  access: { read: () => true, update: isStaff },
   fields: [
     {
       name: "stats",

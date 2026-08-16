@@ -3,6 +3,8 @@ import { Geist, Instrument_Serif, Archivo } from "next/font/google";
 import SmoothScroll from "@components/SmoothScroll";
 import CustomCursor from "@components/CustomCursor";
 import RefreshOnSave from "@components/RefreshOnSave";
+import { getSiteSettingsContent } from "@/lib/content";
+import { metadataFromSettings } from "@/lib/seo";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -21,11 +23,13 @@ const archivo = Archivo({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Bytewave - The Frictionless Way to Hire & Get Hired",
-  description:
-    "Skip the endless resume reviews. Bytewave connects verified candidates directly with companies actively looking for their exact skills.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  // Site-wide defaults come from the SEO group in the admin (Global → Site
+  // Settings), falling back to siteContent when a field is blank or the DB is
+  // unreachable. Pages that set their own metadata still win.
+  const settings = await getSiteSettingsContent();
+  return metadataFromSettings(settings.seo);
+}
 
 export default function RootLayout({
   children,

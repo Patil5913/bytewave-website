@@ -69,78 +69,59 @@ export const SITE_SETTINGS = {
   address: "548 Market St, Suite 95000\nSan Francisco, CA 94104",
   navCtaLabel: "Get Started",
   region: "English (US)",
+  // Every href here must resolve to a real route or a section that exists —
+  // these links also feed sitemap.xml.
   footerGroups: [
     {
       title: "Product",
       links: [
         { label: "For Companies", href: "/companies" },
         { label: "For Professionals", href: "/professionals" },
-        { label: "Pricing", href: "/pricing" },
+        { label: "Enterprise Services", href: "/services#enterprise" },
+        { label: "Talent Services", href: "/services#talent" },
+        { label: "Pricing", href: "/services#pricing" },
       ],
     },
     {
       title: "Company",
       links: [
-        { label: "About", href: "/about" },
         { label: "Insights", href: "/insights" },
-        { label: "Careers", href: "/careers" },
-        { label: "Refer & Earn", href: "/refer" },
-      ],
-    },
-    {
-      title: "Resources",
-      links: [
-        { label: "Help Center", href: "/help" },
-        { label: "Case Studies", href: "/case-studies" },
-        { label: "API Docs", href: "/docs" },
-      ],
-    },
-    {
-      title: "Talent",
-      links: [
-        { label: "Job Placement", href: "/placement" },
-        { label: "IT Skills Training", href: "/training" },
-        { label: "Resume & Interview Prep", href: "/prep" },
-      ],
-    },
-    {
-      title: "Enterprise",
-      links: [
-        { label: "Technical Staffing", href: "/staffing" },
-        { label: "Talent Acquisition", href: "/acquisition" },
-        { label: "Background Verification", href: "/verification" },
-        { label: "Payroll & Compliance", href: "/payroll" },
+        { label: "Refer & Earn", href: "/services#referral" },
       ],
     },
     {
       title: "Legal",
       links: [
-        { label: "Privacy Policy", href: "/privacy" },
-        { label: "Terms of Service", href: "/terms" },
-        { label: "Refund Policy", href: "/refunds" },
+        { label: "Privacy Policy", href: "/legal#privacy" },
+        { label: "Terms of Service", href: "/legal#terms" },
+        { label: "Refund Policy", href: "/legal#refunds" },
       ],
     },
   ],
-  socials: [
-    { label: "Twitter", href: "#" },
-    { label: "LinkedIn", href: "#" },
-    { label: "Instagram", href: "#" },
-  ],
+  // Add real profile URLs in the admin (Global → Site Settings → Social
+  // Links). Empty means the footer hides the row rather than shipping dead
+  // links.
+  socials: [] as { label: string; href: string }[],
   seo: {
-    metaTitle: "find & hire — verified hiring",
+    // The network runs both ways — hiring teams and professionals — so the
+    // default title must not read as company-only.
+    metaTitle: "find & hire — hire verified, or get verified and hired",
     metaDescription:
-      "Connecting verified professionals with the teams that need them.",
+      "Both sides of the hire. Companies get pre-verified specialists instead of resume piles; professionals get verified once and routed straight to the teams that need them.",
     keywords: "",
     ogImage: null as unknown,
   },
 };
 
+// Illustrative until the real figures are entered in the admin (Global →
+// Track Record). Kept deliberately round — precise-looking numbers read as
+// audited claims.
 export const TRACK_RECORD = {
   stats: [
-    { value: "15+", label: "Years Experience" },
-    { value: "1.7k+", label: "Total Placements" },
-    { value: "97.8%", label: "Success Rate" },
-    { value: "600+", label: "Partner Orgs" },
+    { value: "10+", label: "Years Experience" },
+    { value: "1k+", label: "Total Placements" },
+    { value: "9 in 10", label: "Success Rate" },
+    { value: "500+", label: "Partner Orgs" },
   ],
   growth: [
     { year: "2021", value: 130 },
@@ -426,3 +407,173 @@ export function splitBrand(text: string): { text: string; brand: boolean }[] {
         : { text: part, brand: false },
     );
 }
+
+export type LegalParagraph = { text: string };
+export type LegalClause = {
+  n: string;
+  heading: string;
+  paragraphs: LegalParagraph[];
+};
+export type LegalDocument = {
+  id: string;
+  ref: string;
+  eyebrow: string;
+  title: string;
+  summary: string;
+  clauses: LegalClause[];
+};
+
+export const LEGAL_PAGE: {
+  entity: string;
+  version: string;
+  effective: string;
+  governingLaw: string;
+  documents: LegalDocument[];
+} = {
+  entity: "Bytewave, Inc.",
+  version: "2026.08",
+  effective: "15 August 2026",
+  governingLaw: "State of Delaware, USA",
+  documents: [
+  {
+    id: "privacy",
+    ref: "DOC-01",
+    eyebrow: "Privacy Policy",
+    title: "Privacy Policy",
+    summary:
+      "How find & hire collects, uses, shares and retains personal data submitted through this site.",
+    clauses: [
+      {
+        n: "1.1",
+        heading: "Data we collect",
+        paragraphs: [
+          { text: "We collect the information you enter into an intake form: your name and email address and, depending on the form, your target role and years of experience, or your company name, the number of roles you are filling and your primary stack. Free-text entered in a message field is stored as submitted." },
+          { text: "Newsletter subscription collects an email address only. For every submission we also record the page path it originated from, in order to measure which parts of the site are effective." },
+        ],
+      },
+      {
+        n: "1.2",
+        heading: "Purpose of processing",
+        paragraphs: [
+          { text: "Professional submissions are processed to verify your background and route you to matching roles. Company submissions are processed to scope the role and produce shortlists. Newsletter addresses are processed solely to send the newsletter." },
+          { text: "We do not sell personal data and we do not disclose it to advertising networks." },
+        ],
+      },
+      {
+        n: "1.3",
+        heading: "Disclosure to third parties",
+        paragraphs: [
+          { text: "A candidate profile is disclosed to a hiring company only after the role has been discussed with the candidate. Company details are disclosed to a candidate only at the point of introduction." },
+        ],
+      },
+      {
+        n: "1.4",
+        heading: "Retention",
+        paragraphs: [
+          { text: "Intake submissions are retained while a search is active and for 24 months thereafter, so an engagement can be resumed. Newsletter subscriptions are retained until the subscriber opts out." },
+        ],
+      },
+      {
+        n: "1.5",
+        heading: "Your rights",
+        paragraphs: [
+          { text: "You may request a copy of the personal data we hold about you, request correction of inaccurate data, or request deletion. Requests are actioned within 30 days of verification of identity. Contact us through the intake form or by email to exercise any of these rights." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "terms",
+    ref: "DOC-02",
+    eyebrow: "Terms of Service",
+    title: "Terms of Service",
+    summary:
+      "The terms on which find & hire provides recruitment and related services, and the terms on which this site may be used.",
+    clauses: [
+      {
+        n: "2.1",
+        heading: "Scope of services",
+        paragraphs: [
+          { text: "find & hire sources, verifies and introduces candidates for permanent, full-time positions, and verifies and routes professionals to hiring teams. It is not a job board. No representation is made that any given search will result in a hire." },
+        ],
+      },
+      {
+        n: "2.2",
+        heading: "Acceptable use",
+        paragraphs: [
+          { text: "Information submitted must be accurate. Misrepresentation of experience, employment history or corporate identity is grounds for termination of the engagement and removal from the network." },
+          { text: "Automated scraping of the site, attempts to access the administrative interface, and automated form submission are prohibited." },
+        ],
+      },
+      {
+        n: "2.3",
+        heading: "Fees and invoicing",
+        paragraphs: [
+          { text: "Companies pay a success fee calculated on the hire's first-year base salary, invoiced on the hire's start date, or a flat monthly retainer where agreed in writing. Invoices are payable within 30 days." },
+          { text: "Professionals are never charged for verification, routing or placement. Training and interview preparation are optional, quoted in advance and agreed before any work begins." },
+        ],
+      },
+      {
+        n: "2.4",
+        heading: "Placement guarantee",
+        paragraphs: [
+          { text: "Each placement carries a 90-day replacement window measured from the hire's start date. If the hire departs or is terminated within that window, a replacement search is provided at no additional fee. The guarantee provides a replacement search rather than a cash refund, except as set out in clause 3.1." },
+        ],
+      },
+      {
+        n: "2.5",
+        heading: "Limitation of liability",
+        paragraphs: [
+          { text: "Candidates are verified with reasonable care, but hiring decisions rest with the client. We are not liable for the subsequent performance of any hire. Aggregate liability in connection with an engagement is limited to the fees paid to us for that engagement." },
+        ],
+      },
+      {
+        n: "2.6",
+        heading: "Governing law",
+        paragraphs: [
+          { text: "These terms are governed by the laws of the State of Delaware, USA, without regard to conflict-of-law principles. Bytewave, Inc. may update these terms; the effective date above reflects the current version." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "refunds",
+    ref: "DOC-03",
+    eyebrow: "Refund Policy",
+    title: "Refund Policy",
+    summary:
+      "When fees are refundable, on what timeline, and how to request a refund.",
+    clauses: [
+      {
+        n: "3.1",
+        heading: "Success fees",
+        paragraphs: [
+          { text: "If a placed hire departs within 30 days of the start date, the client may elect a full refund of the success fee in place of a replacement search. Between day 31 and day 90, a replacement search is provided; a pro-rated refund is available if the client elects not to continue." },
+          { text: "After 90 days the success fee is non-refundable." },
+        ],
+      },
+      {
+        n: "3.2",
+        heading: "Retainers",
+        paragraphs: [
+          { text: "Monthly retainers may be cancelled on 30 days' written notice. The current month is non-refundable once sourcing work has commenced. Any unused portion of a prepaid period is issued as credit rather than returned." },
+        ],
+      },
+      {
+        n: "3.3",
+        heading: "Training and preparation",
+        paragraphs: [
+          { text: "Sessions cancelled at least 24 hours in advance are refunded in full. Sessions missed without notice are not refundable. Multi-session packages are refundable pro rata for sessions not yet delivered." },
+        ],
+      },
+      {
+        n: "3.4",
+        heading: "Requesting a refund",
+        paragraphs: [
+          { text: "Submit the invoice reference and the circumstances in writing. Approved refunds are returned to the original payment method within 10 business days of approval." },
+        ],
+      },
+    ],
+  },
+],
+};

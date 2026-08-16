@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Reveal from "@components/Reveal";
 import { ArrowRight } from "lucide-react";
 
@@ -66,7 +67,7 @@ export default function PricingReferral() {
             and the offer you want.
           </p>
           <a
-            href="#"
+            href="#intake"
             className="group mt-2 flex w-fit items-center gap-2 bg-ink px-6 py-3 text-sm font-medium text-canvas transition-colors hover:bg-ink/90"
           >
             Book your free strategy call
@@ -147,13 +148,13 @@ export default function PricingReferral() {
           </p>
         </div>
 
-        <a
-          href="#"
+        <Link
+          href="/services#referral"
           className="group flex w-fit shrink-0 items-center gap-2 bg-ink/10 px-6 py-3 text-sm text-ink backdrop-blur-md transition-colors hover:bg-ink/20"
         >
           Get your referral link
           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-        </a>
+        </Link>
       </Reveal>
     </section>
   );

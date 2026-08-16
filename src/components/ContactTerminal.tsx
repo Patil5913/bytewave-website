@@ -67,11 +67,16 @@ const COPY = {
 
 type Props = {
   mode?: "talent" | "enterprise";
+  /**
+   * Attribution recorded on the lead. Defaults to the current path plus its
+   * query string, so a CTA that adds ?from=… stays traceable.
+   */
+  source?: string;
 };
 
 type Status = "idle" | "sending" | "done" | "error";
 
-export default function ContactTerminal({ mode = "talent" }: Props) {
+export default function ContactTerminal({ mode = "talent", source }: Props) {
   const copy = COPY[mode];
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string>("");
@@ -92,7 +97,10 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
     const message = data.get("message");
     if (message) payload.message = String(message);
     payload.source =
-      typeof window !== "undefined" ? window.location.pathname : "unknown";
+      source ??
+      (typeof window !== "undefined"
+        ? `${window.location.pathname}${window.location.search}`
+        : "unknown");
 
     try {
       const res = await fetch("/api/contacts", {
@@ -115,7 +123,7 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
   }
 
   return (
-    <section className="w-full bg-canvas px-6 py-24 md:px-16">
+    <section id="intake" className="w-full scroll-mt-24 bg-canvas px-6 py-24 md:px-16">
       <div className="mx-auto max-w-7xl">
         <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">

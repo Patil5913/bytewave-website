@@ -69,14 +69,14 @@ export default function ProfessionalHero() {
 
         <div className="mt-2 flex w-full max-w-xs flex-col items-center gap-3 text-sm sm:w-auto sm:max-w-none sm:flex-row sm:gap-4 sm:text-base">
           <a
-            href="#"
+            href="#intake"
             className="group flex w-full items-center justify-center gap-2 bg-white/10 px-4 py-2.5 text-white backdrop-blur-md transition-colors hover:bg-white/20 sm:w-auto sm:py-1.5"
           >
             Apply for Verification
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
           <a
-            href="#"
+            href="#markets"
             className="border-b border-white/60 pb-1 text-white transition-colors duration-300 hover:border-white/20 hover:text-white/70"
           >
             Explore Active Markets
