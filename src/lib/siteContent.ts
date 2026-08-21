@@ -69,8 +69,7 @@ export const SITE_SETTINGS = {
   address: "548 Market St, Suite 95000\nSan Francisco, CA 94104",
   navCtaLabel: "Get Started",
   region: "English (US)",
-  // Every href here must resolve to a real route or a section that exists —
-  // these links also feed sitemap.xml.
+  
   footerGroups: [
     {
       title: "Product",
@@ -98,24 +97,18 @@ export const SITE_SETTINGS = {
       ],
     },
   ],
-  // Add real profile URLs in the admin (Global → Site Settings → Social
-  // Links). Empty means the footer hides the row rather than shipping dead
-  // links.
+  
   socials: [] as { label: string; href: string }[],
   seo: {
-    // The network runs both ways — hiring teams and professionals — so the
-    // default title must not read as company-only.
+    
     metaTitle: "find & hire — hire verified, or get verified and hired",
     metaDescription:
       "Both sides of the hire. Companies get pre-verified specialists instead of resume piles; professionals get verified once and routed straight to the teams that need them.",
     keywords: "",
-    ogImage: null as unknown,
+    ogImage: null as number | null,
   },
 };
 
-// Illustrative until the real figures are entered in the admin (Global →
-// Track Record). Kept deliberately round — precise-looking numbers read as
-// audited claims.
 export const TRACK_RECORD = {
   stats: [
     { value: "10+", label: "Years Experience" },
@@ -228,7 +221,16 @@ export const CERTIFICATIONS = [
   },
 ];
 
-export const TESTIMONIAL_QUOTES = [
+type MarqueeRow = "one" | "two";
+
+export const TESTIMONIAL_QUOTES: {
+  name: string;
+  title: string;
+  company: string;
+  domain: string;
+  quote: string;
+  row: MarqueeRow;
+}[] = [
   {
     name: "Priya N.",
     title: "VP Engineering",
@@ -321,15 +323,20 @@ export const TESTIMONIAL_QUOTES = [
   },
 ];
 
-export const TESTIMONIAL_VIDEOS = [
+export const TESTIMONIAL_VIDEOS: {
+  name: string;
+  role: string;
+  company: string;
+  domain: string;
+  duration: string;
+  row: MarqueeRow;
+}[] = [
   {
     name: "David K.",
     role: "Backend Developer",
     company: "Stripe",
     domain: "stripe.com",
     duration: "02:45",
-    thumbnail:
-      "https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=800&auto=format&fit=crop",
     row: "one",
   },
   {
@@ -338,8 +345,6 @@ export const TESTIMONIAL_VIDEOS = [
     company: "Notion",
     domain: "notion.so",
     duration: "03:12",
-    thumbnail:
-      "https://images.unsplash.com/photo-1531384441138-2736e62e0919?q=80&w=800&auto=format&fit=crop",
     row: "one",
   },
   {
@@ -348,8 +353,6 @@ export const TESTIMONIAL_VIDEOS = [
     company: "Vercel",
     domain: "vercel.com",
     duration: "01:58",
-    thumbnail:
-      "https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=800&auto=format&fit=crop",
     row: "one",
   },
   {
@@ -358,8 +361,6 @@ export const TESTIMONIAL_VIDEOS = [
     company: "Figma",
     domain: "figma.com",
     duration: "02:20",
-    thumbnail:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=800&auto=format&fit=crop",
     row: "one",
   },
   {
@@ -368,8 +369,6 @@ export const TESTIMONIAL_VIDEOS = [
     company: "Linear",
     domain: "linear.app",
     duration: "03:40",
-    thumbnail:
-      "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800&auto=format&fit=crop",
     row: "one",
   },
 ];
@@ -408,8 +407,8 @@ export function splitBrand(text: string): { text: string; brand: boolean }[] {
     );
 }
 
-export type LegalParagraph = { text: string };
-export type LegalClause = {
+type LegalParagraph = { text: string };
+type LegalClause = {
   n: string;
   heading: string;
   paragraphs: LegalParagraph[];
@@ -577,3 +576,164 @@ export const LEGAL_PAGE: {
   },
 ],
 };
+
+export type Placement = {
+  role: string;
+  stack: string;
+  candidate: string;
+  company: string;
+  companyName: string;
+  location: string;
+  pay: string;
+  status: "Placed" | "Interviewing" | "Offer" | "Negotiating";
+};
+
+export const EXAMPLE_PLACEMENTS: Placement[] = [
+  {
+    role: "Backend Developer",
+    stack: "Python, FastAPI, PostgreSQL",
+    candidate: "Candidate A",
+    company: "example.com",
+    companyName: "Fintech Platform",
+    location: "New York, NY",
+    pay: "Example listing",
+    status: "Placed",
+  },
+  {
+    role: "Product Designer",
+    stack: "Figma, Design Systems",
+    candidate: "Candidate B",
+    company: "example.com",
+    companyName: "Productivity Startup",
+    location: "Remote",
+    pay: "Example listing",
+    status: "Offer",
+  },
+  {
+    role: "Frontend Engineer",
+    stack: "React, TypeScript, Next.js",
+    candidate: "Candidate C",
+    company: "example.com",
+    companyName: "Developer Tools Co.",
+    location: "San Francisco, CA",
+    pay: "Example listing",
+    status: "Interviewing",
+  },
+  {
+    role: "Data Analyst",
+    stack: "SQL, Python, Looker",
+    candidate: "Candidate D",
+    company: "example.com",
+    companyName: "Marketplace Co.",
+    location: "Austin, TX",
+    pay: "Example listing",
+    status: "Placed",
+  },
+  {
+    role: "DevOps Engineer",
+    stack: "Kubernetes, Terraform, AWS",
+    candidate: "Candidate E",
+    company: "example.com",
+    companyName: "Infrastructure Co.",
+    location: "Seattle, WA",
+    pay: "Example listing",
+    status: "Negotiating",
+  },
+];
+
+export type SiteStat = {
+  value: number;
+  decimals: number;
+  suffix: string;
+  label: string;
+  note: string;
+};
+
+export const SITE_STATS_CONTENT: SiteStat[] = [
+  {
+    value: 94,
+    decimals: 0,
+    suffix: "%",
+    label: "Placement Success Rate",
+    note: "of matched roles close on the first shortlist.",
+  },
+  {
+    value: 14,
+    decimals: 0,
+    suffix: "d",
+    label: "Avg. Time-to-Placement",
+    note: "from first intro to signed offer.",
+  },
+  {
+    value: 1.2,
+    decimals: 1,
+    suffix: "k",
+    label: "Verified Professionals",
+    note: "skills confirmed, not keyword-matched.",
+  },
+  {
+    value: 150,
+    decimals: 0,
+    suffix: "+",
+    label: "Partner Organizations",
+    note: "hiring directly through the network.",
+  },
+];
+
+export const SEED_PLACEMENTS: (Placement & { order: number })[] = [
+    {
+      role: "Backend Developer",
+      stack: "Python, FastAPI, SQLAlchemy",
+      candidate: "M. Davis",
+      company: "stripe.com",
+      companyName: "Stripe",
+      location: "New York, NY",
+      pay: "$165k Base",
+      status: "Placed",
+      order: 0,
+    },
+    {
+      role: "Product Designer",
+      stack: "Figma, Design Systems",
+      candidate: "A. Chen",
+      company: "notion.so",
+      companyName: "Notion",
+      location: "Remote",
+      pay: "$140k Base",
+      status: "Offer",
+      order: 1,
+    },
+    {
+      role: "Frontend Engineer",
+      stack: "React, TypeScript, Next.js",
+      candidate: "J. Okafor",
+      company: "linear.app",
+      companyName: "Linear",
+      location: "San Francisco, CA",
+      pay: "$155k Base",
+      status: "Interviewing",
+      order: 2,
+    },
+    {
+      role: "Data Analyst",
+      stack: "SQL, Python, Looker",
+      candidate: "R. Foster",
+      company: "figma.com",
+      companyName: "Figma",
+      location: "Austin, TX",
+      pay: "$120k Base",
+      status: "Placed",
+      order: 3,
+    },
+    {
+      role: "DevOps Engineer",
+      stack: "Kubernetes, Terraform, AWS",
+      candidate: "S. Kim",
+      company: "vercel.com",
+      companyName: "Vercel",
+      location: "Seattle, WA",
+      pay: "$175k Base",
+      status: "Negotiating",
+      order: 4,
+    },
+];

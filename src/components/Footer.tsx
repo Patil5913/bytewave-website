@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Check, Globe } from "lucide-react";
+import Honeypot from "@components/Honeypot";
 import Reveal from "@components/Reveal";
 import { SITE_SETTINGS } from "@/lib/siteContent";
 
@@ -15,17 +16,32 @@ export default function Footer({
 }) {
   const LINK_GROUPS = settings.footerGroups;
   const [nlStatus, setNlStatus] = useState<NlStatus>("idle");
+  
+  const [renderedAt] = useState(() => Date.now());
 
   async function handleNewsletter(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (nlStatus === "sending" || nlStatus === "done") return;
-    const email = String(new FormData(e.currentTarget).get("email") ?? "");
+    const form = new FormData(e.currentTarget);
+    const email = String(form.get("email") ?? "").trim();
+    
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setNlStatus("error");
+      return;
+    }
     setNlStatus("sending");
     try {
-      const res = await fetch("/api/contacts", {
+      const res = await fetch("/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "newsletter", email, source: "footer" }),
+        body: JSON.stringify({
+          type: "newsletter",
+          email,
+          
+          surface: "footer",
+          companyUrl: String(form.get("companyUrl") ?? ""),
+          renderedAt,
+        }),
       });
       if (!res.ok) throw new Error();
       setNlStatus("done");
@@ -90,6 +106,7 @@ export default function Footer({
                   onSubmit={handleNewsletter}
                   className="flex items-center border-b border-ink/20 focus-within:border-ink/50"
                 >
+                  <Honeypot />
                   <label htmlFor="newsletter-email" className="sr-only">
                     Email address
                   </label>

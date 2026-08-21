@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
 
+import { mediaUrl } from "./media";
 import { SITE_SETTINGS } from "./siteContent";
 
-/**
- * Public origin of the site, without a trailing slash. Every absolute URL we
- * emit (canonical, Open Graph, sitemap, robots) is built from this, so it must
- * be set in production — a localhost og:image breaks every social preview.
- */
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SERVER_URL ?? "http://localhost:3000"
 ).replace(/\/+$/, "");
@@ -19,27 +15,15 @@ export function absoluteUrl(path = "/") {
 
 type SeoSettings = typeof SITE_SETTINGS.seo;
 
-/** Resolve a Payload upload field (id, or populated doc) to a URL. */
-function uploadUrl(value: unknown): string | undefined {
-  if (!value || typeof value !== "object") return undefined;
-  const url = (value as { url?: unknown }).url;
-  return typeof url === "string" && url ? url : undefined;
-}
-
-/**
- * Turn the CMS SEO group into Next metadata. Blank admin fields fall back to
- * the defaults in siteContent, so clearing a field in the admin can never ship
- * an empty <title>.
- */
 export function metadataFromSettings(
   seo: SeoSettings | undefined,
   overrides: {
     title?: string;
     description?: string;
     path?: string;
-    /** Page-specific social image (e.g. an article cover). */
+    
     image?: string;
-    /** Present for articles; emits og:type=article plus byline and date. */
+    
     article?: { publishedTime?: string; authors?: string[] };
   } = {},
 ): Metadata {
@@ -55,10 +39,8 @@ export function metadataFromSettings(
     .split(",")
     .map((k) => k.trim())
     .filter(Boolean);
-  // Only set images explicitly when we actually have one. With no value, Next
-  // falls back to the generated opengraph-image route, whose URL is hashed and
-  // therefore can't be hardcoded here.
-  const image = overrides.image || uploadUrl(seo?.ogImage);
+  
+  const image = overrides.image || mediaUrl(seo?.ogImage);
   const url = absoluteUrl(overrides.path ?? "/");
 
   return {
@@ -66,7 +48,11 @@ export function metadataFromSettings(
     title,
     description,
     ...(keywords.length ? { keywords } : {}),
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      
+      types: { "application/rss+xml": absoluteUrl("/feed.xml") },
+    },
     openGraph: {
       siteName: SITE_NAME,
       title,

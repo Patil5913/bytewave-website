@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 
 import { isStaff } from "../access/roles";
+import { revalidateHooks } from "../lib/revalidate";
 
 export const Placements: CollectionConfig = {
   slug: "placements",
@@ -15,6 +16,7 @@ export const Placements: CollectionConfig = {
     update: isStaff,
     delete: isStaff,
   },
+  hooks: revalidateHooks("placements"),
   fields: [
     { name: "role", type: "text", required: true },
     { name: "stack", type: "text", required: true },

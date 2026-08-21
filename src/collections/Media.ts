@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 
 import { isStaff } from "../access/roles";
+import { revalidateHooks } from "../lib/revalidate";
 
 export const Media: CollectionConfig = {
   slug: "media",
@@ -10,12 +11,20 @@ export const Media: CollectionConfig = {
     update: isStaff,
     delete: isStaff,
   },
+  hooks: revalidateHooks("media"),
   admin: {
     group: "System",
   },
   upload: {
     staticDir: "public/media",
-    mimeTypes: ["image/*"],
+    
+    mimeTypes: [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/avif",
+      "image/gif",
+    ],
   },
   fields: [
     {

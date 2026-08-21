@@ -1,5 +1,4 @@
-import React from "react";
-import { getPayload } from "payload";
+import { getPayload, type CollectionSlug } from "payload";
 import config from "@payload-config";
 
 const ADMIN = "/ops/admin";
@@ -8,7 +7,7 @@ type Card = {
   label: string;
   href: string;
   desc: string;
-  countKey?: string;
+  countKey?: CollectionSlug;
 };
 
 const GROUPS: { title: string; cards: Card[] }[] = [
@@ -37,6 +36,12 @@ const GROUPS: { title: string; cards: Card[] }[] = [
     title: "Companies Page",
     cards: [
       {
+        label: "Company FAQs",
+        href: `${ADMIN}/collections/company-faqs`,
+        desc: "FAQ accordion on /companies",
+        countKey: "company-faqs",
+      },
+      {
         label: "Client quotes",
         href: `${ADMIN}/collections/client-quotes`,
         desc: "Testimonial marquee",
@@ -53,6 +58,12 @@ const GROUPS: { title: string; cards: Card[] }[] = [
   {
     title: "Professionals Page",
     cards: [
+      {
+        label: "Professional FAQs",
+        href: `${ADMIN}/collections/professional-faqs`,
+        desc: "FAQ accordion on /professionals",
+        countKey: "professional-faqs",
+      },
       {
         label: "Success videos",
         href: `${ADMIN}/collections/success-videos`,
@@ -78,6 +89,28 @@ const GROUPS: { title: string; cards: Card[] }[] = [
     ],
   },
   {
+    title: "Referrals",
+    cards: [
+      {
+        label: "Referrers",
+        href: `${ADMIN}/collections/referrers`,
+        desc: "Share links, clicks and reward totals",
+        countKey: "referrers",
+      },
+      {
+        label: "Referrals",
+        href: `${ADMIN}/collections/referrals`,
+        desc: "Attributed leads — qualify to release a reward",
+        countKey: "referrals",
+      },
+      {
+        label: "Referral settings",
+        href: `${ADMIN}/globals/referral-settings`,
+        desc: "Default reward, currency, cookie window",
+      },
+    ],
+  },
+  {
     title: "Global & system",
     cards: [
       {
@@ -90,6 +123,11 @@ const GROUPS: { title: string; cards: Card[] }[] = [
         href: `${ADMIN}/collections/contacts`,
         desc: "Contact + CTA submissions",
         countKey: "contacts",
+      },
+      {
+        label: "Legal pages",
+        href: `${ADMIN}/globals/legal-page`,
+        desc: "Privacy · terms · refunds",
       },
       {
         label: "Media",
@@ -107,19 +145,20 @@ const GROUPS: { title: string; cards: Card[] }[] = [
   },
 ];
 
-async function loadCounts(): Promise<Record<string, number>> {
+const COUNTED_SLUGS = Array.from(
+  new Set(
+    GROUPS.flatMap((group) =>
+      group.cards
+        .map((card) => card.countKey)
+        .filter((slug): slug is CollectionSlug => Boolean(slug)),
+    ),
+  ),
+);
+
+async function loadCounts(): Promise<Partial<Record<CollectionSlug, number>>> {
   try {
     const payload = await getPayload({ config });
-    const slugs = [
-      "posts",
-      "placements",
-      "client-quotes",
-      "success-videos",
-      "certifications",
-      "contacts",
-      "media",
-      "users",
-    ] as const;
+    const slugs = COUNTED_SLUGS;
     const entries = await Promise.all(
       slugs.map(async (s) => {
         try {
@@ -130,7 +169,9 @@ async function loadCounts(): Promise<Record<string, number>> {
         }
       }),
     );
-    return Object.fromEntries(entries);
+    return Object.fromEntries(entries) as Partial<
+      Record<CollectionSlug, number>
+    >;
   } catch {
     return {};
   }
@@ -256,5 +297,3 @@ export const Dashboard = async () => {
     </div>
   );
 };
-
-export default Dashboard;

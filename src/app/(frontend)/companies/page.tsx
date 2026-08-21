@@ -17,8 +17,7 @@ import {
   getSiteSettingsContent,
 } from "@/lib/content";
 import { metadataFromSettings } from "@/lib/seo";
-
-export const dynamic = "force-dynamic";
+import { JsonLd, faqSchema } from "@/lib/structuredData";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettingsContent();
@@ -48,6 +47,7 @@ export default async function Companies() {
       <Certifications items={certs} />
       <ClientStories items={quotes} />
       <EnterpriseEconomics />
+      {faqs.length > 0 && <JsonLd data={faqSchema(faqs)} />}
       <EnterpriseFAQ items={faqs} />
       <ContactTerminal mode="enterprise" />
       <Footer settings={settings} />

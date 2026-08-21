@@ -12,18 +12,17 @@ import Footer from "@components/Footer";
 import {
   getPlacements,
   getSiteStats,
-  getPosts,
+  getPublishedPosts,
   getHomepageContent,
   getSiteSettingsContent,
 } from "@/lib/content";
-
-export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const [placements, stats, posts, home, settings] = await Promise.all([
     getPlacements(),
     getSiteStats(),
-    getPosts(),
+    
+    getPublishedPosts(),
     getHomepageContent(),
     getSiteSettingsContent(),
   ]);

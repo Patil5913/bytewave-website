@@ -1,4 +1,3 @@
-import React from "react";
 import { Mark } from "./Mark";
 
 export const NavHeader = () => (
@@ -41,5 +40,3 @@ export const NavHeader = () => (
     </a>
   </div>
 );
-
-export default NavHeader;

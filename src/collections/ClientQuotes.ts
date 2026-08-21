@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 
 import { isStaff } from "../access/roles";
+import { revalidateHooks } from "../lib/revalidate";
 
 export const ClientQuotes: CollectionConfig = {
   slug: "client-quotes",
@@ -16,6 +17,7 @@ export const ClientQuotes: CollectionConfig = {
     update: isStaff,
     delete: isStaff,
   },
+  hooks: revalidateHooks("client-quotes"),
   fields: [
     { name: "name", type: "text", required: true },
     {

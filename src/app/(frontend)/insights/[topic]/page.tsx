@@ -1,3 +1,4 @@
+import PreviewBanner from "@components/PreviewBanner";
 import type { Metadata } from "next";
 import Navbar from "@components/Navbar";
 import Footer from "@components/Footer";
@@ -5,7 +6,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { buildHref, topicSlug } from "@/lib/insights";
-import { getPosts, getSiteSettingsContent } from "@/lib/content";
+import {
+  getPosts,
+  getPublishedPosts,
+  getSiteSettingsContent,
+} from "@/lib/content";
 import { metadataFromSettings } from "@/lib/seo";
 
 export const revalidate = 30;
@@ -33,7 +38,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const all = await getPosts();
+  const all = await getPublishedPosts();
   const topics = new Set(all.map((post) => topicSlug(post)));
   return Array.from(topics).map((topic) => ({ topic }));
 }
@@ -56,6 +61,7 @@ export default async function InsightsTopic({
 
   return (
     <>
+      <PreviewBanner path={`/insights/${topic}`} />
       <Navbar ctaLabel={settings.navCtaLabel} />
       <section className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
         <div className="mx-auto max-w-7xl">

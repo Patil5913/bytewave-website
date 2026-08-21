@@ -7,8 +7,6 @@ import { getLegalPageContent, getSiteSettingsContent } from "@/lib/content";
 import { metadataFromSettings } from "@/lib/seo";
 import type { LegalDocument } from "@/lib/siteContent";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, legal] = await Promise.all([
     getSiteSettingsContent(),

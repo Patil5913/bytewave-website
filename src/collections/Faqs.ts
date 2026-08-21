@@ -1,12 +1,8 @@
 import type { CollectionConfig, Field } from "payload";
 
 import { isStaff } from "../access/roles";
+import { revalidateHooks } from "../lib/revalidate";
 
-/**
- * FAQs are split into one collection per page rather than a single list with
- * an audience dropdown, so each sits in its own admin group next to the other
- * content for that page.
- */
 const faqFields: Field[] = [
   { name: "question", type: "text", required: true },
   { name: "answer", type: "textarea", required: true },
@@ -35,6 +31,7 @@ export const CompanyFaqs: CollectionConfig = {
     description: "The FAQ accordion on /companies.",
   },
   access: faqAccess,
+  hooks: revalidateHooks("company-faqs"),
   fields: faqFields,
 };
 
@@ -48,5 +45,6 @@ export const ProfessionalFaqs: CollectionConfig = {
     description: "The FAQ accordion on /professionals.",
   },
   access: faqAccess,
+  hooks: revalidateHooks("professional-faqs"),
   fields: faqFields,
 };

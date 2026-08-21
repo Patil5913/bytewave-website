@@ -29,7 +29,7 @@ export type Post = {
   authorLinkedIn?: string;
   authorAvatar?: string;
   readTime: string;
-  cover: string;
+  cover?: string;
   excerpt: string;
   content: Block[];
 };
@@ -50,7 +50,7 @@ export function topicSlug(post: { tag: string }) {
   return slugify(post.tag);
 }
 
-export function articleSlug(post: { id: string; title: string }) {
+function articleSlug(post: { id: string; title: string }) {
   return `${post.id}-${trimTitleSlug(post.title)}`;
 }
 
@@ -58,17 +58,7 @@ export function buildHref(post: { id: string; title: string; tag: string }) {
   return `/insights/${topicSlug(post)}/${articleSlug(post)}`;
 }
 
-export function findPost(topic: string, slug: string): Post | undefined {
-  return ALL_POSTS.find(
-    (post) =>
-      topicSlug(post) === topic &&
-      (slug === post.id || slug.startsWith(`${post.id}-`)),
-  );
-}
 
-export function postsByTopic(topic: string) {
-  return ALL_POSTS.filter((post) => topicSlug(post) === topic);
-}
 
 export const ALL_POSTS: Post[] = [
   {
@@ -81,8 +71,6 @@ export const ALL_POSTS: Post[] = [
     authorBio:
       "R. Fischer covers compensation trends and hiring data across engineering and infrastructure roles.",
     readTime: "6 min read",
-    cover:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop",
     excerpt:
       "Compensation bands are shifting fast as demand for platform engineers outpaces supply across every major market.",
     content: [
@@ -121,13 +109,6 @@ export const ALL_POSTS: Post[] = [
             text: " operators, and a growing willingness among candidates to hold out for roles that match their leverage.",
           },
         ],
-      },
-      {
-        type: "image",
-        src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1800&auto=format&fit=crop",
-        alt: "Compensation trend chart mockup",
-        caption:
-          "Trailing 90-day offer data across platform and infrastructure roles.",
       },
       {
         type: "quote",
@@ -209,8 +190,6 @@ export const ALL_POSTS: Post[] = [
     authorBio:
       "L. Marsh writes about hiring operations and screening process design.",
     readTime: "5 min read",
-    cover:
-      "https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2000&auto=format&fit=crop",
     excerpt:
       "Keyword filters and resume scoring miss the signals that actually predict on-the-job performance.",
     content: [
@@ -234,8 +213,6 @@ export const ALL_POSTS: Post[] = [
     authorBio:
       "T. Nakamura covers team structure and scaling decisions for technical orgs.",
     readTime: "5 min read",
-    cover:
-      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2000&auto=format&fit=crop",
     excerpt:
       "The right ratio of generalists to specialists changes at every stage of growth — here's how to plan for it.",
     content: [
@@ -259,12 +236,7 @@ export const ALL_POSTS: Post[] = [
     authorTitle: "Founder & CEO @ Migrate Mate",
     authorBio:
       "I moved from Australia to the United States in 2023. I have had 3 jobs, and 3 different visas. I started Migrate Mate to help people like me find their dream job in the USA & help them get visa sponsorship.",
-    authorLinkedIn: "#",
-    authorAvatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
     readTime: "8 min read",
-    cover:
-      "https://images.unsplash.com/photo-1436450412740-6b988f486c6b?q=80&w=2000&auto=format&fit=crop",
     excerpt:
       "Migrate Mate files your E-3 within 1 business day of receiving your documents. Here's what the commitment covers and how to prepare for your 4-6 week timeline.",
     content: [
@@ -512,10 +484,7 @@ export const ALL_POSTS: Post[] = [
           {
             text: "Migrate Mate monitors availability across all three and books the earliest appointment that works for your schedule. Check ",
           },
-          {
-            text: "E-3 visa appointment availability",
-            href: "#",
-          },
+          { text: "E-3 visa appointment availability" },
           { text: " across all consulates to understand current wait times." },
         ],
       },

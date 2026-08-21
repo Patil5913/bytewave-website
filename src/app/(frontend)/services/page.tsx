@@ -1,3 +1,4 @@
+import ReferralSignup from "@components/ReferralSignup";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -6,10 +7,8 @@ import Navbar from "@components/Navbar";
 import Footer from "@components/Footer";
 import ContactTerminal from "@components/ContactTerminal";
 import Reveal from "@components/Reveal";
-import { getSiteSettingsContent } from "@/lib/content";
+import { getReferralSettings, getSiteSettingsContent } from "@/lib/content";
 import { metadataFromSettings } from "@/lib/seo";
-
-export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettingsContent();
@@ -210,7 +209,10 @@ function ServiceTrack({
 }
 
 export default async function Services() {
-  const settings = await getSiteSettingsContent();
+  const [settings, referral] = await Promise.all([
+    getSiteSettingsContent(),
+    getReferralSettings(),
+  ]);
 
   return (
     <>
@@ -374,17 +376,15 @@ export default async function Services() {
               </h2>
               <p className="text-base leading-relaxed text-ink/50">
                 Refer a professional or a hiring team and the payout lands once
-                the placement clears its 90-day window. Tell us who you have in
-                mind and we&apos;ll send your link.
+                the placement clears its 90-day window. Get your link below and
+                share it — anyone who signs up through it is credited to you.
               </p>
             </div>
-            <Link
-              href="#intake"
-              className="group flex w-fit shrink-0 items-center gap-2 bg-ink/10 px-6 py-3 text-sm text-ink backdrop-blur-md transition-colors hover:bg-ink/20"
-            >
-              Request your referral link
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
+            <ReferralSignup
+              reward={referral.defaultReward}
+              currency={referral.currency}
+              terms={referral.terms}
+            />
           </Reveal>
         </div>
       </section>

@@ -7,9 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      // Admin, the Payload REST/GraphQL surface, and the seed endpoint are not
-      // content and must never be indexed.
-      disallow: ["/ops/", "/api/", "/seed-content"],
+      
+      disallow: ["/ops/", "/api/", "/seed-content", "/leads", "/preview/"],
     },
     sitemap: absoluteUrl("/sitemap.xml"),
   };

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 
 import { isStaff } from "../access/roles";
+import { revalidateHooks } from "../lib/revalidate";
 
 export const SuccessVideos: CollectionConfig = {
   slug: "success-videos",
@@ -16,6 +17,7 @@ export const SuccessVideos: CollectionConfig = {
     update: isStaff,
     delete: isStaff,
   },
+  hooks: revalidateHooks("success-videos"),
   fields: [
     { name: "name", type: "text", required: true },
     {
@@ -35,8 +37,10 @@ export const SuccessVideos: CollectionConfig = {
       name: "thumbnail",
       type: "upload",
       relationTo: "media",
-      required: true,
-      admin: { description: "Video thumbnail. 16:9 works best." },
+      admin: {
+        description:
+          "Optional. 16:9 works best. Without one the card shows the name and role on a plain background.",
+      },
     },
     {
       name: "row",

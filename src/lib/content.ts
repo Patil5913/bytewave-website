@@ -1,10 +1,17 @@
 import "server-only";
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
+import { draftMode } from "next/headers";
 import { getPayload, type CollectionSlug, type GlobalSlug } from "payload";
 import config from "@payload-config";
 import { ALL_POSTS, type Post } from "./insights";
-import { blocksToMarkdown } from "./markdown";
-import { mdToLexical } from "./lexical";
+import type { Post as PostDoc } from "../payload-types";
+import { mediaAlt, mediaUrl } from "./media";
+import { blocksToLexical } from "./lexical";
+import { ALL_CONTENT_TAG, tagFor } from "./revalidate";
 import {
+  EXAMPLE_PLACEMENTS,
+  SITE_STATS_CONTENT,
   HOMEPAGE,
   LEGAL_PAGE,
   SITE_SETTINGS,
@@ -16,7 +23,7 @@ import {
   TESTIMONIAL_VIDEOS,
 } from "./siteContent";
 
-export type CertItem = {
+type CertItem = {
   code: string;
   ref: string;
   year: string;
@@ -24,8 +31,8 @@ export type CertItem = {
   description: string;
   logoName: string;
 };
-export type FaqItem = { question: string; answer: string };
-export type QuoteItem = {
+type FaqItem = { question: string; answer: string };
+type QuoteItem = {
   name: string;
   title: string;
   company: string;
@@ -33,161 +40,69 @@ export type QuoteItem = {
   quote: string;
   row?: string;
 };
-export type VideoItem = {
+type VideoItem = {
   name: string;
   role: string;
   company: string;
   domain: string;
   duration: string;
-  thumbnail: string;
+  thumbnail?: string;
   row?: string;
 };
 
-export type PostView = Omit<Post, "content"> & {
+export type PostView = Omit<Post, "content" | "cover"> & {
   content: unknown;
-  /** Alt text from the uploaded cover, falling back to the title. */
+  
+  cover?: string;
+  
+  publishedAt?: string;
+  
   coverAlt?: string;
   faqs?: { question: string; answer: string }[];
 };
-
-export type Placement = {
-  role: string;
-  stack: string;
-  candidate: string;
-  company: string;
-  companyName: string;
-  location: string;
-  pay: string;
-  status: string;
-};
-
-/**
- * Illustrative rows shown when the placements collection is empty or the DB is
- * unreachable. Deliberately generic — never put a real client or candidate
- * name in here, it renders in production.
- */
-const EXAMPLE_PLACEMENTS: Placement[] = [
-  {
-    role: "Backend Developer",
-    stack: "Python, FastAPI, PostgreSQL",
-    candidate: "Candidate A",
-    company: "example.com",
-    companyName: "Fintech Platform",
-    location: "New York, NY",
-    pay: "Example listing",
-    status: "Placed",
-  },
-  {
-    role: "Product Designer",
-    stack: "Figma, Design Systems",
-    candidate: "Candidate B",
-    company: "example.com",
-    companyName: "Productivity Startup",
-    location: "Remote",
-    pay: "Example listing",
-    status: "Offer",
-  },
-  {
-    role: "Frontend Engineer",
-    stack: "React, TypeScript, Next.js",
-    candidate: "Candidate C",
-    company: "example.com",
-    companyName: "Developer Tools Co.",
-    location: "San Francisco, CA",
-    pay: "Example listing",
-    status: "Interviewing",
-  },
-  {
-    role: "Data Analyst",
-    stack: "SQL, Python, Looker",
-    candidate: "Candidate D",
-    company: "example.com",
-    companyName: "Marketplace Co.",
-    location: "Austin, TX",
-    pay: "Example listing",
-    status: "Placed",
-  },
-  {
-    role: "DevOps Engineer",
-    stack: "Kubernetes, Terraform, AWS",
-    candidate: "Candidate E",
-    company: "example.com",
-    companyName: "Infrastructure Co.",
-    location: "Seattle, WA",
-    pay: "Example listing",
-    status: "Negotiating",
-  },
-];
-
-export type SiteStat = {
-  value: number;
-  decimals: number;
-  suffix: string;
-  label: string;
-  note: string;
-};
-
-/** Illustrative figures for an empty database — see EXAMPLE_PLACEMENTS. */
-const EXAMPLE_STATS: SiteStat[] = [
-  {
-    value: 94,
-    decimals: 0,
-    suffix: "%",
-    label: "Placement Success Rate",
-    note: "of matched roles close on the first shortlist.",
-  },
-  {
-    value: 14,
-    decimals: 0,
-    suffix: "d",
-    label: "Avg. Time-to-Placement",
-    note: "from first intro to signed offer.",
-  },
-  {
-    value: 1.2,
-    decimals: 1,
-    suffix: "k",
-    label: "Verified Professionals",
-    note: "skills confirmed, not keyword-matched.",
-  },
-  {
-    value: 150,
-    decimals: 0,
-    suffix: "+",
-    label: "Partner Organizations",
-    note: "hiring directly through the network.",
-  },
-];
-
-/**
- * Resolve a Payload upload field to a URL. Depending on query depth the value
- * is either a populated media doc or a bare id; legacy rows may still hold a
- * plain URL string, so all three are handled.
- */
-function mediaUrl(value: unknown): string {
-  if (typeof value === "string") return value;
-  if (value && typeof value === "object") {
-    const url = (value as { url?: unknown }).url;
-    if (typeof url === "string") return url;
-  }
-  return "";
-}
-
-/** Alt text stored alongside an uploaded image, when the doc is populated. */
-function mediaAlt(value: unknown, fallback: string): string {
-  if (value && typeof value === "object") {
-    const alt = (value as { alt?: unknown }).alt;
-    if (typeof alt === "string" && alt) return alt;
-  }
-  return fallback;
-}
 
 async function client() {
   return getPayload({ config });
 }
 
-export async function getPlacements(): Promise<Placement[]> {
+async function logReadFailure(what: string, err: unknown) {
+  const message = `[content] ${what} read failed — serving bundled fallback: ${
+    (err as Error)?.message ?? err
+  }`;
   try {
+    (await client()).logger.error(message);
+  } catch {
+    console.error(message);
+  }
+}
+
+function cachedRead<T>(
+  what: string,
+  keyParts: string[],
+  tags: string[],
+  read: () => Promise<T>,
+  fallback: () => T | Promise<T>,
+  revalidate = 3600,
+): () => Promise<T> {
+  const persisted = unstable_cache(read, ["content", ...keyParts], {
+    tags: [...tags, ALL_CONTENT_TAG],
+    revalidate,
+  });
+  return cache(async () => {
+    try {
+      return await persisted();
+    } catch (err) {
+      await logReadFailure(what, err);
+      return await fallback();
+    }
+  });
+}
+
+export const getPlacements = cachedRead(
+  "placements",
+  ["placements"],
+  [tagFor("placements")],
+  async () => {
     const payload = await client();
     const { docs } = await payload.find({
       collection: "placements",
@@ -195,93 +110,107 @@ export async function getPlacements(): Promise<Placement[]> {
       sort: "order",
     });
     if (!docs.length) return EXAMPLE_PLACEMENTS;
-    return (docs as Record<string, unknown>[]).map((d) => ({
-      role: d.role as string,
-      stack: d.stack as string,
-      candidate: d.candidate as string,
-      company: d.company as string,
-      companyName: d.companyName as string,
-      location: d.location as string,
-      pay: d.pay as string,
-      status: d.status as string,
-    }));
-  } catch (err) {
-    console.error("[content] placements query failed, using examples:", err);
-    return EXAMPLE_PLACEMENTS;
-  }
-}
+    return docs.map(
+      ({ role, stack, candidate, company, companyName, location, pay, status }) => ({
+        role,
+        stack,
+        candidate,
+        company,
+        companyName,
+        location,
+        pay,
+        status,
+      }),
+    );
+  },
+  () => EXAMPLE_PLACEMENTS,
+);
 
-export async function getSiteStats(): Promise<SiteStat[]> {
-  try {
+export const getSiteStats = cachedRead(
+  "site-stats",
+  ["global", "site-stats"],
+  [tagFor("site-stats")],
+  async () => {
     const payload = await client();
-    const global = (await payload.findGlobal({
-      slug: "site-stats",
-    })) as Record<string, unknown>;
-    const stats = (global?.stats ?? []) as SiteStat[];
-    return stats.length ? stats : EXAMPLE_STATS;
-  } catch (err) {
-    console.error("[content] site-stats query failed, using examples:", err);
-    return EXAMPLE_STATS;
-  }
-}
+    const global = await payload.findGlobal({ slug: "site-stats" });
+    const stats = (global.stats ?? []).map(
+      ({ value, decimals, suffix, label, note }) => ({
+        value,
+        decimals,
+        suffix: suffix ?? "",
+        label,
+        note,
+      }),
+    );
+    return stats.length ? stats : SITE_STATS_CONTENT;
+  },
+  () => SITE_STATS_CONTENT,
+);
 
-function toPostView(d: Record<string, unknown>): PostView {
+function toPostView(d: PostDoc): PostView {
   return {
-    id: d.articleId as string,
-    date: d.date as string,
-    updated: (d.updated as boolean) || undefined,
-    tag: d.tag as string,
-    title: d.title as string,
-    author: d.author as string,
-    authorTitle: (d.authorTitle as string) ?? "",
-    authorBio: (d.authorBio as string) ?? "",
-    authorLinkedIn: (d.authorLinkedIn as string) || undefined,
-    authorAvatar: mediaUrl(d.authorAvatar) || undefined,
-    readTime: d.readTime as string,
+    id: d.articleId ?? String(d.id),
+    date: d.date ?? "",
+    publishedAt: d.publishedAt ?? undefined,
+    updated: d.updated || undefined,
+    tag: d.tag,
+    title: d.title,
+    author: d.author,
+    authorTitle: d.authorTitle ?? "",
+    authorBio: d.authorBio ?? "",
+    authorLinkedIn: d.authorLinkedIn || undefined,
+    authorAvatar: mediaUrl(d.authorAvatar),
     cover: mediaUrl(d.cover),
-    coverAlt: mediaAlt(d.cover, (d.title as string) ?? ""),
-    excerpt: d.excerpt as string,
+    coverAlt: mediaAlt(d.cover, d.title),
+    readTime: d.readTime,
+    excerpt: d.excerpt,
     content: d.content,
-    faqs: (d.faqs as { question: string; answer: string }[]) ?? [],
+    faqs: (d.faqs ?? []).map(({ question, answer }) => ({ question, answer })),
   };
 }
 
-async function findAll(collection: string, sort = "order") {
-  try {
+export type ReferralSettingsView = {
+  defaultReward: number;
+  currency: string;
+  terms?: string;
+};
+
+export const getReferralSettings = cachedRead(
+  "referral-settings",
+  ["global", "referral-settings"],
+  [tagFor("referral-settings")],
+  async () => {
     const payload = await client();
-    const { docs } = await payload.find({
-      collection: collection as CollectionSlug,
-      limit: 200,
-      sort,
-    });
-    return docs as Record<string, unknown>[];
-  } catch (err) {
-    console.error(`[content] ${collection} query failed:`, err);
-    return [];
-  }
+    const global = await payload.findGlobal({ slug: "referral-settings" });
+    return {
+      defaultReward: global.defaultReward ?? 0,
+      currency: global.currency ?? "USD",
+      terms: global.terms ?? undefined,
+    } satisfies ReferralSettingsView;
+  },
+  (): ReferralSettingsView => ({ defaultReward: 0, currency: "USD" }),
+);
+
+async function findAll<S extends CollectionSlug>(collection: S, sort = "order") {
+  const payload = await client();
+  const { docs } = await payload.find({ collection, limit: 200, sort });
+  return docs;
 }
 
-async function findGlobalSafe(slug: string) {
-  try {
-    const payload = await client();
-    return (await payload.findGlobal({ slug: slug as GlobalSlug })) as Record<
-      string,
-      unknown
-    > | null;
-  } catch (err) {
-    console.error(`[content] global ${slug} query failed:`, err);
-    return null;
-  }
+async function findGlobal<S extends GlobalSlug>(slug: S) {
+  const payload = await client();
+  return payload.findGlobal({ slug });
 }
 
 function merge<T extends Record<string, unknown>>(
   base: T,
-  cms: Record<string, unknown> | null,
+  cms: object | null,
 ): T {
   if (!cms) return base;
+  const source = cms as Record<string, unknown>;
   const out: Record<string, unknown> = { ...base };
   for (const key of Object.keys(base)) {
-    const v = cms[key];
+    const v = source[key];
     if (Array.isArray(base[key])) {
       if (Array.isArray(v) && v.length) out[key] = v;
     } else if (v !== undefined && v !== null && v !== "") {
@@ -291,110 +220,189 @@ function merge<T extends Record<string, unknown>>(
   return out as T;
 }
 
-export async function getHomepageContent(): Promise<typeof HOMEPAGE> {
-  return merge(HOMEPAGE, await findGlobalSafe("homepage"));
-}
+export const getHomepageContent = cachedRead(
+  "homepage",
+  ["global", "homepage"],
+  [tagFor("homepage")],
+  async () => merge(HOMEPAGE, await findGlobal("homepage")),
+  () => HOMEPAGE,
+);
 
-export async function getSiteSettingsContent(): Promise<typeof SITE_SETTINGS> {
-  return merge(SITE_SETTINGS, await findGlobalSafe("site-settings"));
-}
+export const getSiteSettingsContent = cachedRead(
+  "site-settings",
+  ["global", "site-settings"],
+  [tagFor("site-settings")],
+  async () => merge(SITE_SETTINGS, await findGlobal("site-settings")),
+  () => SITE_SETTINGS,
+);
 
-export async function getLegalPageContent(): Promise<typeof LEGAL_PAGE> {
-  return merge(LEGAL_PAGE, await findGlobalSafe("legal-page"));
-}
+export const getLegalPageContent = cachedRead(
+  "legal-page",
+  ["global", "legal-page"],
+  [tagFor("legal-page")],
+  async () => merge(LEGAL_PAGE, await findGlobal("legal-page")),
+  () => LEGAL_PAGE,
+);
 
-export async function getTrackRecordContent(): Promise<typeof TRACK_RECORD> {
-  return merge(TRACK_RECORD, await findGlobalSafe("track-record"));
-}
+export const getTrackRecordContent = cachedRead(
+  "track-record",
+  ["global", "track-record"],
+  [tagFor("track-record")],
+  async () => merge(TRACK_RECORD, await findGlobal("track-record")),
+  () => TRACK_RECORD,
+);
 
-export async function getCertificationsContent(): Promise<CertItem[]> {
-  const docs = await findAll("certifications");
-  if (!docs.length) return CERT_DEFAULT;
-  return docs.map((d) => ({
-    code: d.code as string,
-    ref: d.ref as string,
-    year: d.year as string,
-    label: d.label as string,
-    description: d.description as string,
-    logoName: d.logoName as string,
-  }));
-}
+export const getCertificationsContent = cachedRead(
+  "certifications",
+  ["certifications"],
+  [tagFor("certifications")],
+  async () => {
+    const docs = await findAll("certifications");
+    if (!docs.length) return CERT_DEFAULT;
+    return docs.map((d) => ({
+      code: d.code,
+      ref: d.ref,
+      year: d.year,
+      label: d.label,
+      description: d.description,
+      logoName: d.logoName,
+    })) as CertItem[];
+  },
+  () => CERT_DEFAULT,
+);
 
-export async function getFaqsContent(
+const faqReaders = {
+  companies: cachedRead(
+    "company-faqs",
+    ["faqs", "companies"],
+    [tagFor("company-faqs")],
+    async () => {
+      const docs = await findAll("company-faqs", "order");
+      if (!docs.length) return FAQS_COMPANIES as FaqItem[];
+      return docs.map((d) => ({
+        question: d.question,
+        answer: d.answer,
+      }));
+    },
+    () => FAQS_COMPANIES as FaqItem[],
+  ),
+  professionals: cachedRead(
+    "professional-faqs",
+    ["faqs", "professionals"],
+    [tagFor("professional-faqs")],
+    async () => {
+      const docs = await findAll("professional-faqs", "order");
+      if (!docs.length) return FAQS_PROFESSIONALS as FaqItem[];
+      return docs.map((d) => ({
+        question: d.question,
+        answer: d.answer,
+      }));
+    },
+    () => FAQS_PROFESSIONALS as FaqItem[],
+  ),
+};
+
+export function getFaqsContent(
   audience: "companies" | "professionals",
 ): Promise<FaqItem[]> {
-  const fallback =
-    audience === "companies" ? FAQS_COMPANIES : FAQS_PROFESSIONALS;
-  try {
-    const payload = await client();
-    const { docs } = await payload.find({
-      collection:
-        audience === "companies" ? "company-faqs" : "professional-faqs",
-      limit: 50,
-      sort: "order",
-    });
-    if (!docs.length) return fallback;
-    return (docs as Record<string, unknown>[]).map((d) => ({
-      question: d.question as string,
-      answer: d.answer as string,
+  return faqReaders[audience]();
+}
+
+export const getTestimonialQuotes = cachedRead(
+  "client-quotes",
+  ["client-quotes"],
+  [tagFor("client-quotes")],
+  async () => {
+    const docs = await findAll("client-quotes");
+    if (!docs.length) return TESTIMONIAL_QUOTES as QuoteItem[];
+    return docs.map((d) => ({
+      name: d.name,
+      title: d.title ?? "",
+      company: d.company,
+      domain: d.domain,
+      quote: d.quote,
+      row: d.row ?? "one",
     }));
-  } catch (err) {
-    console.error(`[content] faqs (${audience}) query failed:`, err);
-    return fallback;
-  }
-}
+  },
+  () => TESTIMONIAL_QUOTES as QuoteItem[],
+);
 
-export async function getTestimonialQuotes(): Promise<QuoteItem[]> {
-  const docs = await findAll("client-quotes");
-  if (!docs.length) return TESTIMONIAL_QUOTES;
-  return docs.map((d) => ({
-    name: d.name as string,
-    title: (d.title as string) ?? "",
-    company: d.company as string,
-    domain: d.domain as string,
-    quote: (d.quote as string) ?? "",
-    row: (d.row as string) ?? "one",
-  }));
-}
+export const getTestimonialVideos = cachedRead(
+  "success-videos",
+  ["success-videos"],
+  [tagFor("success-videos")],
+  async () => {
+    const docs = await findAll("success-videos");
+    if (!docs.length) return TESTIMONIAL_VIDEOS as VideoItem[];
+    return docs.map((d) => ({
+      name: d.name,
+      role: d.role ?? "",
+      company: d.company,
+      domain: d.domain,
+      duration: d.duration ?? "",
+      thumbnail: mediaUrl(d.thumbnail),
+      row: d.row ?? "one",
+    }));
+  },
+  () => TESTIMONIAL_VIDEOS as VideoItem[],
+);
 
-export async function getTestimonialVideos(): Promise<VideoItem[]> {
-  const docs = await findAll("success-videos");
-  if (!docs.length) return TESTIMONIAL_VIDEOS;
-  return docs.map((d) => ({
-    name: d.name as string,
-    role: (d.role as string) ?? "",
-    company: d.company as string,
-    domain: d.domain as string,
-    duration: (d.duration as string) ?? "",
-    thumbnail: mediaUrl(d.thumbnail),
-    row: (d.row as string) ?? "one",
-  }));
-}
+let fallbackPostsPromise: Promise<PostView[]> | undefined;
 
-async function fallbackPosts(): Promise<PostView[]> {
-  return Promise.all(
+function fallbackPosts(): Promise<PostView[]> {
+  fallbackPostsPromise ??= Promise.all(
     ALL_POSTS.map(async (p) => {
-      const { md, faqs } = blocksToMarkdown(p.content);
-      const content = await mdToLexical(md).catch(() => null);
       const { content: _drop, ...rest } = p;
       void _drop;
+      const { content, faqs } = await blocksToLexical(p.content).catch(() => ({
+        content: null,
+        faqs: [] as { question: string; answer: string }[],
+      }));
       return { ...rest, content, faqs } as PostView;
     }),
   );
+  return fallbackPostsPromise;
 }
 
-export async function getPosts(): Promise<PostView[]> {
+export const getPublishedPosts = cachedRead(
+  "posts",
+  ["posts", "published"],
+  [tagFor("posts")],
+  async () => {
+    const payload = await client();
+    const { docs } = await payload.find({
+      collection: "posts",
+      limit: 100,
+      sort: "-publishedAt",
+      where: { _status: { equals: "published" } },
+      overrideAccess: false,
+    });
+    if (!docs.length) return fallbackPosts();
+    return docs.map(toPostView);
+  },
+  () => fallbackPosts(),
+  300,
+);
+
+const getDraftPosts = cache(async (): Promise<PostView[]> => {
   try {
     const payload = await client();
     const { docs } = await payload.find({
       collection: "posts",
       limit: 100,
-      sort: "articleId",
+      sort: "-publishedAt",
+      draft: true,
+      overrideAccess: true,
     });
     if (!docs.length) return fallbackPosts();
-    return docs.map((d) => toPostView(d as Record<string, unknown>));
+    return docs.map(toPostView);
   } catch (err) {
-    console.error("[content] posts query failed, using bundled posts:", err);
+    await logReadFailure("posts (draft)", err);
     return fallbackPosts();
   }
+});
+
+export async function getPosts(): Promise<PostView[]> {
+  const { isEnabled } = await draftMode();
+  return isEnabled ? getDraftPosts() : getPublishedPosts();
 }

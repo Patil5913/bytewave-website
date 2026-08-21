@@ -173,7 +173,7 @@ export default function CareerClimb() {
           </span>
 
           <div className="mt-4 flex w-full max-w-md items-center gap-2">
-            {ROLES.map((r, i) => (
+            {ROLES.map((r) => (
               <span
                 key={r.role}
                 data-on="false"

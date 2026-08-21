@@ -1,14 +1,13 @@
 import type { GlobalConfig } from "payload";
 
 import { isStaff } from "../access/roles";
+import { revalidateGlobalHooks } from "../lib/revalidate";
 
-// The hero is intentionally not editable: its copy is the brand's positioning
-// statement and its two CTAs are the site's primary routing, so both live in
-// code (HOMEPAGE in src/lib/siteContent.ts).
 export const Homepage: GlobalConfig = {
   slug: "homepage",
   admin: { group: "Homepage" },
   access: { read: () => true, update: isStaff },
+  hooks: revalidateGlobalHooks("homepage"),
   fields: [
     {
       type: "tabs",

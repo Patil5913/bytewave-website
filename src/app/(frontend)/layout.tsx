@@ -5,6 +5,7 @@ import CustomCursor from "@components/CustomCursor";
 import RefreshOnSave from "@components/RefreshOnSave";
 import { getSiteSettingsContent } from "@/lib/content";
 import { metadataFromSettings } from "@/lib/seo";
+import { JsonLd, organizationSchema } from "@/lib/structuredData";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -24,24 +25,31 @@ const archivo = Archivo({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  // Site-wide defaults come from the SEO group in the admin (Global → Site
-  // Settings), falling back to siteContent when a field is blank or the DB is
-  // unreachable. Pages that set their own metadata still win.
+  
   const settings = await getSiteSettingsContent();
   return metadataFromSettings(settings.seo);
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSiteSettingsContent();
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${instrumentSerif.variable} ${archivo.variable} antialiased`}
     >
       <body className="overflow-x-hidden">
+        {/* Site-wide publisher identity; per-page schemas are added by the
+            pages that have them. */}
+        <JsonLd
+          data={organizationSchema(
+            settings.seo?.metaDescription || settings.tagline,
+          )}
+        />
         <RefreshOnSave />
         <SmoothScroll />
         <CustomCursor />

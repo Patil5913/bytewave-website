@@ -10,13 +10,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Payload generates these; they are not hand-edited.
     "src/app/(payload)/ops/admin/importMap.js",
     "src/payload-types.ts",
+    "src/migrations/**",
   ]),
   {
-    // The Lexical/richtext bridge walks untyped editor JSON, where `any` is the
-    // honest annotation. Keep it visible as a warning, not a build blocker.
     rules: { "@typescript-eslint/no-explicit-any": "warn" },
   },
 ]);

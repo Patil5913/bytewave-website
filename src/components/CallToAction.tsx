@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
+import Honeypot from "@components/Honeypot";
 import Reveal from "@components/Reveal";
 import { HOMEPAGE, splitBrand } from "@/lib/siteContent";
 
@@ -15,26 +16,26 @@ export default function CallToAction({
 }) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
+  const [renderedAt] = useState(() => Date.now());
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (status === "sending") return;
     setStatus("sending");
     setError("");
-    const email = String(new FormData(e.currentTarget).get("email") ?? "");
+    const form = new FormData(e.currentTarget);
+    const email = String(form.get("email") ?? "");
     try {
-      const res = await fetch("/api/contacts", {
+      const res = await fetch("/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "lead",
           email,
-          // Real path, so the same component stays attributable if it is ever
-          // reused outside the homepage.
-          source:
-            typeof window !== "undefined"
-              ? `${window.location.pathname}${window.location.search}`
-              : "cta",
+          
+          surface: "cta",
+          companyUrl: String(form.get("companyUrl") ?? ""),
+          renderedAt,
         }),
       });
       if (!res.ok) {
@@ -87,6 +88,7 @@ export default function CallToAction({
               onSubmit={handleSubmit}
               className="flex w-full max-w-md flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center"
             >
+              <Honeypot />
               <label htmlFor="cta-email" className="sr-only">
                 Work email
               </label>

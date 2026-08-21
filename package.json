@@ -10,7 +10,11 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "seed": "curl -fsS -X POST \"http://localhost:3000/seed-content?secret=${SEED_SECRET:-dev-seed}\" && echo"
+    "seed": "curl -fsS -X POST -H \"x-seed-secret: ${SEED_SECRET:?set SEED_SECRET in .env}\" http://localhost:3000/seed-content && echo",
+    "generate:types": "curl -fsS -X POST -H \"x-seed-secret: ${SEED_SECRET:?set SEED_SECRET in .env}\" http://localhost:3000/dev/generate-types && echo",
+    "generate:importmap": "payload generate:importmap",
+    "migrate": "payload migrate",
+    "migrate:create": "curl -fsS -X POST -H \"x-seed-secret: ${SEED_SECRET:?set SEED_SECRET in .env}\" \"http://localhost:3000/dev/create-migration?name=${MIGRATION_NAME:-schema}\" && echo"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

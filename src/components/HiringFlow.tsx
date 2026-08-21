@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { BadgeCheck } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -166,7 +165,7 @@ export default function HiringFlow() {
           return (
             <div
               key={stage.n}
-              className="relative flex w-full shrink-0 flex-col px-6 py-24 md:h-screen md:w-screen md:px-16 md:py-16"
+              className="relative flex w-full shrink-0 flex-col px-6 py-24 md:h-screen md:w-screen md:px-16 md:pt-28 md:pb-16"
             >
               <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end gap-6 md:justify-between">
                 <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-start">

@@ -1,3 +1,4 @@
+import PreviewBanner from "@components/PreviewBanner";
 import type { Metadata } from "next";
 import Navbar from "@components/Navbar";
 import Footer from "@components/Footer";
@@ -7,8 +8,6 @@ import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { buildHref } from "@/lib/insights";
 import { getPosts, getSiteSettingsContent } from "@/lib/content";
 import { metadataFromSettings } from "@/lib/seo";
-
-export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettingsContent();
@@ -46,6 +45,7 @@ export default async function InsightsIndex({
 
   return (
     <>
+      <PreviewBanner path="/insights" />
       <Navbar ctaLabel={settings.navCtaLabel} />
       <section className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
         <div className="mx-auto max-w-7xl">
@@ -67,15 +67,17 @@ export default async function InsightsIndex({
               href={buildHref(LEAD)}
               className="group grid grid-cols-1 gap-8 border-t-2 border-ink pt-8 lg:grid-cols-2 lg:gap-14"
             >
-              <div className="relative aspect-[16/10] w-full overflow-hidden">
-                <Image
-                  src={LEAD.cover}
-                  alt={LEAD.title}
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 600px, 100vw"
-                  className="object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                />
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink/5">
+                {LEAD.cover && (
+                  <Image
+                    src={LEAD.cover}
+                    alt={LEAD.coverAlt ?? LEAD.title}
+                    fill
+                    priority
+                    sizes="(min-width: 1024px) 600px, 100vw"
+                    className="object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  />
+                )}
               </div>
               <div className="flex flex-col justify-center gap-4">
                 <span className="flex items-center gap-2.5 text-xs tracking-widest uppercase">
@@ -110,14 +112,16 @@ export default async function InsightsIndex({
                   href={buildHref(post)}
                   className="group grid grid-cols-1 gap-x-6 gap-y-4 border-b border-ink/10 py-6 sm:grid-cols-12 sm:items-center"
                 >
-                  <div className="relative aspect-[16/10] w-40 overflow-hidden sm:col-span-3 sm:w-full">
-                    <Image
-                      src={post.cover}
-                      alt={post.title}
-                      fill
-                      sizes="200px"
-                      className="object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
-                    />
+                  <div className="relative aspect-[16/10] w-40 overflow-hidden bg-ink/5 sm:col-span-3 sm:w-full">
+                    {post.cover && (
+                      <Image
+                        src={post.cover}
+                        alt={post.coverAlt ?? post.title}
+                        fill
+                        sizes="200px"
+                        className="object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
+                      />
+                    )}
                   </div>
 
                   <div className="flex flex-col gap-2 sm:col-span-8">

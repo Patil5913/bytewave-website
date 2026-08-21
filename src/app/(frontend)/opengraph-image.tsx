@@ -21,7 +21,7 @@ export default function OpengraphImage() {
           background: CANVAS,
           color: INK,
           padding: 80,
-          // Blueprint grid — the same language as the on-site charts.
+          
           backgroundImage:
             "linear-gradient(to right, rgba(247,246,243,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(247,246,243,0.05) 1px, transparent 1px)",
           backgroundSize: "60px 60px",

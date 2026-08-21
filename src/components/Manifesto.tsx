@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, BadgeCheck, Building2, Check, MapPin } from "lucide-react";
+import Link from "next/link";
 import Reveal from "@components/Reveal";
 import { HOMEPAGE } from "@/lib/siteContent";
 
@@ -131,13 +132,19 @@ function CandidateBody() {
       </div>
 
       <div className="rise flex items-center gap-3">
-        <button className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-ink/90">
+        <Link
+          href="/companies#intake"
+          className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-ink/90"
+        >
           Request intro
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-        </button>
-        <button className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-ink/5">
+        </Link>
+        <Link
+          href="/professionals"
+          className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-ink/5"
+        >
           View profile
-        </button>
+        </Link>
       </div>
     </div>
   );
@@ -221,13 +228,19 @@ function EnterpriseBody() {
       </div>
 
       <div className="rise flex items-center gap-3">
-        <button className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-ink/90">
+        <Link
+          href="/companies#how-it-works"
+          className="group flex flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-canvas transition-colors hover:bg-ink/90"
+        >
           Review shortlist
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-        </button>
-        <button className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-ink/5">
+        </Link>
+        <Link
+          href="/companies#intake"
+          className="rounded-lg border border-ink/15 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-ink/5"
+        >
           Post a role
-        </button>
+        </Link>
       </div>
     </div>
   );

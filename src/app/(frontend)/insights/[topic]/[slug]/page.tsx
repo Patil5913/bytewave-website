@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import Navbar from "@components/Navbar";
 import Footer from "@components/Footer";
+import PreviewBanner from "@components/PreviewBanner";
+import {
+  JsonLd,
+  articleSchema,
+  breadcrumbSchema,
+  faqSchema,
+} from "@/lib/structuredData";
 import ReadingProgress from "@components/ReadingProgress";
 import ArticleToc from "@components/ArticleToc";
 import Image from "next/image";
@@ -13,7 +20,11 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { buildHref, topicSlug } from "@/lib/insights";
-import { getPosts, getSiteSettingsContent } from "@/lib/content";
+import {
+  getPosts,
+  getPublishedPosts,
+  getSiteSettingsContent,
+} from "@/lib/content";
 import { ArticleRichText, extractToc, hasHeading } from "@/lib/richtext";
 import { metadataFromSettings } from "@/lib/seo";
 
@@ -48,7 +59,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const all = await getPosts();
+  const all = await getPublishedPosts();
   return all.map((post) => ({
     topic: topicSlug(post),
     slug: buildHref(post).split("/").pop() as string,
@@ -92,6 +103,10 @@ export default async function InsightArticle({
 
   return (
     <>
+      <PreviewBanner path={buildHref(post)} />
+      <JsonLd data={articleSchema(post)} />
+      <JsonLd data={breadcrumbSchema(post)} />
+      {faqs.length > 0 && <JsonLd data={faqSchema(faqs)} />}
       <ReadingProgress />
       <Navbar ctaLabel={settings.navCtaLabel} />
       <article className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
@@ -137,16 +152,18 @@ export default async function InsightArticle({
                 </span>
               </div>
 
-              <div className="relative mb-16 aspect-[16/9] w-full overflow-hidden">
-                <Image
-                  src={post.cover}
-                  alt={post.title}
-                  fill
-                  priority
-                  sizes="(min-width: 768px) 768px, 100vw"
-                  className="object-cover"
-                />
-              </div>
+              {post.cover && (
+                <div className="relative mb-16 aspect-[16/9] w-full overflow-hidden">
+                  <Image
+                    src={post.cover}
+                    alt={post.coverAlt ?? post.title}
+                    fill
+                    priority
+                    sizes="(min-width: 768px) 768px, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+              )}
 
               <ArticleRichText data={post.content} />
 
@@ -250,14 +267,16 @@ export default async function InsightArticle({
                         href={buildHref(r)}
                         className="group flex flex-col gap-3"
                       >
-                        <div className="relative aspect-[16/10] w-full overflow-hidden">
-                          <Image
-                            src={r.cover}
-                            alt={r.title}
-                            fill
-                            sizes="(min-width: 640px) 240px, 100vw"
-                            className="object-cover grayscale transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0"
-                          />
+                        <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink/5">
+                          {r.cover && (
+                            <Image
+                              src={r.cover}
+                              alt={r.coverAlt ?? r.title}
+                              fill
+                              sizes="(min-width: 640px) 240px, 100vw"
+                              className="object-cover grayscale transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0"
+                            />
+                          )}
                         </div>
                         <span className="text-[11px] tracking-widest text-brand uppercase">
                           {r.tag}

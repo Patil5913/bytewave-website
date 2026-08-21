@@ -1,15 +1,18 @@
 import "server-only";
+import type { Block } from "./insights";
+import { blocksToMarkdown } from "./markdown";
 import {
   convertMarkdownToLexical,
   editorConfigFactory,
 } from "@payloadcms/richtext-lexical";
-import config from "@payload-config";
 
 let editorConfigPromise: ReturnType<typeof editorConfigFactory.default> | null =
   null;
 
 async function getEditorConfig() {
   if (!editorConfigPromise) {
+    
+    const { default: config } = await import("@payload-config");
     editorConfigPromise = editorConfigFactory.default({
       config: await config,
     });
@@ -113,4 +116,9 @@ export async function mdToLexical(markdown: string) {
   applyHighlights(state.root);
 
   return state;
+}
+
+export async function blocksToLexical(blocks: Block[]) {
+  const { md, faqs } = blocksToMarkdown(blocks);
+  return { content: await mdToLexical(md), faqs };
 }

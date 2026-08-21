@@ -27,15 +27,29 @@ import { Placements } from "./collections/Placements";
 import { ClientQuotes } from "./collections/ClientQuotes";
 import { SuccessVideos } from "./collections/SuccessVideos";
 import { Certifications } from "./collections/Certifications";
+import { Referrers } from "./collections/Referrers";
+import { Referrals } from "./collections/Referrals";
 import { SiteStats } from "./globals/SiteStats";
 import { Homepage } from "./globals/Homepage";
 import { SiteSettings } from "./globals/SiteSettings";
 import { LegalPage } from "./globals/LegalPage";
 import { TrackRecord } from "./globals/TrackRecord";
+import { ReferralSettings } from "./globals/ReferralSettings";
 import { slugify } from "./lib/insights";
+import { migrations } from "./migrations";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+
+function required(name: "PAYLOAD_SECRET" | "DATABASE_URI"): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(
+      `${name} is not set. Copy .env.example to .env and fill it in.`,
+    );
+  }
+  return value;
+}
 
 const email = process.env.SMTP_HOST
   ? nodemailerAdapter({
@@ -57,6 +71,9 @@ export default buildConfig({
   routes: {
     admin: "/ops/admin",
   },
+  
+  defaultDepth: 1,
+  maxDepth: 3,
   admin: {
     user: Users.slug,
     theme: "dark",
@@ -97,9 +114,12 @@ export default buildConfig({
         const slug = collectionConfig?.slug ?? globalConfig?.slug;
         switch (slug) {
           case "posts":
+            
             return data?.tag && data?.articleId
-              ? `${base}/insights/${slugify(String(data.tag))}/${data.articleId}`
-              : `${base}/insights`;
+              ? `${base}/preview/enter?path=${encodeURIComponent(
+                  `/insights/${slugify(String(data.tag))}/${data.articleId}`,
+                )}`
+              : `${base}/preview/enter?path=%2Finsights`;
           case "client-quotes":
           case "certifications":
             return `${base}/companies`;
@@ -112,6 +132,11 @@ export default buildConfig({
       },
     },
   },
+  
+  upload: {
+    limits: { fileSize: 8 * 1024 * 1024 },
+    abortOnLimit: true,
+  },
   collections: [
     Users,
     Media,
@@ -123,8 +148,17 @@ export default buildConfig({
     ClientQuotes,
     SuccessVideos,
     Certifications,
+    Referrers,
+    Referrals,
   ],
-  globals: [SiteStats, Homepage, SiteSettings, TrackRecord, LegalPage],
+  globals: [
+    SiteStats,
+    Homepage,
+    SiteSettings,
+    TrackRecord,
+    LegalPage,
+    ReferralSettings,
+  ],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
@@ -155,14 +189,18 @@ export default buildConfig({
       }),
     ],
   }),
-  secret: process.env.PAYLOAD_SECRET || "",
+  secret: required("PAYLOAD_SECRET"),
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   db: postgresAdapter({
-    push: true,
+    
+    push: process.env.NODE_ENV !== "production",
+    migrationDir: path.resolve(dirname, "migrations"),
+    
+    prodMigrations: migrations,
     pool: {
-      connectionString: process.env.DATABASE_URI || "",
+      connectionString: required("DATABASE_URI"),
     },
   }),
   ...(email ? { email } : {}),

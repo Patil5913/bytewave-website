@@ -12,11 +12,6 @@ const LINKS = [
   { href: "/insights", label: "Insights" },
 ];
 
-/**
- * Where the bar's CTA points when the current page has no intake form of its
- * own — /services carries one, so it is a real destination rather than a
- * bounce back to the homepage.
- */
 const CTA_FALLBACK = "/services#intake";
 
 export default function Navbar({
@@ -24,7 +19,7 @@ export default function Navbar({
   ctaHref,
 }: {
   ctaLabel?: string;
-  /** Overrides the auto-resolved target. */
+  
   ctaHref?: string;
 } = {}) {
   const [scrolled, setScrolled] = useState(true);
@@ -32,9 +27,6 @@ export default function Navbar({
 
   const ctaTarget = ctaHref ?? CTA_FALLBACK;
 
-  // Most pages already end in an intake form, so prefer scrolling to it over
-  // navigating to the homepage one. Resolved on click rather than on mount so
-  // the link keeps a real href for crawlers and middle-click.
   function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>) {
     setOpen(false);
     if (ctaHref) return;
@@ -46,7 +38,7 @@ export default function Navbar({
 
   useEffect(() => {
     const onScroll = () => {
-      // Pages without a hero keep the bar in its solid state.
+      
       const hero = document.querySelector<HTMLElement>("[data-hero]");
       if (!hero) {
         setScrolled(true);
@@ -64,7 +56,6 @@ export default function Navbar({
     };
   }, []);
 
-  // Lock body scroll while the mobile menu is open.
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
@@ -72,8 +63,6 @@ export default function Navbar({
     };
   }, [open]);
 
-  // The menu overlay is always dark, so its contents stay light regardless
-  // of the bar's scrolled state.
   const fg = open || scrolled ? "text-ink" : "text-white";
   const fgMuted = scrolled ? "text-ink/70" : "text-white/70";
 

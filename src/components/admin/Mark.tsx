@@ -1,5 +1,3 @@
-import React from "react";
-
 export function Mark({ size = 24 }: { size?: number }) {
   return (
     <svg
@@ -21,5 +19,3 @@ export function Mark({ size = 24 }: { size?: number }) {
     </svg>
   );
 }
-
-export default Mark;

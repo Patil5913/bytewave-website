@@ -1,11 +1,13 @@
 import type { GlobalConfig } from "payload";
 
 import { isAdmin } from "../access/roles";
+import { revalidateGlobalHooks } from "../lib/revalidate";
 
 export const SiteSettings: GlobalConfig = {
   slug: "site-settings",
   admin: { group: "Global" },
   access: { read: () => true, update: isAdmin },
+  hooks: revalidateGlobalHooks("site-settings"),
   fields: [
     { name: "tagline", type: "textarea" },
     { name: "legalLine", type: "text" },
@@ -34,6 +36,10 @@ export const SiteSettings: GlobalConfig = {
               name: "href",
               type: "text",
               required: true,
+              validate: (value: unknown) =>
+                typeof value === "string" && value.startsWith("/")
+                  ? true
+                  : "Must be a site-relative path starting with / — these links also feed sitemap.xml.",
               admin: {
                 description: "Site-relative path, e.g. /services#pricing.",
               },
@@ -56,6 +62,10 @@ export const SiteSettings: GlobalConfig = {
           name: "href",
           type: "text",
           required: true,
+          validate: (value: unknown) =>
+            typeof value === "string" && value.startsWith("https://")
+              ? true
+              : "Must be a full URL starting with https://.",
           admin: { description: "Full profile URL, including https://." },
         },
       ],

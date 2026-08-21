@@ -10,7 +10,7 @@ type Video = {
   company: string;
   domain: string;
   duration: string;
-  thumbnail: string;
+  thumbnail?: string;
   row?: string;
 };
 
@@ -25,11 +25,13 @@ function VideoRow({ items, anim }: { items: Video[]; anim: string }) {
                 key={`${dup}-${i}`}
                 className="group relative aspect-video w-[300px] shrink-0 overflow-hidden rounded-xl bg-black sm:w-[360px]"
               >
-                <img
-                  src={video.thumbnail}
-                  alt={video.name}
-                  className="h-full w-full object-cover opacity-75 grayscale transition-all duration-500 group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0"
-                />
+                {video.thumbnail && (
+                  <img
+                    src={video.thumbnail}
+                    alt={video.name}
+                    className="h-full w-full object-cover opacity-75 grayscale transition-all duration-500 group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0"
+                  />
+                )}
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 

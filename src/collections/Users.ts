@@ -20,10 +20,12 @@ export const Users: CollectionConfig = {
   },
   access: {
     admin: isStaffUser,
+    
     create: async (args) => {
       if (args.req.user) return isAdmin(args) === true;
       const { totalDocs } = await args.req.payload.count({
         collection: "users",
+        overrideAccess: true,
       });
       return totalDocs === 0;
     },
@@ -54,11 +56,8 @@ export const Users: CollectionConfig = {
           }
         }
 
-        if (operation === "create") {
-          const { totalDocs } = await req.payload.count({
-            collection: "users",
-          });
-          if (totalDocs === 0) data.role = "admin";
+        if (operation === "create" && !req.user) {
+          data.role = "admin";
         }
 
         return data;

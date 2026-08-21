@@ -17,8 +17,7 @@ import {
   getTrackRecordContent,
 } from "@/lib/content";
 import { metadataFromSettings } from "@/lib/seo";
-
-export const dynamic = "force-dynamic";
+import { JsonLd, faqSchema } from "@/lib/structuredData";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettingsContent();
@@ -51,6 +50,7 @@ export default async function Professionals() {
       />
       <VideoTelemetry items={videos} />
       <PricingReferral />
+      {faqs.length > 0 && <JsonLd data={faqSchema(faqs)} />}
       <SystemDocumentation items={faqs} />
       <ContactTerminal />
       <Footer settings={settings} />

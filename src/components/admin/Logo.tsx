@@ -1,4 +1,3 @@
-import React from "react";
 import { Mark } from "./Mark";
 
 export const Logo = () => (
@@ -23,5 +22,3 @@ export const Logo = () => (
     </span>
   </span>
 );
-
-export default Logo;

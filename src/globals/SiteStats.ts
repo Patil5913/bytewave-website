@@ -1,11 +1,13 @@
 import type { GlobalConfig } from "payload";
 
 import { isStaff } from "../access/roles";
+import { revalidateGlobalHooks } from "../lib/revalidate";
 
 export const SiteStats: GlobalConfig = {
   slug: "site-stats",
   admin: { group: "Homepage" },
   access: { read: () => true, update: isStaff },
+  hooks: revalidateGlobalHooks("site-stats"),
   fields: [
     {
       name: "stats",

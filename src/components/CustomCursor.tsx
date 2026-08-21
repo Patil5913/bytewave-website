@@ -4,10 +4,6 @@ import { useEffect, useRef, useSyncExternalStore } from "react";
 
 type Box = { x: number; y: number; w: number; h: number; r: number };
 
-// The custom cursor only makes sense for a fine pointer, and never when the
-// user asked for reduced motion. Reading it through useSyncExternalStore keeps
-// it SSR-safe (false on the server) and re-evaluates if either query flips —
-// a tablet gaining a trackpad, or an OS motion setting changing mid-session.
 const CURSOR_QUERY =
   "(pointer: fine) and (prefers-reduced-motion: no-preference)";
 

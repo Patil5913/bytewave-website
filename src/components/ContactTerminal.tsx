@@ -1,5 +1,6 @@
 "use client";
 
+import Honeypot from "@components/Honeypot";
 import { useState } from "react";
 import Reveal from "@components/Reveal";
 import { ArrowRight, Check } from "lucide-react";
@@ -67,19 +68,15 @@ const COPY = {
 
 type Props = {
   mode?: "talent" | "enterprise";
-  /**
-   * Attribution recorded on the lead. Defaults to the current path plus its
-   * query string, so a CTA that adds ?from=… stays traceable.
-   */
-  source?: string;
 };
 
 type Status = "idle" | "sending" | "done" | "error";
 
-export default function ContactTerminal({ mode = "talent", source }: Props) {
+export default function ContactTerminal({ mode = "talent" }: Props) {
   const copy = COPY[mode];
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string>("");
+  const [renderedAt] = useState(() => Date.now());
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -96,14 +93,13 @@ export default function ContactTerminal({ mode = "talent", source }: Props) {
     }
     const message = data.get("message");
     if (message) payload.message = String(message);
-    payload.source =
-      source ??
-      (typeof window !== "undefined"
-        ? `${window.location.pathname}${window.location.search}`
-        : "unknown");
+    
+    payload.surface = "contact-terminal";
+    payload.companyUrl = String(data.get("companyUrl") ?? "");
+    payload.renderedAt = renderedAt;
 
     try {
-      const res = await fetch("/api/contacts", {
+      const res = await fetch("/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -181,6 +177,7 @@ export default function ContactTerminal({ mode = "talent", source }: Props) {
                 onSubmit={handleSubmit}
                 className="grid grid-cols-1 gap-6 sm:grid-cols-2"
               >
+                <Honeypot />
                 {copy.fields.map((field) => (
                   <div key={field.id} className="flex flex-col gap-2">
                     <label

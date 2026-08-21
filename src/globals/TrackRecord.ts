@@ -1,11 +1,13 @@
 import type { GlobalConfig } from "payload";
 
 import { isStaff } from "../access/roles";
+import { revalidateGlobalHooks } from "../lib/revalidate";
 
 export const TrackRecord: GlobalConfig = {
   slug: "track-record",
   admin: { group: "Professionals Page" },
   access: { read: () => true, update: isStaff },
+  hooks: revalidateGlobalHooks("track-record"),
   fields: [
     {
       name: "stats",

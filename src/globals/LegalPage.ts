@@ -1,15 +1,14 @@
 import type { GlobalConfig } from "payload";
 
 import { isStaff } from "../access/roles";
+import { revalidateGlobalHooks } from "../lib/revalidate";
 
-// Policy text changes for legal reasons, often urgently, so it must never
-// require a deploy. The page header stays in code (see the hero rule); the
-// documents and their clauses are fully editable here.
 export const LegalPage: GlobalConfig = {
   slug: "legal-page",
   label: "Legal Page",
   admin: { group: "Legal" },
   access: { read: () => true, update: isStaff },
+  hooks: revalidateGlobalHooks("legal-page"),
   fields: [
     {
       type: "tabs",
