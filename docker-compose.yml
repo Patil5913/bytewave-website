@@ -13,7 +13,7 @@ services:
 
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_SERVER_URL: https://bytewave.vrugle.com
+      NEXT_PUBLIC_SERVER_URL: https://bytewavewebsite.vrugle.com
       DATABASE_URI: postgres://bwave:bwave@postgres-prod:5432/bwave
 
     networks:
