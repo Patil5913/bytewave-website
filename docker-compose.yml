@@ -1,18 +1,23 @@
-# Local Postgres for Payload. `docker compose up -d` brings it back after a
-# host/Docker restart (survives via the named volume + restart policy).
-services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: bwave-postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: bwave
-      POSTGRES_PASSWORD: bwave
-      POSTGRES_DB: bwave
-    ports:
-      - "5432:5432"
-    volumes:
-      - bwave-pgdata:/var/lib/postgresql/data
+networks:
+  bytewave-network:
+    external: true
 
-volumes:
-  bwave-pgdata:
+services:
+  bytewave:
+    container_name: bytewave
+    build: .
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_SERVER_URL: https://bytewave.vrugle.com
+      DATABASE_URI: postgres://bwave:bwave@postgres-prod:5432/bwave
+
+    networks:
+      - bytewave-network
+
+    expose:
+      - "3000"
