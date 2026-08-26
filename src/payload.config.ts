@@ -29,6 +29,7 @@ import { SuccessVideos } from "./collections/SuccessVideos";
 import { Certifications } from "./collections/Certifications";
 import { Referrers } from "./collections/Referrers";
 import { Referrals } from "./collections/Referrals";
+import { Newsletters } from "./collections/Newsletters";
 import { SiteStats } from "./globals/SiteStats";
 import { Homepage } from "./globals/Homepage";
 import { SiteSettings } from "./globals/SiteSettings";
@@ -71,7 +72,7 @@ export default buildConfig({
   routes: {
     admin: "/ops/admin",
   },
-  
+
   defaultDepth: 1,
   maxDepth: 3,
   admin: {
@@ -114,7 +115,6 @@ export default buildConfig({
         const slug = collectionConfig?.slug ?? globalConfig?.slug;
         switch (slug) {
           case "posts":
-            
             return data?.tag && data?.articleId
               ? `${base}/preview/enter?path=${encodeURIComponent(
                   `/insights/${slugify(String(data.tag))}/${data.articleId}`,
@@ -132,7 +132,7 @@ export default buildConfig({
       },
     },
   },
-  
+
   upload: {
     limits: { fileSize: 8 * 1024 * 1024 },
     abortOnLimit: true,
@@ -150,6 +150,7 @@ export default buildConfig({
     Certifications,
     Referrers,
     Referrals,
+    Newsletters,
   ],
   globals: [
     SiteStats,
@@ -194,10 +195,9 @@ export default buildConfig({
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   db: postgresAdapter({
-    
     push: process.env.NODE_ENV !== "production",
     migrationDir: path.resolve(dirname, "migrations"),
-    
+
     prodMigrations: migrations,
     pool: {
       connectionString: required("DATABASE_URI"),

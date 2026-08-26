@@ -22,8 +22,8 @@ the rest degrade quietly, which is exactly why they are easy to forget.
 | `PAYLOAD_SECRET` | **Yes** | App refuses to boot. Signs auth tokens — generate with `openssl rand -hex 32`. |
 | `NEXT_PUBLIC_SERVER_URL` | Effectively yes | Falls back to `http://localhost:3000`, which breaks every canonical URL, `sitemap.xml`, `robots.txt` and social preview image. Set it to the public origin, no trailing slash. |
 | `ADMIN_EMAIL_DOMAIN` | Recommended | Defaults to `findandhire.co`. This is the only gate on admin signup, so a wrong value here means the wrong domain can register. |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` | Recommended | No email is sent. Payload logs to the console instead, so **lead notifications are silently never delivered**. |
-| `LEADS_NOTIFY_EMAIL` | Recommended | Nobody is emailed when a lead arrives. Leads are still saved and visible in the admin. |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` | Recommended | No email is sent. Payload logs to the console instead, so **every outbound mail is silently never delivered** — internal lead alerts, submitter acknowledgements, referrer welcome mails and admin password resets alike. |
+| `LEADS_NOTIFY_EMAIL` | Recommended | Nobody internal is emailed when a lead arrives. Leads are still saved, visible in the admin, and the submitter still receives their acknowledgement. |
 | `NEXT_PUBLIC_LOGO_DEV_KEY` | Optional | Company logos on the placement feed, testimonials and certifications 404. Publishable token, safe to expose. |
 | `PREVIEW_SECRET` | Optional | Draft preview still works for signed-in editors; only out-of-band preview links stop working. |
 | `SEED_SECRET` | No | Leave **unset in production**. It closes `/seed-content` and the dev generator routes. |

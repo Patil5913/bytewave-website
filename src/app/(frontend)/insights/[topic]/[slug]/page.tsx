@@ -109,7 +109,7 @@ export default async function InsightArticle({
       {faqs.length > 0 && <JsonLd data={faqSchema(faqs)} />}
       <ReadingProgress />
       <Navbar ctaLabel={settings.navCtaLabel} />
-      <article className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
+      <article className="w-full bg-canvas px-6 max-sm:px-5 pt-32 max-sm:pt-24 pb-24 max-sm:pb-14 md:px-16">
         <div className="mx-auto max-w-7xl">
           <nav className="mb-6 flex items-center gap-2 text-xs tracking-wide text-ink/40">
             <Link href="/" className="transition-colors hover:text-ink">
@@ -126,7 +126,7 @@ export default async function InsightArticle({
             <span className="truncate text-ink/60">{post.title}</span>
           </nav>
 
-          <div className="grid grid-cols-1 gap-16 lg:grid-cols-12">
+          <div className="grid grid-cols-1 gap-16 max-sm:gap-10 lg:grid-cols-12">
             <div className="mx-auto w-full max-w-3xl lg:col-span-9 lg:mx-0">
               <Link
                 href="/insights"
@@ -153,7 +153,7 @@ export default async function InsightArticle({
               </div>
 
               {post.cover && (
-                <div className="relative mb-16 aspect-[16/9] w-full overflow-hidden">
+                <div className="relative mb-16 max-sm:mb-8 aspect-[16/9] w-full overflow-hidden">
                   <Image
                     src={post.cover}
                     alt={post.coverAlt ?? post.title}
@@ -200,7 +200,7 @@ export default async function InsightArticle({
                 </div>
               )}
 
-              <div className="mt-20 flex flex-col gap-4 bg-ink/[0.03] p-6">
+              <div className="mt-20 max-sm:mt-12 flex flex-col gap-4 bg-ink/[0.03] p-6">
                 <span className="text-xs font-medium tracking-widest text-ink/40 uppercase">
                   About the Author
                 </span>
@@ -247,7 +247,7 @@ export default async function InsightArticle({
               </div>
 
               {related.length > 0 && (
-                <div className="mt-20 flex flex-col gap-8 border-t border-ink/10 pt-10">
+                <div className="mt-20 max-sm:mt-12 flex flex-col gap-8 border-t border-ink/10 pt-10">
                   <div className="flex items-end justify-between">
                     <span className="text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
                       Keep Reading

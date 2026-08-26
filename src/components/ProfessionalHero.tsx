@@ -57,7 +57,7 @@ export default function ProfessionalHero() {
           Live roles for verified specialists
         </span>
 
-        <h1 className="max-w-4xl text-center font-instrument text-4xl font-medium text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] sm:text-5xl lg:text-8xl">
+        <h1 className="max-w-4xl text-center font-instrument max-sm:text-3xl text-4xl font-medium text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] sm:text-5xl lg:text-8xl">
           Bypass the noise. Deploy your expertise.
         </h1>
 
@@ -95,7 +95,7 @@ export default function ProfessionalHero() {
         </p>
         <div className="marquee-fade w-full sm:w-3/4">
           <div className="overflow-hidden">
-            <div className="animate-marquee flex w-max gap-12 whitespace-nowrap">
+            <div className="animate-marquee flex w-max gap-12 max-sm:gap-8 whitespace-nowrap">
               {COMPANIES.concat(COMPANIES).map((company, i) => (
                 <span
                   key={i}

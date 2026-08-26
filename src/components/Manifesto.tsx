@@ -339,11 +339,11 @@ export default function Manifesto({
   content?: typeof HOMEPAGE;
 }) {
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16">
-        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16">
+    <section className="relative flex min-h-screen max-sm:min-h-0 w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 max-sm:gap-10">
+        <div className="grid grid-cols-1 items-center gap-12 max-sm:gap-8 md:grid-cols-12 md:gap-16">
           <Reveal className="flex flex-col gap-6 md:col-span-6">
-            <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
+            <h2 className="font-instrument max-sm:text-3xl text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
               {content.manifestoHeadline}
             </h2>
             <p className="max-w-prose text-base leading-relaxed text-ink/70 md:text-lg">
@@ -356,7 +356,7 @@ export default function Manifesto({
           </Reveal>
         </div>
 
-        <Reveal className="grid grid-cols-1 gap-8 border-t border-ink/10 pt-8 sm:grid-cols-2 md:gap-16">
+        <Reveal className="grid grid-cols-1 gap-8 border-t border-ink/10 pt-8 sm:grid-cols-2 md:gap-16 max-sm:gap-10">
           {content.manifestoPoints.map((point, i) => (
             <div key={i}>
               <h4 className="mb-2 text-sm font-medium tracking-wider text-ink uppercase">

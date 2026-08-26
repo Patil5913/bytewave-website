@@ -47,13 +47,13 @@ const CAPABILITIES: Capability[] = [
 
 export default function PlatformCapabilities() {
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
+    <section className="relative flex min-h-screen max-sm:min-h-0 w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-12 max-sm:gap-8 lg:grid-cols-12 lg:gap-16">
         <Reveal className="flex flex-col gap-6 lg:col-span-4 lg:sticky lg:top-32">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Platform Capabilities
           </span>
-          <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
+          <h2 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
             Hiring infrastructure, not a job board.
           </h2>
           <p className="max-w-md text-base leading-relaxed text-ink/50">

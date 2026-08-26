@@ -17,7 +17,7 @@ type Video = {
 function VideoRow({ items, anim }: { items: Video[]; anim: string }) {
   return (
     <div className="marquee-fade-soft w-full overflow-hidden">
-      <div className={`${anim} flex w-max gap-6 px-6 md:px-16`}>
+      <div className={`${anim} flex w-max gap-6 px-6 max-sm:px-5 md:px-16`}>
         {[0, 1].map((dup) => (
           <Fragment key={dup}>
             {items.map((video, i) => (
@@ -88,14 +88,14 @@ export default function VideoTelemetry({ items }: { items: Video[] }) {
   const two = rowTwo.length ? rowTwo : items;
 
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas py-24">
+    <section className="relative flex min-h-screen max-sm:min-h-0 w-full flex-col justify-center overflow-hidden bg-canvas py-24">
       <div className="mx-auto w-full max-w-7xl px-6 md:px-16">
-        <div className="mb-14 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mb-14 max-sm:mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <Reveal className="flex flex-col gap-4">
             <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
               Success Stories
             </span>
-            <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
+            <h2 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
               Verified execution. On record.
             </h2>
           </Reveal>

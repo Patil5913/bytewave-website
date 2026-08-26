@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "seed": "curl -fsS -X POST -H \"x-seed-secret: ${SEED_SECRET:?set SEED_SECRET in .env}\" http://localhost:3000/seed-content && echo",
     "generate:types": "curl -fsS -X POST -H \"x-seed-secret: ${SEED_SECRET:?set SEED_SECRET in .env}\" http://localhost:3000/dev/generate-types && echo",
+    "email:preview": "bun run scripts/preview-emails.ts",
     "generate:importmap": "payload generate:importmap",
     "migrate": "payload migrate",
     "migrate:create": "curl -fsS -X POST -H \"x-seed-secret: ${SEED_SECRET:?set SEED_SECRET in .env}\" \"http://localhost:3000/dev/create-migration?name=${MIGRATION_NAME:-schema}\" && echo"
@@ -23,6 +24,8 @@
     "@payloadcms/live-preview-react": "3.86.0",
     "@payloadcms/next": "3.86.0",
     "@payloadcms/richtext-lexical": "3.86.0",
+    "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.1.0",
     "graphql": "16.9.0",
     "gsap": "^3.15.0",
     "lenis": "^1.3.25",

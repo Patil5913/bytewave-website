@@ -31,13 +31,13 @@ const PHASES = [
 
 export default function AdvocacyProtocol() {
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-16">
+    <section className="relative flex min-h-screen max-sm:min-h-0 w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-16 max-sm:gap-10">
         <Reveal className="flex max-w-3xl flex-col gap-5">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             The Advocacy Protocol
           </span>
-          <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-6xl">
+          <h2 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-6xl">
             We don&apos;t just place you. We engineer your leverage.
           </h2>
         </Reveal>
@@ -48,7 +48,7 @@ export default function AdvocacyProtocol() {
         >
           {PHASES.map((phase) => (
             <div key={phase.id} className="group flex flex-col gap-4">
-              <span className="font-instrument text-5xl font-medium tabular-nums text-ink/15 transition-colors duration-300 group-hover:text-brand lg:text-7xl">
+              <span className="font-instrument max-sm:text-4xl text-5xl font-medium tabular-nums text-ink/15 transition-colors duration-300 group-hover:text-brand lg:text-7xl">
                 {phase.id}
               </span>
               <h3 className="font-instrument text-2xl leading-tight font-medium text-ink lg:text-3xl">

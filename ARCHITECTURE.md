@@ -182,6 +182,63 @@ Totals on a referrer (`totalReferrals`, `qualifiedReferrals`, `totalRewards`) ar
 rather than denormalised counters that can drift. `clicks` *is* a stored counter,
 because an exact click count is not worth a row per click.
 
+## Outbound email
+
+Templates live in `src/lib/email/`. `render.ts` holds one shell —
+600px table layout, inline styles, brand wordmark, hidden preheader — and every
+template returns `{ subject, html, text }`. The plaintext half is generated from
+the same block list rather than written twice, so the two never drift; sending
+HTML alone materially hurts deliverability.
+
+`templates.ts` owns the copy for the five messages we send:
+
+| Template | Trigger | Recipient |
+| --- | --- | --- |
+| `leadNotification` | `contacts` create | `LEADS_NOTIFY_EMAIL` (internal), links to the record in the CMS |
+| `leadConfirmation` | `contacts` create, non-newsletter | the submitter |
+| `newsletterConfirmation` | `contacts` create, `type: newsletter` | the subscriber |
+| `referrerWelcome` | `referrers` create | the referrer, carrying their `/r/<code>` link |
+| `newsletterIssue` | `POST /newsletter/send` | every newsletter subscriber, addressed individually |
+| `postAnnouncement` | `POST /newsletter/announce` | subscribers — hero image, excerpt, three related reads |
+| `passwordReset` | Payload forgot-password | the admin user |
+
+Every non-internal template renders a compliance footer: social links, Privacy /
+Terms / Insights links, the trading name, the postal address, and a `Sent to
+<address>` line. Marketing mail (the newsletter) additionally carries an
+unsubscribe link and `List-Unsubscribe` / `List-Unsubscribe-Post` headers, which
+Gmail and Yahoo require on bulk mail. Transactional mail deliberately does not —
+an unsubscribe link on a password reset is a support ticket waiting to happen.
+
+Footer identity is read from the `site-settings` global via `emailFooter()`, so
+editing the address or social links in the admin changes emails without a
+deploy; `SITE_SETTINGS` is the fallback.
+
+Issues are composed in the `newsletters` collection (subject, preheader, edition
+eyebrow, intro, an optional stat strip, item list, CTA, sign-off). **Saving never
+sends.** `POST /newsletter/send` with `x-newsletter-secret` does, guarded by
+`NEWSLETTER_SEND_SECRET`; passing `{ "test": "you@example.com" }` sends a single
+copy without stamping the row. Sends run in batches of 20, each copy addressed to
+one subscriber so the unsubscribe link and `List-Unsubscribe` header are
+per-recipient, and an issue already marked `sent` is refused with a 409. This is
+a route rather than a collection hook on purpose: saving a draft must not be able
+to mail the list.
+
+`POST /newsletter/announce` mails a published post: hero cover image, tag, title,
+excerpt, byline, a "read the article" button, then the three next-newest
+published posts as thumbnail rows. It refuses a draft, and stamps `posts.announcedAt`
+so the same piece cannot be announced twice. Both send routes take
+`{ "test": "you@example.com" }` for a single copy that skips the stamp.
+
+`GET /unsubscribe?e=&t=` verifies an HMAC of the address (keyed with
+`PAYLOAD_SECRET`), so a link needs no database lookup and cannot be edited into
+someone else's address. It deletes the matching `newsletter` rows and always
+renders the same wording, subscribed or not — the page must not confirm whether
+an address is on the list.
+
+All sends are wrapped and logged on failure: a bounced acknowledgement must never
+fail a submission that is already saved. With `SMTP_HOST` unset there is no
+adapter at all, so everything falls through to Payload's console transport.
+
 ## Access control
 
 `src/access/roles.ts` defines two roles. `admin` gets everything; `editor` gets

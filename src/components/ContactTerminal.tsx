@@ -93,7 +93,7 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
     }
     const message = data.get("message");
     if (message) payload.message = String(message);
-    
+
     payload.surface = "contact-terminal";
     payload.companyUrl = String(data.get("companyUrl") ?? "");
     payload.renderedAt = renderedAt;
@@ -119,13 +119,16 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
   }
 
   return (
-    <section id="intake" className="w-full scroll-mt-24 bg-canvas px-6 py-24 md:px-16">
+    <section
+      id="intake"
+      className="w-full scroll-mt-24 bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16"
+    >
       <div className="mx-auto max-w-7xl">
-        <Reveal className="mb-16 flex flex-col gap-4 md:max-w-2xl">
+        <Reveal className="mb-16 max-sm:mb-10 flex flex-col gap-4 md:max-w-2xl">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Get In Touch
           </span>
-          <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
+          <h2 className="font-instrument max-sm:text-3xl text-4xl leading-tight font-medium text-ink lg:text-5xl">
             Start your intake.
           </h2>
           <p className="max-w-md text-base leading-relaxed text-ink/50">
@@ -135,7 +138,10 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
           </p>
         </Reveal>
 
-        <Reveal delay={0.1} className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+        <Reveal
+          delay={0.1}
+          className="grid grid-cols-1 gap-12 max-sm:gap-8 lg:grid-cols-12"
+        >
           <div className="flex flex-col gap-8 lg:col-span-4">
             <span className="flex w-fit items-center gap-2 bg-ink/5 px-4 py-2 text-sm font-medium text-ink">
               {copy.tag}
@@ -192,7 +198,7 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
                       type={field.type}
                       required={field.id === "email"}
                       placeholder={field.placeholder}
-                      className="w-full border-b border-ink/15 bg-transparent py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-ink/40 focus:outline-none"
+                      className="w-full border-b border-ink/15 bg-transparent py-2.5 text-sm max-sm:text-base text-ink placeholder:text-ink/30 focus:border-ink/40 focus:outline-none"
                     />
                   </div>
                 ))}
@@ -209,7 +215,7 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
                     name="message"
                     rows={3}
                     placeholder={copy.messagePlaceholder}
-                    className="w-full resize-none border-b border-ink/15 bg-transparent py-2.5 text-sm text-ink placeholder:text-ink/30 focus:border-ink/40 focus:outline-none"
+                    className="w-full resize-none border-b border-ink/15 bg-transparent py-2.5 text-sm max-sm:text-base text-ink placeholder:text-ink/30 focus:border-ink/40 focus:outline-none"
                   />
                 </div>
 
@@ -225,7 +231,7 @@ export default function ContactTerminal({ mode = "talent" }: Props) {
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="group mt-2 flex w-fit items-center justify-center gap-2 bg-ink/10 px-6 py-3 text-sm text-ink backdrop-blur-md transition-colors hover:bg-ink/20 disabled:cursor-not-allowed disabled:opacity-60 sm:col-span-2"
+                  className="group mt-2 flex w-fit max-sm:w-full items-center justify-center gap-2 bg-ink/10 px-6 py-3 text-sm text-ink backdrop-blur-md transition-colors hover:bg-ink/20 disabled:cursor-not-allowed disabled:opacity-60 sm:col-span-2"
                 >
                   {status === "sending" ? "Sending…" : copy.cta}
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

@@ -111,7 +111,7 @@ export default function ReferralSignup({
         required
         maxLength={120}
         placeholder="Your name"
-        className="w-full border-b border-ink/20 bg-transparent py-2 text-sm text-ink placeholder:text-ink/30 focus:border-ink/50 focus:outline-none"
+        className="w-full border-b border-ink/20 bg-transparent py-2 text-sm max-sm:text-base text-ink placeholder:text-ink/30 focus:border-ink/50 focus:outline-none"
       />
       <label htmlFor="referral-email" className="sr-only">
         Your email
@@ -123,7 +123,7 @@ export default function ReferralSignup({
         required
         maxLength={254}
         placeholder="you@company.com"
-        className="w-full border-b border-ink/20 bg-transparent py-2 text-sm text-ink placeholder:text-ink/30 focus:border-ink/50 focus:outline-none"
+        className="w-full border-b border-ink/20 bg-transparent py-2 text-sm max-sm:text-base text-ink placeholder:text-ink/30 focus:border-ink/50 focus:outline-none"
       />
       <button
         type="submit"

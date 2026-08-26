@@ -164,14 +164,14 @@ export default function Stats({ stats }: { stats: StatItem[] }) {
   );
 
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
+    <section className="relative flex min-h-screen max-sm:min-h-0 w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16">
       <div
         ref={ref}
-        className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16"
+        className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 max-sm:gap-8 md:grid-cols-12 md:gap-16"
       >
         <div className="flex flex-col gap-10 md:col-span-6">
           <div className="flex flex-col gap-6">
-            <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
+            <h2 className="font-instrument max-sm:text-3xl text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
               Proof, not promises.
             </h2>
             <p className="max-w-prose text-base leading-relaxed text-ink/70 md:text-lg">
@@ -184,7 +184,7 @@ export default function Stats({ stats }: { stats: StatItem[] }) {
           <div className="stats-grid grid grid-cols-2 gap-x-8 gap-y-10 border-t border-ink/10 pt-10">
             {STATS.map((stat) => (
               <div key={stat.label} className="stat-block flex flex-col gap-3">
-                <h3 className="font-instrument text-5xl font-medium tracking-tight text-ink tabular-nums lg:text-6xl">
+                <h3 className="font-instrument max-sm:text-4xl text-5xl font-medium tracking-tight text-ink tabular-nums lg:text-6xl">
                   <span
                     className="stat-num"
                     data-value={stat.value}

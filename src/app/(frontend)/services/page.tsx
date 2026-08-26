@@ -154,14 +154,14 @@ function ServiceTrack({
   return (
     <section
       id={id}
-      className="relative flex min-h-screen w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16"
+      className="relative flex min-h-screen max-sm:min-h-0 w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16"
     >
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-12 max-sm:gap-8 lg:grid-cols-12 lg:gap-16">
         <Reveal className="flex flex-col gap-6 lg:sticky lg:top-32 lg:col-span-4">
           <span className="flex items-center gap-2.5 text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
             {eyebrow}
           </span>
-          <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
+          <h2 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
             {title}
           </h2>
           <p className="max-w-md text-base leading-relaxed text-ink/50">
@@ -219,13 +219,13 @@ export default async function Services() {
       <Navbar ctaLabel={settings.navCtaLabel} />
 
       {/* Header — no hero image, so the bar stays in its solid state. */}
-      <section className="relative flex w-full flex-col justify-center overflow-hidden bg-canvas px-6 pt-36 pb-16 md:px-16">
+      <section className="relative flex w-full flex-col justify-center overflow-hidden bg-canvas px-6 pt-36 max-sm:pt-28 pb-16 md:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-end gap-10 lg:grid-cols-12">
           <Reveal className="flex flex-col gap-6 lg:col-span-7">
             <span className="flex items-center gap-2.5 text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
               Services
             </span>
-            <h1 className="font-instrument text-5xl leading-[1.05] font-medium text-balance text-ink lg:text-7xl">
+            <h1 className="font-instrument max-sm:text-4xl text-5xl leading-[1.05] font-medium text-balance text-ink lg:text-7xl">
               Everything we run, and what it costs.
             </h1>
             <p className="max-w-md text-base leading-relaxed text-ink/50">
@@ -277,14 +277,14 @@ export default async function Services() {
       {/* Pricing — mirrors the hiring-statement receipt on /companies. */}
       <section
         id="pricing"
-        className="relative flex min-h-screen w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16"
+        className="relative flex min-h-screen max-sm:min-h-0 w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16"
       >
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-20">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-14 max-sm:gap-10 lg:grid-cols-2 lg:gap-20">
           <Reveal className="flex flex-col gap-6">
             <span className="flex items-center gap-2.5 text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
               Pricing
             </span>
-            <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-6xl">
+            <h2 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-6xl">
               You pay when it works.
             </h2>
             <p className="max-w-md text-base leading-relaxed text-ink/50">
@@ -293,7 +293,7 @@ export default async function Services() {
             </p>
             <Link
               href="#intake"
-              className="group mt-2 flex w-fit items-center gap-2 bg-ink px-6 py-3 text-sm font-medium text-canvas transition-colors hover:bg-ink/90"
+              className="group mt-2 flex w-fit max-sm:w-full max-sm:justify-center items-center gap-2 bg-ink px-6 py-3 text-sm font-medium text-canvas transition-colors hover:bg-ink/90"
             >
               Talk through your requirement
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -304,7 +304,7 @@ export default async function Services() {
             <div className="ml-auto w-full max-w-md font-mono text-sm">
               <div aria-hidden className="h-3 bg-ink/[0.04]" style={TORN_TOP} />
 
-              <div className="bg-ink/[0.04] px-7 py-6">
+              <div className="bg-ink/[0.04] px-7 py-6 max-sm:px-4 max-sm:py-5">
                 <div className="flex items-center justify-between border-b border-dashed border-ink/20 pb-5">
                   <div className="flex flex-col gap-0.5">
                     <span className="text-base tracking-tight text-ink/70 lowercase">
@@ -363,7 +363,7 @@ export default async function Services() {
       {/* Referral */}
       <section
         id="referral"
-        className="relative flex w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16"
+        className="relative flex w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16"
       >
         <div className="mx-auto w-full max-w-7xl">
           <Reveal className="flex flex-col gap-8 border-t border-ink/10 pt-12 md:flex-row md:items-end md:justify-between">
@@ -371,7 +371,7 @@ export default async function Services() {
               <span className="flex items-center gap-2.5 text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
                 Refer &amp; Earn
               </span>
-              <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
+              <h2 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
                 Know someone worth hiring?
               </h2>
               <p className="text-base leading-relaxed text-ink/50">

@@ -63,7 +63,7 @@ export default async function InsightsTopic({
     <>
       <PreviewBanner path={`/insights/${topic}`} />
       <Navbar ctaLabel={settings.navCtaLabel} />
-      <section className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
+      <section className="w-full bg-canvas px-6 max-sm:px-5 pt-32 max-sm:pt-24 pb-24 max-sm:pb-14 md:px-16">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex items-center gap-2 text-xs tracking-wide text-ink/40">
             <Link href="/" className="transition-colors hover:text-ink">
@@ -77,12 +77,12 @@ export default async function InsightsTopic({
             <span className="text-ink/60">{posts[0].tag}</span>
           </div>
 
-          <div className="mb-16 flex flex-col gap-4 md:max-w-2xl">
+          <div className="mb-16 max-sm:mb-10 flex flex-col gap-4 md:max-w-2xl">
             <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
               <span className="text-ink/40">[ Topic ]</span>
               {posts[0].tag}
             </span>
-            <h1 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
+            <h1 className="font-instrument max-sm:text-3xl text-4xl leading-tight font-medium text-ink lg:text-5xl">
               {posts[0].tag}.
             </h1>
           </div>

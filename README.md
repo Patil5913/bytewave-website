@@ -137,8 +137,8 @@ when something looks broken:
 | Variable | Effect if unset |
 | --- | --- |
 | `NEXT_PUBLIC_SERVER_URL` | Canonical/OG URLs and the sitemap fall back to `http://localhost:3000`. **Set this in production.** |
-| `SMTP_*` | No email transport is configured, so lead notifications and newsletters are never delivered. |
-| `LEADS_NOTIFY_EMAIL` | New contact submissions are stored but nobody is notified. |
+| `SMTP_*` | No email transport is configured, so nothing is delivered — lead alerts, submitter acknowledgements, referrer welcome mails and admin password resets are logged to the console only. Templates live in `src/lib/email/`. |
+| `LEADS_NOTIFY_EMAIL` | New contact submissions are stored, and the submitter still gets their acknowledgement, but no internal alert is sent. |
 | `NEXT_PUBLIC_LOGO_DEV_KEY` | Company logo images fail to load. |
 | `ADMIN_EMAIL_DOMAIN` | Defaults to `findandhire.co`. |
 | `SEED_SECRET` | Defaults to `dev-seed`. |

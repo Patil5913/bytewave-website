@@ -133,7 +133,7 @@ const ROUTES = [
 
 export default function Gateways() {
   return (
-    <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
+    <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16">
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <Reveal
           stagger={0.12}
@@ -143,7 +143,7 @@ export default function Gateways() {
             <a
               key={route.href}
               href={route.href}
-              className={`group relative flex min-h-[440px] flex-col justify-between gap-12 overflow-hidden p-10 transition-colors duration-500 md:min-h-[60svh] md:p-14 ${
+              className={`group relative flex min-h-[440px] max-sm:min-h-[360px] flex-col justify-between gap-12 max-sm:gap-8 overflow-hidden p-10 max-sm:p-6 transition-colors duration-500 md:min-h-[60svh] md:p-14 ${
                 i === 0
                   ? "border-b border-ink/10 md:border-r md:border-b-0"
                   : ""
@@ -166,7 +166,7 @@ export default function Gateways() {
                 className="pointer-events-none absolute inset-0 bg-gradient-to-t from-canvas/70 via-canvas/30 to-transparent"
               />
 
-              <span className="pointer-events-none absolute -top-8 -right-2 font-instrument text-[13rem] leading-none font-medium text-ink/[0.03] transition-all duration-500 group-hover:-translate-y-1 group-hover:text-ink/[0.06]">
+              <span className="pointer-events-none absolute -top-8 -right-2 font-instrument text-[13rem] max-sm:text-[7rem] leading-none font-medium text-ink/[0.03] transition-all duration-500 group-hover:-translate-y-1 group-hover:text-ink/[0.06]">
                 {route.index}
               </span>
 
@@ -180,7 +180,7 @@ export default function Gateways() {
               </div>
 
               <div className="relative flex flex-col gap-6">
-                <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-ink lg:text-6xl">
+                <h2 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-ink lg:text-6xl">
                   {route.headline}
                 </h2>
                 <p className="max-w-sm text-sm leading-relaxed text-ink/70">

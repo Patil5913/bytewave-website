@@ -1,6 +1,13 @@
 import type { CollectionConfig } from "payload";
 
 import { isAdmin, isStaff } from "../access/roles";
+import {
+  leadConfirmation,
+  leadNotification,
+  newsletterConfirmation,
+} from "../lib/email/templates";
+import { unsubscribeUrl } from "../lib/email/unsubscribe";
+import { emailFooter, serverUrl } from "../lib/email/render";
 
 export const Contacts: CollectionConfig = {
   slug: "contacts",
@@ -10,7 +17,6 @@ export const Contacts: CollectionConfig = {
     group: "Inbound",
   },
   access: {
-    
     create: isStaff,
     read: isAdmin,
     update: isAdmin,
@@ -20,27 +26,45 @@ export const Contacts: CollectionConfig = {
     afterChange: [
       async ({ operation, doc, req }) => {
         if (operation !== "create") return;
+
+        // Internal alert. Off when LEADS_NOTIFY_EMAIL is unset.
         const to = process.env.LEADS_NOTIFY_EMAIL;
-        if (!to) return;
+        if (to) {
+          try {
+            await req.payload.sendEmail({
+              to,
+              ...(await leadNotification(doc)),
+            });
+          } catch (err) {
+            req.payload.logger.error(
+              `Lead notification failed: ${(err as Error).message}`,
+            );
+          }
+        }
+
+        // Acknowledgement to whoever submitted. Never blocks the submission.
         try {
+          const isNewsletter = doc.type === "newsletter";
+          const footer = await emailFooter();
+          const mail = isNewsletter
+            ? await newsletterConfirmation(doc, footer)
+            : await leadConfirmation(doc, footer);
           await req.payload.sendEmail({
-            to,
-            subject: `New ${doc.type} lead — ${doc.email}`,
-            text: [
-              `Type: ${doc.type}`,
-              `Email: ${doc.email}`,
-              doc.name && `Name: ${doc.name}`,
-              doc.company && `Company: ${doc.company}`,
-              doc.role && `Role: ${doc.role}`,
-              doc.message && `Message: ${doc.message}`,
-              `Source: ${doc.source ?? "unknown"}`,
-            ]
-              .filter(Boolean)
-              .join("\n"),
+            to: doc.email,
+            ...mail,
+            // Gmail and Yahoo require a machine-readable opt-out on bulk mail.
+            ...(isNewsletter
+              ? {
+                  headers: {
+                    "List-Unsubscribe": `<${unsubscribeUrl(serverUrl(), doc.email)}>`,
+                    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                  },
+                }
+              : {}),
           });
         } catch (err) {
           req.payload.logger.error(
-            `Lead notification failed: ${(err as Error).message}`,
+            `Lead acknowledgement failed: ${(err as Error).message}`,
           );
         }
       },
@@ -118,7 +142,6 @@ export const Contacts: CollectionConfig = {
       type: "text",
       index: true,
       admin: {
-        
         description: "Keyed hash of the submitter's IP, used to rate limit.",
         readOnly: true,
         hidden: true,

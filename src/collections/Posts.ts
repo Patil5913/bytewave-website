@@ -39,7 +39,7 @@ export const Posts: CollectionConfig = {
     useAsTitle: "title",
     defaultColumns: ["title", "tag", "publishedAt", "_status"],
     group: "Insights",
-    
+
     preview: (doc) => {
       const tag = doc?.tag;
       const articleId = doc?.articleId;
@@ -49,12 +49,10 @@ export const Posts: CollectionConfig = {
     },
   },
   versions: {
-    
     drafts: { validate: false },
     maxPerDoc: 25,
   },
   access: {
-    
     read: ({ req: { user } }) =>
       user ? true : { _status: { equals: "published" } },
     create: isStaff,
@@ -82,10 +80,9 @@ export const Posts: CollectionConfig = {
         return data;
       },
     ],
-    
+
     afterChange: [
       ({ doc, previousDoc }) => {
-        
         const wasPublic =
           doc?._status === "published" || previousDoc?._status === "published";
         if (!wasPublic) return;
@@ -132,6 +129,15 @@ export const Posts: CollectionConfig = {
           },
         },
         { name: "updated", type: "checkbox", defaultValue: false },
+        {
+          name: "announcedAt",
+          type: "date",
+          admin: {
+            readOnly: true,
+            description:
+              "Stamped by POST /newsletter/announce. Present means subscribers were already emailed about this post.",
+          },
+        },
         { name: "readTime", type: "text", required: true },
         {
           name: "cover",

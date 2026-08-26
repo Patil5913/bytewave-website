@@ -1,6 +1,8 @@
 import { APIError, type CollectionConfig, type PayloadRequest } from "payload";
 
 import { isAdmin, isStaff } from "../access/roles";
+import { emailFooter } from "../lib/email/render";
+import { referrerWelcome } from "../lib/email/templates";
 import { revalidateHooks } from "../lib/revalidate";
 
 const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -97,6 +99,23 @@ export const Referrers: CollectionConfig = {
       },
     ],
     ...revalidateHooks("referrers"),
+    // spread first, then extend — a bare spread would drop these afterChange entries
+    afterChange: [
+      ...revalidateHooks("referrers").afterChange,
+      async ({ operation, doc, req }) => {
+        if (operation !== "create" || !doc?.email || !doc?.code) return;
+        try {
+          await req.payload.sendEmail({
+            to: doc.email,
+            ...(await referrerWelcome(doc, await emailFooter())),
+          });
+        } catch (err) {
+          req.payload.logger.error(
+            `Referrer welcome failed: ${(err as Error).message}`,
+          );
+        }
+      },
+    ],
   },
   fields: [
     { name: "name", type: "text", required: true, maxLength: 120 },

@@ -16,7 +16,7 @@ export default function Footer({
 }) {
   const LINK_GROUPS = settings.footerGroups;
   const [nlStatus, setNlStatus] = useState<NlStatus>("idle");
-  
+
   const [renderedAt] = useState(() => Date.now());
 
   async function handleNewsletter(e: React.FormEvent<HTMLFormElement>) {
@@ -24,7 +24,7 @@ export default function Footer({
     if (nlStatus === "sending" || nlStatus === "done") return;
     const form = new FormData(e.currentTarget);
     const email = String(form.get("email") ?? "").trim();
-    
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setNlStatus("error");
       return;
@@ -37,7 +37,7 @@ export default function Footer({
         body: JSON.stringify({
           type: "newsletter",
           email,
-          
+
           surface: "footer",
           companyUrl: String(form.get("companyUrl") ?? ""),
           renderedAt,
@@ -51,9 +51,9 @@ export default function Footer({
   }
 
   return (
-    <footer className="relative w-full overflow-hidden bg-canvas px-6 pt-24 pb-8 md:px-16">
+    <footer className="relative w-full overflow-hidden bg-canvas px-6 pt-24 max-sm:px-5 max-sm:pt-14 pb-8 md:px-16">
       <div className="relative z-10 mx-auto max-w-7xl">
-        <Reveal className="flex flex-col gap-16 md:flex-row md:justify-between">
+        <Reveal className="flex flex-col gap-16 max-sm:gap-10 md:flex-row md:justify-between">
           <div className="flex flex-col gap-4">
             <Link
               href="/"
@@ -117,7 +117,7 @@ export default function Footer({
                     required
                     aria-labelledby="newsletter-label"
                     placeholder="you@company.com"
-                    className="w-full bg-transparent py-2 text-sm text-ink placeholder:text-ink/30 focus:outline-none"
+                    className="w-full bg-transparent py-2 text-sm max-sm:text-base text-ink placeholder:text-ink/30 focus:outline-none"
                   />
                   <button
                     type="submit"
@@ -182,7 +182,7 @@ export default function Footer({
           </div>
         </Reveal>
 
-        <div className="mt-20 flex flex-col items-start justify-between gap-4 border-t border-ink/10 pt-8 text-xs text-ink/55 sm:flex-row sm:items-center">
+        <div className="mt-20 max-sm:mt-12 flex flex-col items-start justify-between gap-4 border-t border-ink/10 pt-8 text-xs text-ink/55 sm:flex-row sm:items-center">
           <span>
             © 2026 find &amp; hire, a Bytewave company. All rights reserved.
           </span>

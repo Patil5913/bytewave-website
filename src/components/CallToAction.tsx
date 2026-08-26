@@ -32,7 +32,7 @@ export default function CallToAction({
         body: JSON.stringify({
           type: "lead",
           email,
-          
+
           surface: "cta",
           companyUrl: String(form.get("companyUrl") ?? ""),
           renderedAt,
@@ -54,10 +54,10 @@ export default function CallToAction({
   return (
     <section
       id="cta"
-      className="relative flex min-h-svh w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-32 md:px-16"
+      className="relative flex min-h-svh w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-32 max-sm:py-16 md:px-16"
     >
       <Reveal className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center">
-        <h2 className="mb-6 font-instrument text-5xl leading-[1.05] font-medium text-balance text-ink md:text-7xl">
+        <h2 className="mb-6 font-instrument max-sm:text-4xl text-5xl leading-[1.05] font-medium text-balance text-ink md:text-7xl">
           {splitBrand(content.ctaHeadline).map((seg, i) =>
             seg.brand ? (
               <span key={i} className="text-brand">
@@ -69,7 +69,7 @@ export default function CallToAction({
           )}
         </h2>
 
-        <p className="mb-12 max-w-xl text-lg leading-relaxed text-ink/70">
+        <p className="mb-12 max-sm:mb-8 max-w-xl text-lg leading-relaxed text-ink/70">
           {content.ctaBody}
         </p>
 
@@ -104,7 +104,7 @@ export default function CallToAction({
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="group flex shrink-0 items-center justify-center gap-2 whitespace-nowrap bg-ink px-6 py-3 font-medium text-canvas transition-colors hover:bg-ink/90 disabled:cursor-not-allowed disabled:opacity-60"
+                className="group flex shrink-0 items-center justify-center gap-2 whitespace-nowrap bg-ink px-6 py-3 max-sm:w-full font-medium text-canvas transition-colors hover:bg-ink/90 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {status === "sending" ? "Sending…" : "Book a Strategy Call"}
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

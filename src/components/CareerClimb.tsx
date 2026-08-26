@@ -107,7 +107,24 @@ export default function CareerClimb() {
         },
       );
 
-      mm.add("(max-width: 767px), (prefers-reduced-motion: reduce)", () => {
+      // phones: same climb, scrubbed as the section passes instead of pinned
+      mm.add(
+        "(max-width: 767px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          // hold at the start until the whole graph band is on screen
+          const st = ScrollTrigger.create({
+            trigger: graphRef.current ?? root,
+            start: "bottom bottom",
+            end: "+=70%",
+            scrub: 0.4,
+            onUpdate: (self) => apply(self.progress),
+          });
+          apply(0);
+          return () => st.kill();
+        },
+      );
+
+      mm.add("(prefers-reduced-motion: reduce)", () => {
         apply(1);
       });
 
@@ -118,11 +135,11 @@ export default function CareerClimb() {
 
   return (
     <section ref={ref} className="relative w-full overflow-hidden bg-canvas">
-      <div className="relative flex min-h-screen w-full items-center px-6 py-24 md:h-screen md:px-16 md:py-0">
+      <div className="relative flex min-h-screen w-full items-center px-6 py-24 max-sm:min-h-[82svh] max-sm:px-5 max-sm:py-16 md:h-screen md:px-16 md:py-0">
         <div
           ref={graphRef}
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[55vh]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[55vh] max-sm:h-[38%] max-sm:opacity-70"
           style={{ clipPath: "inset(0 100% 0 0)" }}
         >
           <svg

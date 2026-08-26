@@ -32,25 +32,63 @@ export default function ScrollStory({
       if (!track) return;
       const mm = gsap.matchMedia();
 
-      mm.add(
-        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
-        () => {
-          const distance = () => track.scrollWidth - window.innerWidth;
-          gsap.to(track, {
-            x: () => -distance(),
-            ease: "none",
+      // same behaviour at every width: pinned section, track slides with scroll
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const distance = () => track.scrollWidth - window.innerWidth;
+        const tween = gsap.to(track, {
+          x: () => -distance(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: root,
+            start: "top top",
+            end: () => "+=" + distance(),
+            scrub: 0.6,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        const panels = gsap.utils.toArray<HTMLElement>(
+          root.querySelectorAll("[data-story-panel]"),
+        );
+        const reveals = panels.map((panel) =>
+          gsap.from(panel.querySelectorAll(":scope > div > *"), {
+            opacity: 0,
+            y: 28,
+            duration: 0.55,
+            stagger: 0.08,
+            ease: "power3.out",
             scrollTrigger: {
-              trigger: root,
-              start: "top top",
-              end: () => "+=" + distance(),
-              scrub: 0.6,
-              pin: true,
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
+              trigger: panel,
+              containerAnimation: tween,
+              start: "left 75%",
+              once: true,
             },
+          }),
+        );
+
+        return () => {
+          reveals.forEach((t) => {
+            t.scrollTrigger?.kill();
+            t.kill();
           });
-        },
-      );
+          tween.scrollTrigger?.kill();
+          tween.kill();
+        };
+      });
+
+      // reduced motion: nothing pins, so the track must be swipeable
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        const classes = [
+          "snap-x",
+          "snap-mandatory",
+          "overflow-x-auto",
+          "overscroll-x-contain",
+        ];
+        track.classList.add(...classes);
+        return () => track.classList.remove(...classes);
+      });
 
       return () => mm.revert();
     },
@@ -60,20 +98,21 @@ export default function ScrollStory({
   return (
     <section
       ref={ref}
-      className="relative w-full overflow-hidden bg-canvas md:h-screen"
+      className="relative h-svh w-full overflow-hidden bg-canvas md:h-screen"
     >
-      <div className="story-track flex flex-col md:h-screen md:w-max md:flex-row">
+      <div className="story-track flex h-full w-max flex-row [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {PANELS.map((panel, pi) => (
           <div
             key={pi}
-            className="flex w-full shrink-0 flex-col justify-center gap-6 px-6 py-24 md:h-screen md:w-screen md:px-16 md:py-0"
+            data-story-panel
+            className="flex h-full w-screen shrink-0 snap-center flex-col justify-center gap-6 px-6 pt-24 pb-12 max-sm:px-5 md:px-16 md:py-0"
           >
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 [&>*]:will-change-transform">
               <div className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
                 <span className="tabular-nums text-brand">0{pi + 1}</span>
                 {panel.eyebrow && <span>{panel.eyebrow}</span>}
               </div>
-              <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink sm:text-5xl lg:text-7xl xl:text-8xl">
+              <h2 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-balance text-ink sm:text-5xl lg:text-7xl xl:text-8xl">
                 {panel.lines.map((line, li) => (
                   <span key={li} className="block">
                     {line.map((seg, si) =>

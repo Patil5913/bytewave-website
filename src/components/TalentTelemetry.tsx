@@ -95,14 +95,14 @@ function ShortlistWindow() {
 
 export default function TalentTelemetry() {
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16">
+    <section className="relative flex min-h-screen max-sm:min-h-0 w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16">
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 max-sm:gap-8 md:grid-cols-12 md:gap-16">
         <div className="flex flex-col gap-10 md:col-span-6">
           <div className="flex flex-col gap-6">
             <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
               Talent Telemetry
             </span>
-            <h2 className="font-instrument text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
+            <h2 className="font-instrument max-sm:text-3xl text-4xl leading-tight font-medium text-balance text-ink lg:text-5xl xl:text-6xl">
               A shortlist, not a search.
             </h2>
             <p className="max-w-prose text-base leading-relaxed text-ink/60 md:text-lg">
@@ -115,7 +115,7 @@ export default function TalentTelemetry() {
           <div className="grid grid-cols-2 gap-x-8 gap-y-10 border-t border-ink/10 pt-10">
             {STATS.map((stat) => (
               <div key={stat.label} className="flex flex-col gap-2">
-                <span className="font-instrument text-4xl font-medium text-ink tabular-nums lg:text-5xl">
+                <span className="font-instrument max-sm:text-3xl text-4xl font-medium text-ink tabular-nums lg:text-5xl">
                   {stat.value}
                 </span>
                 <span className="text-xs font-medium tracking-wider text-ink/50 uppercase">

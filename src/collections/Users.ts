@@ -6,12 +6,20 @@ import {
   isAdminField,
   isStaffUser,
 } from "../access/roles";
+import { serverUrl } from "../lib/email/render";
+import { passwordReset } from "../lib/email/templates";
 
 export const Users: CollectionConfig = {
   slug: "users",
   auth: {
     maxLoginAttempts: 5,
     lockTime: 10 * 60 * 1000,
+    forgotPassword: {
+      generateEmailSubject: async () => (await passwordReset("")).subject,
+      generateEmailHTML: async ({ token } = {}) =>
+        (await passwordReset(`${serverUrl()}/ops/admin/reset/${token ?? ""}`))
+          .html,
+    },
   },
   admin: {
     useAsTitle: "email",
@@ -20,7 +28,7 @@ export const Users: CollectionConfig = {
   },
   access: {
     admin: isStaffUser,
-    
+
     create: async (args) => {
       if (args.req.user) return isAdmin(args) === true;
       const { totalDocs } = await args.req.payload.count({

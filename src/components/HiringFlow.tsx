@@ -98,12 +98,13 @@ function Cluster({
   return (
     <div
       aria-hidden
-      className="grid place-items-center gap-2"
+      className="grid place-items-center gap-1.5 sm:gap-2"
       style={{ gridTemplateColumns: `repeat(${cols}, ${DOT}px)` }}
     >
       {Array.from({ length: count }).map((_, i) => (
         <span
           key={i}
+          data-flow-dot
           className={`rounded-full ${alwaysHighlight ? "bg-brand" : "bg-ink/35"}`}
           style={{
             width: DOT,
@@ -127,25 +128,79 @@ export default function HiringFlow() {
       if (!track) return;
       const mm = gsap.matchMedia();
 
-      mm.add(
-        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
-        () => {
-          const distance = () => track.scrollWidth - window.innerWidth;
-          gsap.to(track, {
-            x: () => -distance(),
-            ease: "none",
+      // one behaviour at every width: the section pins and the track slides
+      // horizontally with the page scroll — no optional swipe to discover
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const distance = () => track.scrollWidth - window.innerWidth;
+        const tween = gsap.to(track, {
+          x: () => -distance(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: root,
+            start: "top top",
+            end: () => "+=" + distance(),
+            scrub: 0.6,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        // stage copy and dots animate as their panel slides in, driven by the
+        // same horizontal tween rather than by vertical position
+        const panels = gsap.utils.toArray<HTMLElement>(
+          root.querySelectorAll("[data-flow-panel]"),
+        );
+        const reveals = panels.flatMap((panel) => [
+          gsap.from(panel.querySelectorAll("[data-flow-item]"), {
+            opacity: 0,
+            y: 24,
+            duration: 0.5,
+            stagger: 0.08,
+            ease: "power3.out",
             scrollTrigger: {
-              trigger: root,
-              start: "top top",
-              end: () => "+=" + distance(),
-              scrub: 0.6,
-              pin: true,
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
+              trigger: panel,
+              containerAnimation: tween,
+              start: "left 75%",
+              once: true,
             },
+          }),
+          gsap.from(panel.querySelectorAll("[data-flow-dot]"), {
+            opacity: 0,
+            scale: 0.4,
+            duration: 0.5,
+            stagger: { each: 0.01, from: "random" },
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: panel,
+              containerAnimation: tween,
+              start: "left 70%",
+              once: true,
+            },
+          }),
+        ]);
+
+        return () => {
+          reveals.forEach((t) => {
+            t.scrollTrigger?.kill();
+            t.kill();
           });
-        },
-      );
+          tween.scrollTrigger?.kill();
+          tween.kill();
+        };
+      });
+
+      // reduced motion: no pin, so the track has to be swipeable to be usable
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        const classes = [
+          "snap-x",
+          "snap-mandatory",
+          "overflow-x-auto",
+          "overscroll-x-contain",
+        ];
+        track.classList.add(...classes);
+        return () => track.classList.remove(...classes);
+      });
 
       return () => mm.revert();
     },
@@ -156,19 +211,33 @@ export default function HiringFlow() {
     <section
       id="how-it-works"
       ref={ref}
-      className="relative w-full scroll-mt-24 overflow-hidden bg-canvas md:h-screen"
+      className="relative h-svh w-full scroll-mt-24 overflow-hidden bg-canvas md:h-screen"
     >
-      <div className="flow-track flex flex-col md:h-screen md:w-max md:flex-row">
+      <div className="flow-track flex h-full w-max flex-row [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {STAGES.map((stage, si) => {
           const { cols } = CLUSTERS[si];
           const count = DOT_COUNTS[si];
           return (
             <div
               key={stage.n}
-              className="relative flex w-full shrink-0 flex-col px-6 py-24 md:h-screen md:w-screen md:px-16 md:pt-28 md:pb-16"
+              data-flow-panel
+              className="relative flex h-full w-screen shrink-0 snap-center flex-col px-6 pt-24 pb-12 max-sm:px-5 md:px-16 md:pt-28 md:pb-16"
             >
-              <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end gap-6 md:justify-between">
-                <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-start">
+              <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-between gap-6">
+                <div
+                  data-flow-item
+                  className="relative z-10 flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45"
+                >
+                  <span className="tabular-nums text-brand">{stage.n}</span>
+                  {stage.label}
+                </div>
+
+                {/* dots read as the funnel volume — they own the band between
+                    the stage label and the copy, centered in whatever is left */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none flex min-h-0 flex-1 items-center justify-start overflow-hidden py-4"
+                >
                   <Cluster
                     cols={cols}
                     count={count}
@@ -176,13 +245,11 @@ export default function HiringFlow() {
                   />
                 </div>
 
-                <div className="relative z-10 flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
-                  <span className="tabular-nums text-brand">{stage.n}</span>
-                  {stage.label}
-                </div>
-
-                <div className="relative z-10 flex max-w-xl flex-col gap-5">
-                  <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink sm:text-5xl lg:text-6xl">
+                <div
+                  data-flow-item
+                  className="relative z-10 flex max-w-xl flex-col gap-5"
+                >
+                  <h2 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-balance text-ink sm:text-5xl lg:text-6xl">
                     {stage.title}
                   </h2>
                   <p className="max-w-md text-base leading-relaxed text-ink/50 md:text-lg">

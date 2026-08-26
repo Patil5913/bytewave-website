@@ -23,25 +23,50 @@ export default function AgentIntro({
       if (!root) return;
       const mm = gsap.matchMedia();
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const chars = gsap.utils.toArray<HTMLElement>(
-          root.querySelectorAll(".reveal-char"),
-        );
-        gsap.set(chars, { opacity: 0.18 });
-        gsap.to(chars, {
-          opacity: 1,
-          ease: "none",
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: root,
-            start: "top top",
-            end: "+=150%",
-            scrub: 0.6,
-            pin: true,
-            anticipatePin: 1,
-          },
-        });
-      });
+      const chars = () =>
+        gsap.utils.toArray<HTMLElement>(root.querySelectorAll(".reveal-char"));
+
+      mm.add(
+        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          const c = chars();
+          gsap.set(c, { opacity: 0.18 });
+          gsap.to(c, {
+            opacity: 1,
+            ease: "none",
+            stagger: 0.1,
+            scrollTrigger: {
+              trigger: root,
+              start: "top top",
+              end: "+=150%",
+              scrub: 0.6,
+              pin: true,
+              anticipatePin: 1,
+            },
+          });
+        },
+      );
+
+      // phones: same word-by-word reveal, scrubbed while passing (no pin —
+      // pinning a viewport-tall block on a small screen traps the scroll)
+      mm.add(
+        "(max-width: 767px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          const c = chars();
+          gsap.set(c, { opacity: 0.18 });
+          gsap.to(c, {
+            opacity: 1,
+            ease: "none",
+            stagger: 0.1,
+            scrollTrigger: {
+              trigger: root,
+              start: "top 75%",
+              end: "bottom 55%",
+              scrub: 0.5,
+            },
+          });
+        },
+      );
 
       return () => mm.revert();
     },
@@ -51,7 +76,7 @@ export default function AgentIntro({
   return (
     <section
       ref={ref}
-      className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16"
+      className="relative flex min-h-screen max-sm:min-h-svh w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16"
     >
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-8 xl:max-w-6xl 2xl:max-w-7xl">
         {PARAGRAPHS.map((segments, pi) => (

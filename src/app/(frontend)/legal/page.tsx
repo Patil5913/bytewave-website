@@ -19,7 +19,6 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-
 export default async function Legal() {
   const [settings, legal] = await Promise.all([
     getSiteSettingsContent(),
@@ -32,13 +31,13 @@ export default async function Legal() {
       <Navbar ctaLabel={settings.navCtaLabel} />
 
       {/* Document header — reads as a filing cover sheet. */}
-      <section className="relative w-full overflow-hidden bg-canvas px-6 pt-36 pb-14 md:px-16">
+      <section className="relative w-full overflow-hidden bg-canvas px-6 pt-36 max-sm:pt-28 pb-14 md:px-16">
         <div className="mx-auto w-full max-w-7xl">
           <Reveal className="flex flex-col gap-6">
             <span className="flex items-center gap-2.5 text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
               Legal
             </span>
-            <h1 className="max-w-3xl font-instrument text-5xl leading-[1.05] font-medium text-balance text-ink lg:text-7xl">
+            <h1 className="max-w-3xl font-instrument max-sm:text-4xl text-5xl leading-[1.05] font-medium text-balance text-ink lg:text-7xl">
               Terms, privacy and refunds.
             </h1>
             <p className="max-w-md text-base leading-relaxed text-ink/50">
@@ -59,7 +58,7 @@ export default async function Legal() {
             ].map((row) => (
               <div
                 key={row.label}
-                className="flex flex-col gap-1.5 bg-canvas px-5 py-4"
+                className="flex flex-col gap-1.5 bg-canvas px-5 py-4 max-sm:px-4 max-sm:py-3"
               >
                 <span className="text-[10px] tracking-[0.2em] text-ink/35 uppercase">
                   {row.label}
@@ -71,8 +70,8 @@ export default async function Legal() {
         </div>
       </section>
 
-      <section className="relative w-full overflow-hidden bg-canvas px-6 pb-24 md:px-16">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
+      <section className="relative w-full overflow-hidden bg-canvas px-6 pb-24 max-sm:px-5 max-sm:pb-14 md:px-16">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-12 max-sm:gap-8 lg:grid-cols-12 lg:gap-16">
           {/* Contents */}
           <Reveal className="flex flex-col gap-5 lg:sticky lg:top-32 lg:col-span-3">
             <span className="text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
@@ -93,8 +92,8 @@ export default async function Legal() {
               ))}
             </nav>
             <p className="text-xs leading-relaxed text-ink/40">
-              Questions about any clause? Raise them before signing — we
-              answer them directly rather than pointing at the document.
+              Questions about any clause? Raise them before signing — we answer
+              them directly rather than pointing at the document.
             </p>
           </Reveal>
 
@@ -153,8 +152,7 @@ export default async function Legal() {
             <Reveal className="border-t border-ink/10 pt-8">
               <p className="font-mono text-[11px] leading-relaxed text-ink/35">
                 End of document set · {legal.version} · Effective{" "}
-                {legal.effective} ·{" "}
-                {settings.legalLine}
+                {legal.effective} · {settings.legalLine}
               </p>
             </Reveal>
           </div>

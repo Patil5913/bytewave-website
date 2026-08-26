@@ -21,7 +21,7 @@ export default async function Home() {
   const [placements, stats, posts, home, settings] = await Promise.all([
     getPlacements(),
     getSiteStats(),
-    
+
     getPublishedPosts(),
     getHomepageContent(),
     getSiteSettingsContent(),

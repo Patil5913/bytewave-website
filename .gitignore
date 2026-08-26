@@ -46,3 +46,4 @@ next-env.d.ts
 
 # Impeccable critique snapshots
 .impeccable/
+.email-preview/

@@ -30,6 +30,7 @@ function toPercent(value: number) {
 export default function MarketTelemetry() {
   const [active, setActive] = useState<number | null>(null);
   const chartRef = useRef<HTMLDivElement>(null);
+  const mobileChartRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -62,17 +63,40 @@ export default function MarketTelemetry() {
     { scope: chartRef },
   );
 
+  useGSAP(
+    () => {
+      const el = mobileChartRef.current;
+      if (!el) return;
+      const bars = gsap.utils.toArray<HTMLElement>(
+        el.querySelectorAll("[data-mobile-bar]"),
+      );
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.from(bars, {
+          scaleX: 0,
+          transformOrigin: "left center",
+          duration: 0.7,
+          ease: "expo.out",
+          stagger: 0.07,
+          scrollTrigger: { trigger: el, start: "top 85%", once: true },
+        });
+      });
+      return () => mm.revert();
+    },
+    { scope: mobileChartRef },
+  );
+
   return (
     <section
       id="markets"
-      className="relative flex min-h-screen w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16"
+      className="relative flex min-h-screen max-sm:min-h-0 w-full scroll-mt-24 flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16"
     >
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-12">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 max-sm:gap-8">
         <Reveal className="flex flex-col gap-4 md:max-w-3xl">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Market Telemetry
           </span>
-          <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
+          <h2 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
             We show you the real range, not a guess.
           </h2>
           <p className="max-w-2xl text-sm leading-relaxed text-ink/50">
@@ -86,7 +110,55 @@ export default function MarketTelemetry() {
         </Reveal>
 
         <Reveal delay={0.15} className="w-full">
-          <div ref={chartRef} className="flex gap-4 sm:gap-6">
+          {/* phones: label above its own full-width track */}
+          <div ref={mobileChartRef} className="flex flex-col gap-5 sm:hidden">
+            {STACKS.map((stack) => {
+              const left = toPercent(stack.min);
+              const width = toPercent(stack.max) - left;
+              return (
+                <div key={stack.label} className="flex flex-col gap-2">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="text-xs font-medium tracking-wide text-ink/70">
+                      {stack.label}
+                    </span>
+                    <span className="text-[11px] tabular-nums whitespace-nowrap text-ink/55">
+                      ${stack.min}k – ${stack.max}k
+                    </span>
+                  </div>
+                  <div className="relative h-2.5 w-full rounded-full bg-ink/[0.06]">
+                    <div
+                      style={{ left: `${left}%`, width: `${width}%` }}
+                      data-mobile-bar
+                      className="absolute inset-y-0 rounded-full bg-linear-to-r from-brand/70 via-amber-300/60 to-rose-300/60"
+                    />
+                  </div>
+                </div>
+              );
+            })}
+            <div className="relative mt-1 h-4">
+              {TICKS.map((tick, i) => {
+                const first = i === 0;
+                const last = i === TICKS.length - 1;
+                return (
+                  <span
+                    key={tick}
+                    className={`absolute text-[10px] tracking-wide text-ink/30 ${
+                      first ? "left-0" : last ? "right-0" : "-translate-x-1/2"
+                    }`}
+                    style={
+                      first || last
+                        ? undefined
+                        : { left: `${toPercent(tick)}%` }
+                    }
+                  >
+                    ${tick}k
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+
+          <div ref={chartRef} className="hidden gap-4 sm:flex sm:gap-6">
             <div className="flex w-28 shrink-0 flex-col gap-3 sm:w-36 lg:w-44">
               {STACKS.map((stack, i) => (
                 <div

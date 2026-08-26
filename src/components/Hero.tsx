@@ -79,7 +79,7 @@ export default function Hero({
           {content.heroBadge}
         </span>
 
-        <h1 className="max-w-4xl text-center font-instrument text-4xl font-medium text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] sm:text-5xl lg:text-8xl">
+        <h1 className="max-w-4xl text-center font-instrument max-sm:text-3xl text-4xl font-medium text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] sm:text-5xl lg:text-8xl">
           {content.heroHeadline}
         </h1>
 
@@ -115,7 +115,7 @@ export default function Hero({
         </p>
         <div className="marquee-fade w-full sm:w-3/4">
           <div className="overflow-hidden">
-            <div className="animate-marquee flex w-max gap-12 whitespace-nowrap">
+            <div className="animate-marquee flex w-max gap-12 max-sm:gap-8 whitespace-nowrap">
               {PLATFORMS.concat(PLATFORMS).map((platform, i) => (
                 <span
                   key={i}

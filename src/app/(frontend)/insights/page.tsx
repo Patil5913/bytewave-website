@@ -47,13 +47,13 @@ export default async function InsightsIndex({
     <>
       <PreviewBanner path="/insights" />
       <Navbar ctaLabel={settings.navCtaLabel} />
-      <section className="w-full bg-canvas px-6 pt-32 pb-24 md:px-16">
+      <section className="w-full bg-canvas px-6 max-sm:px-5 pt-32 max-sm:pt-24 pb-24 max-sm:pb-14 md:px-16">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-16 flex flex-col gap-4 md:max-w-2xl">
+          <div className="mb-16 max-sm:mb-10 flex flex-col gap-4 md:max-w-2xl">
             <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
               Insights
             </span>
-            <h1 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-6xl">
+            <h1 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-6xl">
               Intelligence &amp; Insights.
             </h1>
             <p className="max-w-md text-base leading-relaxed text-ink/50">
@@ -62,10 +62,22 @@ export default async function InsightsIndex({
             </p>
           </div>
 
+          {ALL_POSTS.length === 0 && (
+            <div className="border-t border-ink/10 py-20 text-center max-sm:py-12">
+              <p className="font-instrument text-2xl text-ink">
+                Nothing published yet.
+              </p>
+              <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-ink/50">
+                We publish market data and hiring analysis as it lands.
+                Subscribe below and the next piece reaches you first.
+              </p>
+            </div>
+          )}
+
           {LEAD && (
             <Link
               href={buildHref(LEAD)}
-              className="group grid grid-cols-1 gap-8 border-t-2 border-ink pt-8 lg:grid-cols-2 lg:gap-14"
+              className="group grid grid-cols-1 gap-8 border-t-2 border-ink pt-8 lg:grid-cols-2 lg:gap-14 max-sm:gap-10"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink/5">
                 {LEAD.cover && (
@@ -101,7 +113,7 @@ export default async function InsightsIndex({
             </Link>
           )}
 
-          <div className={LEAD ? "mt-20" : ""}>
+          <div className={LEAD ? "mt-20 max-sm:mt-12" : ""}>
             <span className="mb-6 block text-xs font-medium tracking-[0.2em] text-ink/45 uppercase">
               {LEAD ? "More Insights" : `Insights · Page ${page}`}
             </span>

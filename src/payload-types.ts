@@ -79,6 +79,7 @@ export interface Config {
     certifications: Certification;
     referrers: Referrer;
     referrals: Referral;
+    newsletters: Newsletter;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -98,6 +99,7 @@ export interface Config {
     certifications: CertificationsSelect<false> | CertificationsSelect<true>;
     referrers: ReferrersSelect<false> | ReferrersSelect<true>;
     referrals: ReferralsSelect<false> | ReferralsSelect<true>;
+    newsletters: NewslettersSelect<false> | NewslettersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -281,6 +283,10 @@ export interface Post {
    */
   date?: string | null;
   updated?: boolean | null;
+  /**
+   * Stamped by POST /newsletter/announce. Present means subscribers were already emailed about this post.
+   */
+  announcedAt?: string | null;
   readTime: string;
   /**
    * Optional header image, also used as the social preview. 16:9 works best.
@@ -496,6 +502,73 @@ export interface Referral {
   createdAt: string;
 }
 /**
+ * Draft an issue, preview it, then send with POST /newsletter/send. Saving never sends.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletters".
+ */
+export interface Newsletter {
+  id: number;
+  /**
+   * Inbox subject line. Keep under ~60 characters.
+   */
+  subject: string;
+  /**
+   * The grey preview line next to the subject. Not repeated in the body.
+   */
+  preheader: string;
+  /**
+   * Eyebrow, e.g. “Issue 04 · March 2026”.
+   */
+  edition?: string | null;
+  heading: string;
+  /**
+   * One or two short paragraphs to open the issue.
+   */
+  intro: string;
+  /**
+   * Optional data strip, e.g. “Median time-to-hire — 14 days”.
+   */
+  stats?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  items?:
+    | {
+        title: string;
+        body: string;
+        /**
+         * Optional link, absolute or site-relative.
+         */
+        href?: string | null;
+        linkLabel?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  cta?: {
+    label?: string | null;
+    href?: string | null;
+  };
+  /**
+   * Closing line above the footer.
+   */
+  signoff?: string | null;
+  /**
+   * Set by the send endpoint, not by hand.
+   */
+  status: 'draft' | 'sent';
+  sentAt?: string | null;
+  /**
+   * Recipients the send reached.
+   */
+  sentCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -566,6 +639,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'referrals';
         value: number | Referral;
+      } | null)
+    | ({
+        relationTo: 'newsletters';
+        value: number | Newsletter;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -703,6 +780,7 @@ export interface PostsSelect<T extends boolean = true> {
   publishedAt?: T;
   date?: T;
   updated?: T;
+  announcedAt?: T;
   readTime?: T;
   cover?: T;
   excerpt?: T;
@@ -815,6 +893,45 @@ export interface ReferralsSelect<T extends boolean = true> {
   rewardAmount?: T;
   paidOut?: T;
   landingPath?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletters_select".
+ */
+export interface NewslettersSelect<T extends boolean = true> {
+  subject?: T;
+  preheader?: T;
+  edition?: T;
+  heading?: T;
+  intro?: T;
+  stats?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  items?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        href?: T;
+        linkLabel?: T;
+        id?: T;
+      };
+  cta?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  signoff?: T;
+  status?: T;
+  sentAt?: T;
+  sentCount?: T;
   updatedAt?: T;
   createdAt?: T;
 }

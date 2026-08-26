@@ -9,12 +9,16 @@ import Reveal from "@components/Reveal";
 export default function Insights({ posts }: { posts: PostView[] }) {
   const ARTICLES = posts.slice(0, 4);
   const [LEAD, ...REST] = ARTICLES;
+
+  // nothing published yet: skip the section entirely instead of rendering an
+  // empty band between two full-height sections
+  if (!LEAD) return null;
   return (
-    <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
+    <section className="relative flex min-h-svh w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16">
       <div className="relative z-10 mx-auto w-full max-w-7xl">
-        <Reveal className="mb-14 flex items-end justify-between">
+        <Reveal className="mb-14 max-sm:mb-8 flex items-end justify-between">
           <div className="flex flex-col gap-4">
-            <h2 className="font-instrument text-4xl font-medium text-ink md:text-5xl">
+            <h2 className="font-instrument max-sm:text-3xl text-4xl font-medium text-ink md:text-5xl">
               Intelligence &amp; Insights.
             </h2>
           </div>

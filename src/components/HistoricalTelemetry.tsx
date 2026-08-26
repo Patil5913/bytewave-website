@@ -134,18 +134,18 @@ export default function HistoricalTelemetry({
   );
 
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 md:px-16">
+    <section className="relative flex min-h-screen max-sm:min-h-0 w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16">
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col md:min-h-[78vh]">
-        <Reveal className="mb-14 flex max-w-2xl flex-col gap-4">
+        <Reveal className="mb-14 max-sm:mb-8 flex max-w-2xl flex-col gap-4">
           <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
             Track Record
           </span>
-          <h2 className="font-instrument text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
+          <h2 className="font-instrument max-sm:text-3xl text-4xl leading-[1.05] font-medium text-balance text-ink lg:text-5xl">
             Proven scale. Global reach.
           </h2>
         </Reveal>
 
-        <Reveal className="mb-14 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-6">
+        <Reveal className="mb-14 max-sm:mb-8 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-6">
           {stats.map((stat) => (
             <div key={stat.label} className="flex items-baseline gap-2">
               <span className="font-instrument text-2xl font-medium text-ink">

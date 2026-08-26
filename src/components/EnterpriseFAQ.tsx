@@ -114,14 +114,14 @@ export default function EnterpriseFAQ({
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="w-full bg-canvas px-6 py-24 md:px-16">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 lg:grid-cols-12">
+    <section className="w-full bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 max-sm:gap-10 lg:grid-cols-12">
         <Reveal className="flex flex-col gap-6 lg:col-span-5 lg:sticky lg:top-24 lg:h-fit">
           <div className="flex flex-col gap-4">
             <span className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
               Common Questions
             </span>
-            <h2 className="font-instrument text-4xl leading-tight font-medium text-ink lg:text-5xl">
+            <h2 className="font-instrument max-sm:text-3xl text-4xl leading-tight font-medium text-ink lg:text-5xl">
               Everything you need to know.
             </h2>
           </div>
