@@ -58,6 +58,17 @@ export default function Reveal({
         } else {
           vars.delay = delay;
         }
+        // A staggered Reveal whose list came back empty has nothing to tween.
+        // GSAP would log "target not found"; an empty list is a valid state
+        // (unpublished posts, a blank CMS array), so skip quietly instead.
+        if (Array.isArray(targets) && targets.length === 0) {
+          if (process.env.NODE_ENV !== "production") {
+            console.info(
+              `[Reveal] no children to stagger${className ? ` (${className})` : ""}`,
+            );
+          }
+          return;
+        }
         gsap.from(targets, vars);
       });
       return () => mm.revert();

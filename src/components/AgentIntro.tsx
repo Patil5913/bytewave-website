@@ -78,11 +78,11 @@ export default function AgentIntro({
       ref={ref}
       className="relative flex min-h-screen max-sm:min-h-svh w-full flex-col justify-center overflow-hidden bg-canvas px-6 py-24 max-sm:px-5 max-sm:py-14 md:px-16"
     >
-      <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-8 xl:max-w-6xl 2xl:max-w-7xl">
+      <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-8 max-sm:gap-6 xl:max-w-6xl 2xl:max-w-7xl">
         {PARAGRAPHS.map((segments, pi) => (
           <p
             key={pi}
-            className="font-instrument text-2xl leading-snug font-medium text-ink sm:text-3xl lg:text-5xl lg:leading-[1.25] xl:text-6xl 2xl:text-7xl 2xl:leading-[1.2]"
+            className="font-instrument text-2xl leading-snug font-medium text-ink max-sm:text-[1.75rem] max-sm:leading-[1.32] sm:text-3xl lg:text-5xl lg:leading-[1.25] xl:text-6xl 2xl:text-7xl 2xl:leading-[1.2]"
           >
             {segments.map((seg, si) =>
               seg.text.split(" ").map((word, wi) => (
