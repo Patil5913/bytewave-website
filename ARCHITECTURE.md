@@ -55,15 +55,21 @@ Two rules that are easy to break:
 
 ### Fallbacks
 
+`src/lib/insights.ts` deliberately ships **no** articles — `ALL_POSTS` is empty,
+so editorial exists only in the CMS and an empty `posts` table renders an empty
+state rather than placeholder journalism. Everything else still has a bundled
+fallback.
+
 If the database is unreachable, every page still renders using the bundled
-content in `src/lib/siteContent.ts` and `src/lib/insights.ts`, and the failure
+content in `src/lib/siteContent.ts`, and the failure
 is logged loudly through `payload.logger`. This is deliberate — the marketing
 site staying up matters more than it being current — but it means **a broken
 database looks like a working site**. The log line is the only signal, so
 whatever you use for alerting should watch for `[content] … read failed`.
 
-Those same modules are the seed source, so they serve double duty: fixtures for
-`/seed-content` and runtime fallback.
+`siteContent.ts` is also the seed source, so it serves double duty: fixtures for
+`/seed-content` and runtime fallback. `/seed-content` no longer seeds posts,
+since there is nothing bundled to seed.
 
 ## Caching and revalidation
 

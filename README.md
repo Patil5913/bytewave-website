@@ -26,7 +26,7 @@ animated with GSAP. Run with Bun.
 
 ```bash
 cp .env.example .env          # then fill in PAYLOAD_SECRET at minimum
-docker compose up -d          # first run only — creates the bwave-postgres container
+docker compose --profile local up -d postgres   # first run only — creates bwave-postgres
 bun install
 bun dev                       # starts Postgres if stopped, then next dev
 ```
@@ -39,8 +39,10 @@ which email domain is treated as staff.
 
 ### Seeding content
 
-The site renders illustrative example data when the database is empty. To load
-the bundled real content instead:
+Marketing copy, placements, testimonials and stats fall back to illustrative
+example data when the database is empty. **Articles do not** — `src/lib/insights.ts`
+ships no posts, so `/insights` shows an empty state until something is published
+in the CMS. To load the bundled content for everything else:
 
 ```bash
 bun run seed        # POST /seed-content, x-seed-secret: $SEED_SECRET
@@ -66,6 +68,19 @@ The public forms post to `POST /leads`, not to Payload's REST endpoint —
 fields, applies a honeypot, derives `source` from the `Referer` (so it cannot
 be spoofed), and rate limits per email and per hashed IP over a 10-minute
 window.
+
+### Outbound email
+
+Templates are React Email components in `src/lib/email/` — one shared shell,
+then a lead alert, intake confirmation, newsletter confirmation, newsletter
+issue, new-post announcement and password reset. `bun run email:preview`
+renders all of them to `.email-preview/` for review in a browser.
+
+Marketing mail carries a signed unsubscribe link (`GET /unsubscribe`) and
+`List-Unsubscribe` headers; transactional mail deliberately does not. Sending a
+newsletter issue or announcing a post are explicit, secret-guarded routes
+(`POST /newsletter/send`, `POST /newsletter/announce`) — saving in the CMS never
+mails anybody. See [ARCHITECTURE.md](ARCHITECTURE.md#outbound-email).
 
 ### Referrals
 
@@ -123,6 +138,7 @@ If the database is unreachable, pages fall back to the bundled content in
 | `bun run typecheck` | `tsc --noEmit`. |
 | `bun run db:up` / `db:down` | Start/stop the `bwave-postgres` container. |
 | `bun run seed` | Seed content through the `/seed-content` route. Needs `SEED_SECRET`. |
+| `bun run email:preview` | Render every email template to `.email-preview/` and open `index.html`. |
 | `bun run generate:types` | Regenerate `src/payload-types.ts`. Needs the dev server running. |
 | `bun run generate:importmap` | Rebuild the admin import map after changing admin components. |
 | `bun run migrate:create` | Write a migration for the current schema into `src/migrations`. Needs the dev server running. |
@@ -139,6 +155,7 @@ when something looks broken:
 | `NEXT_PUBLIC_SERVER_URL` | Canonical/OG URLs and the sitemap fall back to `http://localhost:3000`. **Set this in production.** |
 | `SMTP_*` | No email transport is configured, so nothing is delivered — lead alerts, submitter acknowledgements, referrer welcome mails and admin password resets are logged to the console only. Templates live in `src/lib/email/`. |
 | `LEADS_NOTIFY_EMAIL` | New contact submissions are stored, and the submitter still gets their acknowledgement, but no internal alert is sent. |
+| `NEWSLETTER_SEND_SECRET` | `POST /newsletter/send` and `POST /newsletter/announce` return 403 — a drafted issue can be written but never mailed. |
 | `NEXT_PUBLIC_LOGO_DEV_KEY` | Company logo images fail to load. |
 | `ADMIN_EMAIL_DOMAIN` | Defaults to `findandhire.co`. |
 | `SEED_SECRET` | Defaults to `dev-seed`. |
@@ -148,12 +165,15 @@ when something looks broken:
 Editable from the admin: **Globals** — Homepage, Site Stats, Site Settings
 (tagline, address, nav CTA label, footer link groups, social links, SEO
 defaults), Track Record. **Collections** — Posts, Placements, Client Quotes,
-Success Videos, Certifications, Contacts (inbound leads), Media, Users.
+Success Videos, Certifications, Newsletters (drafted issues), Contacts (inbound
+leads), Media, Users.
 
 Every loader in `src/lib/content.ts` falls back to the hardcoded defaults in
 `src/lib/siteContent.ts` when a global is blank or the database is unreachable,
 and logs the failure to the server console. If the site looks like it is
-ignoring your edits, check that log first.
+ignoring your edits, check that log first. Articles are the one exception —
+there is no bundled editorial, so an empty `posts` table means an empty
+`/insights`.
 
 ## Routes
 

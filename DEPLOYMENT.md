@@ -24,6 +24,7 @@ the rest degrade quietly, which is exactly why they are easy to forget.
 | `ADMIN_EMAIL_DOMAIN` | Recommended | Defaults to `findandhire.co`. This is the only gate on admin signup, so a wrong value here means the wrong domain can register. |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` | Recommended | No email is sent. Payload logs to the console instead, so **every outbound mail is silently never delivered** — internal lead alerts, submitter acknowledgements, referrer welcome mails and admin password resets alike. |
 | `LEADS_NOTIFY_EMAIL` | Recommended | Nobody internal is emailed when a lead arrives. Leads are still saved, visible in the admin, and the submitter still receives their acknowledgement. |
+| `NEWSLETTER_SEND_SECRET` | Optional | `POST /newsletter/send` and `POST /newsletter/announce` return 403. Issues can be drafted in the CMS but never mailed. Set it only when you actually intend to send. |
 | `NEXT_PUBLIC_LOGO_DEV_KEY` | Optional | Company logos on the placement feed, testimonials and certifications 404. Publishable token, safe to expose. |
 | `PREVIEW_SECRET` | Optional | Draft preview still works for signed-in editors; only out-of-band preview links stop working. |
 | `SEED_SECRET` | No | Leave **unset in production**. It closes `/seed-content` and the dev generator routes. |
@@ -129,6 +130,18 @@ curl -s -o /dev/null -w 'types: %{http_code}\n'       -X POST $BASE/dev/generate
 curl -s -o /dev/null -w 'migration: %{http_code}\n'   -X POST $BASE/dev/create-migration
 # Expect 404 (NODE_ENV=production) or 403 (SEED_SECRET unset)
 
+# Newsletter sending must be closed unless you set the secret
+curl -s -o /dev/null -w 'newsletter send: %{http_code}\n'     -X POST $BASE/newsletter/send \
+  -H 'Content-Type: application/json' -d '{"id":1}'
+curl -s -o /dev/null -w 'newsletter announce: %{http_code}\n' -X POST $BASE/newsletter/announce \
+  -H 'Content-Type: application/json' -d '{"id":1}'
+# Expect 403 without a valid x-newsletter-secret
+
+# Unsubscribe must reject a forged token
+curl -s -o /dev/null -w 'unsubscribe: %{http_code}\n' \
+  "$BASE/unsubscribe?e=someone@example.com&t=forged"
+# Expect 400
+
 # Lead intake must reject the old public path
 curl -s -o /dev/null -w 'rest contacts: %{http_code}\n' -X POST $BASE/api/contacts \
   -H 'Content-Type: application/json' -d '{"type":"lead","email":"a@b.com"}'
@@ -139,7 +152,14 @@ Then by hand:
 
 - Submit each of the three forms (contact terminal, homepage CTA, footer
   newsletter) and confirm the lead appears under **Inbound → Contacts** with a
-  sensible `source`, and that `LEADS_NOTIFY_EMAIL` received a message.
+  sensible `source`, that `LEADS_NOTIFY_EMAIL` received a message, **and that the
+  submitter received their acknowledgement** — that second mail is new and goes
+  to real strangers, so check it renders before announcing the launch.
+- Click the unsubscribe link in the newsletter confirmation and confirm the row
+  disappears from **Contacts**.
+- Send a newsletter issue to yourself first:
+  `curl -X POST $BASE/newsletter/send -H "x-newsletter-secret: …" -d '{"id":1,"test":"you@…"}'`.
+  The `test` form never stamps the issue, so the real send still works after.
 - Edit any CMS field, save, reload the public page — the change should appear
   immediately. If it does not, cache invalidation is not reaching the app.
 - Save a post as a draft and confirm it is **absent** from `/insights`,
@@ -177,10 +197,12 @@ Honest list, all reproducible today.
 4. **No automated tests.** There is no test runner in the repo. The smoke checks
    above are the current safety net; adding a test suite is the obvious next
    investment.
-5. **Local dev port conflict (this machine only).** `docker-compose.yml` maps
-   Postgres to host port `5432`, which on the original development machine was
-   already taken by an unrelated project. If `bun dev` cannot reach the database,
-   change the published port in `docker-compose.yml` and `DATABASE_URI` to
-   something free, e.g. `55432`.
+5. **Local Postgres is behind a compose profile.** `docker-compose.yml` holds the
+   production app service plus a `postgres` service under `profiles: ["local"]`,
+   so a deploy never starts a database container. First run locally:
+   `docker compose --profile local up -d postgres`. It publishes host port
+   **5433** (5432 is commonly taken by another local stack); `DATABASE_URI` in
+   `.env.example` matches. A `password authentication failed for user "bwave"`
+   error almost always means something else owns the port you pointed at.
 6. **`socials` is empty by default,** so the footer social row is hidden until
    someone adds links in Site Settings.

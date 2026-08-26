@@ -13,7 +13,7 @@ numbers and images only.
 
 | Role | Can do |
 | --- | --- |
-| **Editor** | Edit all page content, articles, FAQs, testimonials, legal documents, referral records. |
+| **Editor** | Edit all page content, articles, FAQs, testimonials, legal documents, referral records, newsletter issues. |
 | **Admin** | Everything an editor can, plus: leads, site settings, referral settings, and creating other accounts. |
 
 If a section described here is missing when you log in, you are an editor and it
@@ -30,6 +30,7 @@ the site. The same groups are in the left sidebar:
 | **Companies Page** | Company FAQs, client quotes, certifications |
 | **Professionals Page** | Professional FAQs, success videos, track record |
 | **Insights** | Blog articles |
+| **Newsletter** | Drafted newsletter issues |
 | **Referrals** | Referrers, referrals, referral settings |
 | **Inbound** | Leads from the site's forms (admin only) |
 | **Legal** | Privacy, terms and refunds documents |
@@ -40,6 +41,8 @@ Two general rules:
 
 - **Saving publishes immediately** for everything except articles, which have a
   draft option (see [Articles](#articles)).
+- **Saving never emails anyone.** Newsletter issues and article announcements go
+  out only when a developer runs the send step (see [Newsletter](#newsletter)).
 - **Changes appear on the live site straight away.** Save, then reload the public
   page. There is no separate "publish site" step and no waiting.
 
@@ -149,6 +152,56 @@ the public sees. The published version stays up until you publish again.
 
 To take an article down, set its status back to draft.
 
+### Telling subscribers about a new article
+
+Publishing does **not** email anybody. Announcing is a separate, deliberate step
+run by a developer:
+
+```
+POST /newsletter/announce   with header x-newsletter-secret
+{ "id": 12 }                      → emails every newsletter subscriber
+{ "id": 12, "test": "you@…" }     → sends one copy to you only
+```
+
+Subscribers get the cover image, the tag, the title, the excerpt, a link to the
+article, and the three next-newest articles underneath. Once announced, the
+record shows **Announced at** and the same article cannot be announced twice —
+that field is deliberately read-only.
+
+## Newsletter
+
+**Newsletter → Newsletters** is where an issue is written. One row per issue:
+
+| Field | What it does |
+| --- | --- |
+| **Subject** | The inbox subject line. Keep it under ~60 characters. |
+| **Preheader** | The grey preview text next to the subject. Not shown in the email body. |
+| **Edition** | Small label above the heading, e.g. "Issue 04 · March 2026". |
+| **Heading** | The large opening line. |
+| **Intro** | One or two short paragraphs to open. |
+| **Stats** | Optional data strip — a label and a value per row. |
+| **Items** | The body. Each item is a title, a paragraph, and an optional link. |
+| **CTA** | Optional button at the end. |
+| **Signoff** | Closing line above the footer. |
+
+**Saving never sends.** Sending is a developer step, the same shape as
+announcing an article:
+
+```
+POST /newsletter/send   with header x-newsletter-secret
+{ "id": 3 }                     → sends to every subscriber
+{ "id": 3, "test": "you@…" }    → sends one copy to you only
+```
+
+Always send yourself a test first — a `test` send does not mark the issue as
+sent, so the real send still works afterwards. After a real send the row shows
+**Status: sent**, **Sent at** and **Sent count**, and sending again is refused.
+There is no unsend.
+
+Every issue carries an unsubscribe link automatically. Someone who unsubscribes
+disappears from **Inbound → Contacts** and stops receiving issues; they still get
+replies about any intake they submitted.
+
 ## Images
 
 **System → Media** holds every uploaded image. Uploading from within an article
@@ -172,7 +225,9 @@ contact details, the message, and **Source**, which records which form and page
 it came from. Source is recorded automatically and cannot be edited.
 
 If lead notification email is configured, each new submission is also emailed
-out. If you are not receiving them, the email settings need checking — the leads
+out, **and the person who submitted receives an acknowledgement** — an intake
+confirmation, or a subscription confirmation for the newsletter form. If you are
+not receiving the internal alerts, the email settings need checking — the leads
 are still saved here regardless.
 
 ## Referrals (refer and earn)
