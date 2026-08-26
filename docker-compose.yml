@@ -1,7 +1,36 @@
-# Local Postgres for Payload. `docker compose up -d` brings it back after a
-# host/Docker restart (survives via the named volume + restart policy).
+networks:
+  bytewave-network:
+    external: true
+
 services:
+  bytewave:
+    container_name: bytewave
+    build: .
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_SERVER_URL: https://bytewavewebsite.vrugle.com
+      DATABASE_URI: postgresql://bytewave:bytewave123@postgres-prod:5432/bytewave
+
+    networks:
+      - bytewave-network
+
+    expose:
+      - "3000"
+
+  # Local Postgres for development only — the production stack points at
+  # postgres-prod on the shared network instead. Behind a profile so it never
+  # starts as part of a deploy:
+  #
+  #   docker compose --profile local up -d postgres
+  #
+  # `bun run db:up` then starts this container on subsequent runs.
   postgres:
+    profiles: ["local"]
     image: postgres:16-alpine
     container_name: bwave-postgres
     restart: unless-stopped
